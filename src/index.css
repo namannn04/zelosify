@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", serif;
+  font-weight: 500; /* Optional default weight */
+  font-style: normal; /* Optional default style */
+}
+
+/* this is for testimonial section  */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+}
+
+/* this is for contact section  */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+/* for background banner  */
+
+
+/* In your Tailwind CSS configuration (e.g., styles.css) */
+.scroll-mt-40 {
+    scroll-margin-top: 40px;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+.overflow-hidden {
+  overflow: hidden;
+}
+
+
+/* this is for scroll bar  */
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: .8rem;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: gray;
+  transition: all 0.5s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(105, 25, 192);
+}
+
+::-webkit-scrollbar-track {
+  background: #f9f9f9;
+}
