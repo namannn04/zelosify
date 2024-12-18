@@ -13,32 +13,32 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
     rel="stylesheet">
-
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="b7ab1c20-7bd4-4c0c-a2c0-f9f728c791d2"></script>
   <title>Zelosify</title>
 
   <!-- Inline script to update favicon based on theme -->
- <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const faviconLink = document.getElementById('favicon');
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const faviconLink = document.getElementById('favicon');
 
-    const updateFavicon = () => {
-      if (darkModeQuery.matches) {
-        // Set dark mode favicon
-        faviconLink.href = '/favicon1.ico';
-      } else {
-        // Set light mode favicon
-        faviconLink.href = '/favicon.ico';
-      }
-    };
+      const updateFavicon = () => {
+        if (darkModeQuery.matches) {
+          // Set dark mode favicon
+          faviconLink.href = '/favicon1.ico';
+        } else {
+          // Set light mode favicon
+          faviconLink.href = '/favicon.ico';
+        }
+      };
 
-    // Initial check
-    updateFavicon();
+      // Initial check
+      updateFavicon();
 
-    // Listen for changes in the color scheme preference
-    darkModeQuery.addEventListener('change', updateFavicon);
-  });
-</script>
+      // Listen for changes in the color scheme preference
+      darkModeQuery.addEventListener('change', updateFavicon);
+    });
+  </script>
 
 </head>
 
