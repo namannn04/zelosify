@@ -59,7 +59,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 px-4 space-y-2">
+        <nav className="flex-1 py-4 px-4 space-y-10">
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.href;
