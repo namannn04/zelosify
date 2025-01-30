@@ -9,6 +9,7 @@ import RegisterPage from './pages/LandingPage/authentication/RegisterPage';
 import NotFound from './pages/LandingPage/ErrorPage';
 import HomeOutlet from './pages/LandingPage/HomeOutlet'
 import TermsPage from './pages/LandingPage/terms & privacy/TermsPage';
+import AdminHome from "./pages/AdminPage/AdminHome"
 
 
 const router = createBrowserRouter([
@@ -44,7 +45,10 @@ const router = createBrowserRouter([
       {
         path: 'terms',
         element: <TermsPage />,
-      },
+      },{
+        path:"admin",
+        element:<AdminHome/>
+      }
     ],
   },
 ]);
@@ -93,4 +97,3 @@ const App = () => {
 };
 
 export default App;
-
