@@ -1,7 +1,9 @@
 import React, { useEffect, useCallback, useRef } from "react"
-import { Link, useLocation } from "react-router-dom"
-import { BarChart, FileText, LineChart, MessageSquare, Settings, Menu, X } from "lucide-react"
+import { useLocation } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
+import { BarChart, FileText, LineChart, MessageSquare, Settings } from "lucide-react"
+import NavigationItem from "./NavigationItem"
+import SidebarHeader from "./SidebarHeader"
 import UserProfile from "./UserProfile"
 
 const navigationItems = [
@@ -11,61 +13,6 @@ const navigationItems = [
   { title: "Messages", href: "/admin/messages", icon: MessageSquare },
   { title: "Settings", href: "/admin/settings", icon: Settings },
 ]
-
-// eslint-disable-next-line react/display-name
-const NavigationItem = React.memo(({ item, isActive, isOpen }) => {
-  const Icon = item.icon
-  return (
-    <Link
-      to={item.href}
-      className={`flex items-center gap-4 px-4 py-3 rounded-md transition-colors duration-200 ease-in-out text-sm 
-      ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"} 
-      ${isOpen ? "justify-start" : "justify-center"}`}
-    >
-      <Icon className={`h-5 w-5 ${isActive ? "text-blue-600" : "text-gray-500"}`} />
-      <AnimatePresence>
-        {isOpen && (
-          <motion.span
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: "auto" }}
-            exit={{ opacity: 0, width: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden whitespace-nowrap"
-          >
-            {item.title}
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </Link>
-  )
-})
-
-// eslint-disable-next-line react/display-name
-const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
-  <div className="h-16 border-b flex items-center justify-between px-4">
-    <AnimatePresence>
-      {isOpen && (
-        <motion.h2
-          initial={{ opacity: 0, width: 0 }}
-          animate={{ opacity: 1, width: "auto" }}
-          exit={{ opacity: 0, width: 0 }}
-          transition={{ duration: 0.2 }}
-          className="text-lg font-semibold text-gray-900 overflow-hidden whitespace-nowrap"
-        >
-          Dashboard
-        </motion.h2>
-      )}
-    </AnimatePresence>
-    <button
-      onClick={toggleSidebar}
-      className={`p-2 rounded-md hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center ${
-        isOpen ? "" : "w-full"
-      }`}
-    >
-      {isOpen ? <X className="h-5 w-5 text-gray-600" /> : <Menu className="h-5 w-5 text-gray-600" />}
-    </button>
-  </div>
-))
 
 // eslint-disable-next-line react/display-name
 const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
