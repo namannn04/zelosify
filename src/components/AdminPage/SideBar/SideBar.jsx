@@ -56,7 +56,12 @@ const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
         </motion.h2>
       )}
     </AnimatePresence>
-    <button onClick={toggleSidebar} className="p-2 rounded-md hover:bg-slate-50  transition-colors duration-200 ">
+    <button
+      onClick={toggleSidebar}
+      className={`p-2 rounded-md hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center ${
+        isOpen ? "" : "w-full"
+      }`}
+    >
       {isOpen ? <X className="h-5 w-5 text-gray-600" /> : <Menu className="h-5 w-5 text-gray-600" />}
     </button>
   </div>
@@ -133,15 +138,6 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
           <UserProfile isCollapsed={!isOpen} />
         </div>
       </motion.aside>
-
-      {!isOpen && (
-        <button
-          onClick={toggleSidebar}
-          className="fixed top-4 left-4 lg:hidden z-50 p-2 bg-white rounded-md "
-        >
-          <Menu className="h-5 w-5 text-gray-600" />
-        </button>
-      )}
     </>
   )
 })
