@@ -1,49 +1,48 @@
-import React, { useEffect, useCallback, useRef } from "react";
-import { useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  BarChart,
-  FileText,
-  LineChart,
-  MessageSquare,
-  Settings,
-} from "lucide-react";
-import NavigationItem from "./NavigationItem";
-import SidebarHeader from "./SidebarHeader";
-import UserProfile from "./UserProfile";
+import React, { useEffect, useRef, useMemo } from "react"
+import { useLocation } from "react-router-dom"
+import { motion, AnimatePresence } from "framer-motion"
+import { Home, Plus, BarChart, FileText, LineChart, MessageSquare, Settings } from "lucide-react"
+import NavigationItem from "./NavigationItem"
+import SidebarHeader from "./SidebarHeader"
+import ChatHistory from "./ChatHistory"
 
 const navigationItems = [
+  { title: "Home", href: "/admin/home", icon: Home },
+  { title: "New Chat", href: "/admin/chat/new", icon: Plus },
   { title: "Dashboard", href: "/admin/dashboard", icon: BarChart },
   { title: "Pages", href: "/admin/pages", icon: FileText },
   { title: "Analytics", href: "/admin/analytics", icon: LineChart },
   { title: "Messages", href: "/admin/messages", icon: MessageSquare },
   { title: "Settings", href: "/admin/settings", icon: Settings },
-];
+]
 
 const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
-  const location = useLocation();
-  const sidebarRef = useRef(null);
+  const location = useLocation()
+  const sidebarRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) &&
-        isOpen &&
-        window.innerWidth < 1024
-      ) {
-        toggleSidebar();
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target) && isOpen && window.innerWidth < 1024) {
+        toggleSidebar()
       }
-    };
+    }
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen, toggleSidebar]);
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [isOpen, toggleSidebar])
 
   const sidebarVariants = {
     open: { width: "16rem" },
     closed: { width: "5rem" },
-  };
+  }
+
+  const memoizedNavigationItems = useMemo(
+    () =>
+      navigationItems.map((item) => (
+        <NavigationItem key={item.title} item={item} isActive={location.pathname === item.href} isOpen={isOpen} />
+      )),
+    [location.pathname, isOpen],
+  )
 
   return (
     <>
@@ -66,29 +65,26 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
         animate={isOpen ? "open" : "closed"}
         variants={sidebarVariants}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed inset-y-0 left-0 z-50 bg-white border-r shadow-lg flex flex-col h-screen"
+        className="fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 shadow-lg flex flex-col h-screen"
       >
         <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
-        <div className="flex-1 overflow-y-auto py-6 px-3">
-          <nav className="space-y-8">
-            {navigationItems.map((item) => (
-              <NavigationItem
-                key={item.title}
-                item={item}
-                isActive={location.pathname === item.href}
-                isOpen={isOpen}
-              />
-            ))}
-          </nav>
-        </div>
+        <div className={`flex-1 overflow-hidden ${isOpen ? "custom-scrollbar" : ""}`}>
+          <div className={`h-full ${isOpen ? "overflow-y-auto" : "overflow-y-hidden"}`}>
+            <div className="px-3 py-4 space-y-1">{memoizedNavigationItems}</div>
 
-        <div className="border-t p-4">
-          <UserProfile isCollapsed={!isOpen} />
+            {isOpen && (
+              <div className="px-3 py-4 border-t border-gray-200">
+                <ChatHistory isOpen={isOpen} />
+              </div>
+            )}
+          </div>
         </div>
       </motion.aside>
     </>
-  );
-});
+  )
+})
 
-export default Sidebar;
+Sidebar.displayName = "Sidebar"
+export default Sidebar
+

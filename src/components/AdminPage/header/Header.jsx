@@ -1,6 +1,7 @@
-import { memo } from "react";
-import { Bell, Search, ChevronDown } from "lucide-react";
-import { motion } from "framer-motion";
+import { memo } from "react"
+import { Bell, Search } from "lucide-react"
+import { motion } from "framer-motion"
+import UserProfile from "./UserProfile"
 
 const Header = memo(({ toggleSidebar, isSidebarOpen }) => {
   return (
@@ -34,38 +35,13 @@ const Header = memo(({ toggleSidebar, isSidebarOpen }) => {
             </button>
           </div>
 
-          <div className="relative group">
-            <button className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition-colors">
-              <span className="font-medium text-sm text-gray-700">Admin</span>
-              <ChevronDown className="h-4 w-4 text-gray-500" />
-            </button>
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block">
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Profile
-              </a>
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              >
-                Settings
-              </a>
-              <div className="border-t border-gray-100"></div>
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-              >
-                Logout
-              </a>
-            </div>
-          </div>
+          <UserProfile />
         </div>
       </div>
     </motion.header>
-  );
-});
+  )
+})
 
-Header.displayName = "Header";
-export default Header;
+Header.displayName = "Header"
+export default Header
+
