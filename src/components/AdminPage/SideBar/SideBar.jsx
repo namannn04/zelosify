@@ -1,107 +1,132 @@
-import { useEffect } from "react"
-import { BarChart, FileText, LineChart, MessageSquare, Settings, Menu } from "lucide-react"
+import React, { useEffect, useCallback } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { BsLayoutTextSidebar, BsLayoutTextSidebarReverse } from "react-icons/bs"
+import { BarChart, FileText, LineChart, MessageSquare, Settings, Menu } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 import UserProfile from "./UserProfile"
 
 const navigationItems = [
-  { title: "Top Vendors Statistics", icon: BarChart, href: "/top-vendors" },
-  { title: "Contract Details", icon: FileText, href: "/contracts" },
-  { title: "Insights Report", icon: LineChart, href: "/insights" },
-  { title: "Internal", icon: MessageSquare, href: "/internal" },
-  { title: "Settings", icon: Settings, href: "/settings" },
+  { title: "Dashboard", href: "/admin/dashboard", icon: BarChart },
+  { title: "Pages", href: "/admin/pages", icon: FileText },
+  { title: "Analytics", href: "/admin/analytics", icon: LineChart },
+  { title: "Messages", href: "/admin/messages", icon: MessageSquare },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
 ]
 
-function Sidebar({ isOpen, toggleSidebar }) {
+const NavigationItem = React.memo(({ item, isActive, isOpen }) => {
+  const Icon = item.icon
+  return (
+    <Link
+      to={item.href}
+      className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors duration-200 ease-in-out text-sm 
+      ${isActive ? "bg-blue-100 text-blue-600 font-medium" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"} 
+      ${isOpen ? "justify-start" : "justify-center"}`}
+    >
+      <Icon className={`h-5 w-5 ${isActive ? "text-blue-600" : "text-gray-500"}`} />
+      <AnimatePresence>
+        {isOpen && (
+          <motion.span
+            initial={{ opacity: 0, width: 0 }}
+            animate={{ opacity: 1, width: "auto" }}
+            exit={{ opacity: 0, width: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden whitespace-nowrap"
+          >
+            {item.title}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </Link>
+  )
+})
+
+const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
+  <div className="h-16 border-b flex items-center justify-between px-4">
+    <AnimatePresence>
+      {isOpen && (
+        <motion.h2
+          initial={{ opacity: 0, width: 0 }}
+          animate={{ opacity: 1, width: "auto" }}
+          exit={{ opacity: 0, width: 0 }}
+          transition={{ duration: 0.2 }}
+          className="text-lg font-semibold text-gray-900 overflow-hidden whitespace-nowrap"
+        >
+          Dashboard
+        </motion.h2>
+      )}
+    </AnimatePresence>
+    <button onClick={toggleSidebar} className="p-2 rounded-md hover:bg-gray-100 transition-colors duration-200">
+      <Menu className="h-5 w-5 text-gray-600" />
+    </button>
+  </div>
+))
+
+const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
   const location = useLocation()
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024 && !isOpen) {
-        toggleSidebar()
-      }
+  const handleResize = useCallback(() => {
+    if (window.innerWidth >= 1024 && !isOpen) {
+      toggleSidebar()
     }
+  }, [isOpen, toggleSidebar])
 
+  useEffect(() => {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
-  }, [isOpen, toggleSidebar])
+  }, [handleResize])
+
+  const sidebarVariants = {
+    open: { width: "16rem" },
+    closed: { width: "5rem" },
+  }
 
   return (
     <>
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-40 lg:hidden transition-opacity duration-300 z-40"
-          onClick={toggleSidebar}
-        />
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black bg-opacity-20 lg:hidden z-40"
+            onClick={toggleSidebar}
+          />
+        )}
+      </AnimatePresence>
 
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 shadow-md transition-all duration-300 ease-in-out transform 
-        ${isOpen ? "w-64 translate-x-0" : "w-20 -translate-x-0 lg:w-20"} h-screen flex flex-col justify-between`}
+      <motion.aside
+        initial={isOpen ? "open" : "closed"}
+        animate={isOpen ? "open" : "closed"}
+        variants={sidebarVariants}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed inset-y-0 left-0 z-50 bg-white border-r shadow-lg flex flex-col h-screen"
       >
-        <div className="relative h-16 border-b border-gray-200">
-          <div className={`absolute inset-0 flex items-center ${isOpen ? "justify-between px-4" : "justify-center"}`}>
-            <h2
-              className={`text-base font-medium bg-black text-white px-3 py-1 rounded-md transition-opacity duration-300 
-              ${isOpen ? "opacity-100" : "opacity-0 w-0 h-0 overflow-hidden"}`}
-            >
-              Dashboard
-            </h2>
-            <button
-              onClick={toggleSidebar}
-              className="p-2 rounded-md hover:bg-gray-100 transition-all duration-200 flex items-center justify-center w-10 h-10"
-            >
-              {isOpen ? (
-                <BsLayoutTextSidebarReverse size={24} className="text-gray-600 hover:text-black" />
-              ) : (
-                <BsLayoutTextSidebar size={24} className="text-gray-600 hover:text-black" />
-              )}
-            </button>
-          </div>
-          {!isOpen && (
-            <button
-              onClick={toggleSidebar}
-              className="absolute inset-0 w-full h-full cursor-pointer"
-              aria-label="Toggle Sidebar"
-            />
-          )}
+        <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
+
+        <div className="flex-1 overflow-y-auto py-4 px-2">
+          <nav className="space-y-8">
+            {navigationItems.map((item) => (
+              <NavigationItem key={item.title} item={item} isActive={location.pathname === item.href} isOpen={isOpen} />
+            ))}
+          </nav>
         </div>
 
-        <nav className="flex-1 py-4 px-4 space-y-8">
-          {navigationItems.map((item) => {
-            const Icon = item.icon
-            const isActive = location.pathname === item.href
-            return (
-              <Link
-                key={item.title}
-                to={item.href}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 ease-in-out text-sm 
-                ${isActive ? "bg-gray-100 text-black font-medium" : "text-gray-600 hover:bg-gray-100 hover:text-black"} 
-                ${isOpen ? "opacity-100" : "justify-center"}`}
-              >
-                <Icon className={`h-6 w-6 ${isActive ? "text-black" : "text-gray-500 group-hover:text-black"}`} />
-                <span className={isOpen ? "block" : "hidden"}>{item.title}</span>
-              </Link>
-            )
-          })}
-        </nav>
-
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t p-4">
           <UserProfile isCollapsed={!isOpen} />
         </div>
-      </aside>
+      </motion.aside>
 
       {!isOpen && (
         <button
           onClick={toggleSidebar}
-          className="fixed top-4 left-4 lg:hidden z-50 p-3 bg-white rounded-full shadow-lg hover:bg-gray-100 border border-gray-200"
+          className="fixed top-4 left-4 lg:hidden z-50 p-2 bg-white rounded-md shadow-lg hover:bg-gray-100 transition-colors duration-200"
         >
-          <Menu size={24} className="text-gray-600 hover:text-black" />
+          <Menu className="h-5 w-5 text-gray-600" />
         </button>
       )}
     </>
   )
-}
+})
 
 export default Sidebar
 
