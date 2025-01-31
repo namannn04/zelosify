@@ -29,8 +29,8 @@ export default function AdminHome() {
           toggleSidebar={toggleSidebar}
         />
         <main
-          className={`flex-1 p-5 transition-all duration-300 ease-in-out
-            ${isSidebarOpen ? "lg:ml-64" : "lg:ml-20"}
+          className={`flex-1 p-3 md:p-5 transition-all duration-300 ease-in-out
+            ${isSidebarOpen ? "ml-64 lg:ml-64" : "ml-20 lg:ml-20"}
           `}
         >
           <ChatLayout />
