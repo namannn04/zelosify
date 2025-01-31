@@ -86,3 +86,31 @@ html {
     @apply flex justify-center items-center;
   }
 }
+
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0.3rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #e2e8f0;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #cbd5e1;
+}
+
+.custom-scrollbar > div {
+  margin-right: -0.5rem;
+  padding-right: 0.5rem;
+}

@@ -14,7 +14,13 @@ const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
           transition={{ duration: 0.2 }}
           className="text-lg font-semibold text-gray-900 overflow-hidden whitespace-nowrap"
         >
-          Dashboard
+          <img
+              src="src/assets/logos/zelosify_Dark.png"
+              alt="Zelosify Logo"
+              width={120}
+              height={40}
+              className="object-contain"
+            />
         </motion.h2>
       )}
     </AnimatePresence>
