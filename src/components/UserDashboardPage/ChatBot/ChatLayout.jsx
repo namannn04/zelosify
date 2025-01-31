@@ -35,7 +35,7 @@ export default function ChatLayout() {
 
       {/* Chat Content */}
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
         {/*1st User Message */}
         <div className="flex gap-3">
           <div className="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center font-medium">

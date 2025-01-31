@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import SideBarLayout from "../../components/AdminPage/SideBar/SideBarLayout";
-import ChatLayout from "../../components/AdminPage/Chat/ChatLayout";
-import Header from "../../components/AdminPage/header/Header";
+import { Outlet } from "react-router-dom";
+import Header from "../../components/UserDashboardPage/Header/Header";
+import SideBarLayout from "../../components/UserDashboardPage/SideBar/SideBarLayout";
 
-export default function AdminHome() {
+export default function UserOutlet() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function AdminHome() {
             isSidebarOpen ? "ml-64 lg:ml-64" : "ml-20 lg:ml-20"
           }`}
         >
-          <ChatLayout />
+          <Outlet />
         </main>
       </div>
     </div>
