@@ -81,7 +81,7 @@ html {
 }
 
 /* Resusable classes */
-@components {
+@layer components {
   .flex-center {
     @apply flex justify-center items-center;
   }
