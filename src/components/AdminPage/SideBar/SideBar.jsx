@@ -1,99 +1,94 @@
-import { useState, useEffect } from "react";
-import { BarChart, FileText, LineChart, MessageSquare, Settings, ChevronLeft, ChevronRight } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useCallback, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  BarChart,
+  FileText,
+  LineChart,
+  MessageSquare,
+  Settings,
+} from "lucide-react";
+import NavigationItem from "./NavigationItem";
+import SidebarHeader from "./SidebarHeader";
 import UserProfile from "./UserProfile";
 
 const navigationItems = [
-  { title: "Top Vendors Statistics", icon: BarChart, href: "/top-vendors" },
-  { title: "Contract Details", icon: FileText, href: "/contracts" },
-  { title: "Insights Report", icon: LineChart, href: "/insights" },
-  { title: "Internal", icon: MessageSquare, href: "/internal" },
-  { title: "Settings", icon: Settings, href: "/settings" },
+  { title: "Dashboard", href: "/admin/dashboard", icon: BarChart },
+  { title: "Pages", href: "/admin/pages", icon: FileText },
+  { title: "Analytics", href: "/admin/analytics", icon: LineChart },
+  { title: "Messages", href: "/admin/messages", icon: MessageSquare },
+  { title: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
-function Sidebar({ isOpen, toggleSidebar }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
   const location = useLocation();
-
-  const toggleCollapse = () => setIsCollapsed(!isCollapsed);
+  const sidebarRef = useRef(null);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsCollapsed(false);
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        isOpen &&
+        window.innerWidth < 1024
+      ) {
+        toggleSidebar();
       }
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen, toggleSidebar]);
+
+  const sidebarVariants = {
+    open: { width: "16rem" },
+    closed: { width: "5rem" },
+  };
 
   return (
     <>
-      {/* Mobile Backdrop */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-30 lg:hidden transition-opacity duration-300 ease-in-out z-40"
-          onClick={toggleSidebar}
-        />
-      )}
+      <AnimatePresence>
+        {isOpen && window.innerWidth < 1024 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black bg-opacity-20 z-40"
+            onClick={toggleSidebar}
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Sidebar */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 transform bg-white text-gray-900 border-r border-gray-200 transition-all duration-300 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        ${isCollapsed ? "w-20" : "w-64"}
-        lg:translate-x-0 lg:static lg:z-auto h-screen flex flex-col justify-between`}
+      <motion.aside
+        ref={sidebarRef}
+        initial={isOpen ? "open" : "closed"}
+        animate={isOpen ? "open" : "closed"}
+        variants={sidebarVariants}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="fixed inset-y-0 left-0 z-50 bg-white border-r shadow-lg flex flex-col h-screen"
       >
-        {/* Header */}
-        <div className="border-b border-gray-200 px-4 py-4 flex items-center justify-between">
-          <h2 className={`text-base font-medium transition-opacity duration-300 ${isCollapsed ? "opacity-0 w-0" : "opacity-100"}`}>
-            Dashboard
-          </h2>
-          <button
-            onClick={toggleCollapse}
-            className="p-2 rounded-md hover:bg-gray-100 transition-all duration-200 flex items-center justify-center w-8 h-8"
-          >
-            {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-          </button>
-        </div>
+        <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
-        {/* Navigation */}
-        <nav className="flex-1 py-4 px-4 space-y-2">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.href;
-            return (
-              <Link
+        <div className="flex-1 overflow-y-auto py-6 px-3">
+          <nav className="space-y-8">
+            {navigationItems.map((item) => (
+              <NavigationItem
                 key={item.title}
-                to={item.href}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 ease-in-out text-sm
-                ${isActive ? "bg-blue-50 text-blue-600" : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"}`}
-              >
-                <Icon className={`h-5 w-5 ${isActive ? "text-blue-600" : "text-gray-500"}`} />
-                <span className={`transition-opacity duration-300 ${isCollapsed ? "opacity-0 w-0" : "opacity-100"}`}>
-                  {item.title}
-                </span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Profile Section */}
-        <div className="border-t border-gray-200 p-4">
-          <UserProfile isCollapsed={isCollapsed} />
+                item={item}
+                isActive={location.pathname === item.href}
+                isOpen={isOpen}
+              />
+            ))}
+          </nav>
         </div>
-      </aside>
 
-      {/* Toggle Button */}
-      <button
-        onClick={toggleSidebar}
-        className="fixed bottom-4 right-4 lg:hidden z-50 p-3 bg-white text-gray-900 rounded-full shadow-lg hover:bg-gray-100 transition-colors duration-200 border border-gray-200"
-      >
-        ☰
-      </button>
+        <div className="border-t p-4">
+          <UserProfile isCollapsed={!isOpen} />
+        </div>
+      </motion.aside>
     </>
   );
-}
+});
 
 export default Sidebar;

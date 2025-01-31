@@ -1,20 +1,19 @@
-import { useState } from "react"
-import Sidebar from "./SideBar"
+import { useEffect } from "react";
+import Sidebar from "./Sidebar";
 
-function Layout({ children }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+function SideBarLayout({ isSidebarOpen, toggleSidebar }) {
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024 && !isSidebarOpen) {
+        toggleSidebar();
+      }
+    };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
-  }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isSidebarOpen, toggleSidebar]);
 
-  return (
-    <div className="flex min-h-screen bg-gray-50">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <main className="flex-1 overflow-auto transition-all duration-300 ease-in-out p-4 lg:p-8">{children}</main>
-    </div>
-  )
+  return <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />;
 }
 
-export default Layout
-
+export default SideBarLayout;
