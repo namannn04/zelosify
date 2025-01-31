@@ -1,28 +1,19 @@
-import { useState, useEffect } from "react"
-import Sidebar from "./Sidebar"
+import { useEffect } from "react";
+import Sidebar from "./Sidebar";
 
-function SideBarLayout({ toggleSidebar: parentToggle }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
+function SideBarLayout({ isSidebarOpen, toggleSidebar }) {
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarOpen(window.innerWidth >= 1024)
-    }
+      if (window.innerWidth >= 1024 && !isSidebarOpen) {
+        toggleSidebar();
+      }
+    };
 
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isSidebarOpen, toggleSidebar]);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
-    if (parentToggle) {
-      parentToggle()
-    }
-  }
-
-  return <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+  return <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />;
 }
 
-export default SideBarLayout
-
+export default SideBarLayout;
