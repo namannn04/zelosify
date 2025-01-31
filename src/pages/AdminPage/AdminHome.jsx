@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Header } from "../../components/AdminPage/header/header";
 import SideBarLayout from "../../components/AdminPage/SideBar/SideBarLayout";
-import { ChatLayout } from "../../components/AdminPage/Chat/ChatLayout";
+import ChatLayout from "../../components/AdminPage/Chat/ChatLayout";
 
 export default function AdminHome() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -29,7 +29,7 @@ export default function AdminHome() {
           toggleSidebar={toggleSidebar}
         />
         <main
-          className={`flex-1 p-2 transition-all duration-300 ease-in-out ${
+          className={`flex-1 p-5 transition-all duration-300 ease-in-out ${
             isSidebarOpen ? "ml-64 lg:ml-64" : "ml-20 lg:ml-20"
           }`}
         >

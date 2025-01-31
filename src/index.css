@@ -45,10 +45,9 @@
 
 /* for background banner  */
 
-
 /* In your Tailwind CSS configuration (e.g., styles.css) */
 .scroll-mt-40 {
-    scroll-margin-top: 40px;
+  scroll-margin-top: 40px;
 }
 
 .whitespace-nowrap {
@@ -58,14 +57,13 @@
   overflow: hidden;
 }
 
-
 /* this is for scroll bar  */
 html {
   scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {
-  width: .8rem;
+  width: 0.8rem;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -80,4 +78,11 @@ html {
 
 ::-webkit-scrollbar-track {
   background: #f9f9f9;
+}
+
+/* Resusable classes */
+@components {
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
 }
