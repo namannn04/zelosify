@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import Header from "../../components/AdminPage/header/header";
 import SideBarLayout from "../../components/AdminPage/SideBar/SideBarLayout";
 import ChatLayout from "../../components/AdminPage/Chat/ChatLayout";
+import Header from "../../components/AdminPage/header/header";
 
 export default function AdminHome() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
