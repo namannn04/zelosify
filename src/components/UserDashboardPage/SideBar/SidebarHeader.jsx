@@ -1,6 +1,7 @@
 import React from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Menu } from "lucide-react"
+import Logo from "../../../assets/logos/zelosify_Dark.png";
 
 // eslint-disable-next-line react/display-name
 const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
@@ -14,13 +15,13 @@ const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
           transition={{ duration: 0.2 }}
           className="text-lg font-semibold text-gray-900 overflow-hidden whitespace-nowrap"
         >
-          <img
-              src="src/assets/logos/zelosify_Dark.png"
-              alt="Zelosify Logo"
-              width={120}
-              height={40}
-              className="object-contain"
-            />
+           <img
+            src={Logo}
+            alt="Zelosify Logo"
+            width={120}
+            height={40}
+            className="object-contain"
+          />
         </motion.h2>
       )}
     </AnimatePresence>
