@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 
 function SideBarLayout({ isSidebarOpen, toggleSidebar }) {
   useEffect(() => {
