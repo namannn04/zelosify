@@ -1,8 +1,18 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Sidebar from "./Sidebar"
 
 function Layout({ children }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSidebarOpen(window.innerWidth >= 1024)
+    }
+
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
@@ -13,7 +23,7 @@ function Layout({ children }) {
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <main
         className={`flex-1 overflow-auto transition-all duration-300 ease-in-out p-4 lg:p-8 ${
-          isSidebarOpen ? "lg:ml-64" : "lg:ml-20"
+          isSidebarOpen ? "lg:ml-64" : "ml-20 lg:ml-20"
         }`}
       >
         {children}

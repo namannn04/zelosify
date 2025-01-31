@@ -1,11 +1,23 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { User, Bell, LogOut } from "lucide-react"
 
 function UserProfile({ isCollapsed }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         className="flex items-center w-full p-2 rounded-md hover:bg-gray-100 transition-colors duration-200"
