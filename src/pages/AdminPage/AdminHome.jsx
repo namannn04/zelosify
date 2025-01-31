@@ -1,41 +1,39 @@
-import { useState, useEffect } from "react";
-import { Header } from "../../components/AdminPage/header/header";
-import SideBarLayout from "../../components/AdminPage/SideBar/SideBarLayout";
-import { ChatLayout } from "../../components/AdminPage/Chat/ChatLayout";
+import { useState, useEffect, useCallback } from "react"
+import { Header } from "../../components/AdminPage/header/header"
+import SideBarLayout from "../../components/AdminPage/SideBar/SideBarLayout"
+import { ChatLayout } from "../../components/AdminPage/Chat/ChatLayout"
 
 export default function AdminHome() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarOpen(window.innerWidth >= 1024);
-    };
+      setIsSidebarOpen(window.innerWidth >= 1024)
+    }
 
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarOpen((prev) => !prev)
+  }, [])
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <Header toggleSidebar={toggleSidebar} />
+      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       <div className="flex flex-1 overflow-hidden">
-        <SideBarLayout
-          isSidebarOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-        />
+        <SideBarLayout isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <main
-          className={`flex-1 p-2 transition-all duration-300 ease-in-out ${
-            isSidebarOpen ? "ml-64 lg:ml-64" : "ml-20 lg:ml-20"
-          }`}
+          className={`flex-1 p-4 transition-all duration-300 ease-in-out
+            ${isSidebarOpen ? "lg:ml-64" : "lg:ml-20"}
+          `}
         >
           <ChatLayout />
         </main>
       </div>
     </div>
-  );
+  )
 }
+
