@@ -32,89 +32,86 @@ const volumeServiceData = [
 
 export default function DashboardUser() {
   return (
-    <>
-      {/* Main Content */}
-      <main className="p-6 bg-[#f7fdf8ec]">
-        {/* Stats Grid */}
-        <div className="flex flex-wrap lg:flex-nowrap gap-x-6 py-4">
-          {/* First Component: VendorStats */}
-          <div className="w-full lg:w-3/5">
-            <VendorStats />
-          </div>
-
-          {/* Second Component: Contracts Bar Chart */}
-          <div className="w-full lg:w-2/5">
-            <ContractsChart />
-          </div>
+    <div className="px-6 py-2 bg-gray-50">
+      {/* Stats Grid */}
+      <div className="flex flex-wrap lg:flex-nowrap gap-x-6 py-4">
+        {/* First Component: VendorStats */}
+        <div className="w-full lg:w-3/5">
+          <VendorStats />
         </div>
 
-        {/* Charts Grid */}
-        {/* Total Contracts Chart */}
-        <div className="flex flex-wrap gap-4 pb-6">
-          <div className="w-full lg:w-[45%]">
-            <VendorInsightsChart />
-          </div>
-          <div className="w-full lg:w-[30%]">
-            <VendorSatisfactionChart />
-          </div>
-          <div className="w-full lg:w-[20%]"></div>
+        {/* Second Component: Contracts Bar Chart */}
+        <div className="w-full lg:w-2/5">
+          <ContractsChart />
         </div>
+      </div>
 
-        <div className="grid grid-cols-3 gap-6">
-          <ComplianceChart />
-          {/* Top Vendor Items */}
-          <div className="bg-white rounded-lg p-6 border border-gray-100">
-            <h2 className="text-lg font-semibold mb-6">Top Vendor Items</h2>
-            <div className="space-y-6">
-              {vendorItems.map((item) => (
-                <div key={item.id}>
-                  <div className="flex justify-between mb-2">
-                    <div className="text-sm text-gray-600">
-                      {item.id}. {item.name}
-                    </div>
-                    <div className="text-sm font-medium">{item.percentage}</div>
+      {/* Charts Grid */}
+      {/* Total Contracts Chart */}
+      <div className="flex flex-wrap gap-4 pb-6">
+        <div className="w-full lg:w-[45%]">
+          <VendorInsightsChart />
+        </div>
+        <div className="w-full lg:w-[30%]">
+          <VendorSatisfactionChart />
+        </div>
+        <div className="w-full lg:w-[20%]"></div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        <ComplianceChart />
+        {/* Top Vendor Items */}
+        <div className="bg-white rounded-lg p-6 border border-gray-100">
+          <h2 className="text-lg font-semibold mb-6">Top Vendor Items</h2>
+          <div className="space-y-6">
+            {vendorItems.map((item) => (
+              <div key={item.id}>
+                <div className="flex justify-between mb-2">
+                  <div className="text-sm text-gray-600">
+                    {item.id}. {item.name}
                   </div>
-                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-blue-500 rounded-full"
-                      style={{ width: `${item.popularity}%` }}
-                    ></div>
-                  </div>
+                  <div className="text-sm font-medium">{item.percentage}</div>
                 </div>
-              ))}
-            </div>
+                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-blue-500 rounded-full"
+                    style={{ width: `${item.popularity}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* Volume vs Service Level */}
-          <div className="bg-white rounded-lg p-6 border border-gray-100">
-            <h2 className="text-lg font-semibold mb-6">
-              Volume vs Service Level
-            </h2>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={volumeServiceData} barSize={20}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="volume" fill="#3b82f6" />
-                  <Bar dataKey="services" fill="#10b981" />
-                </BarChart>
-              </ResponsiveContainer>
+        {/* Volume vs Service Level */}
+        <div className="bg-white rounded-lg p-6 border border-gray-100">
+          <h2 className="text-lg font-semibold mb-6">
+            Volume vs Service Level
+          </h2>
+          <div className="h-[300px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={volumeServiceData} barSize={20}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="volume" fill="#3b82f6" />
+                <Bar dataKey="services" fill="#10b981" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm">Volume</span>
+              <span className="text-sm font-medium">1,135</span>
             </div>
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm">Volume</span>
-                <span className="text-sm font-medium">1,135</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm">Services</span>
-                <span className="text-sm font-medium">635</span>
-              </div>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm">Services</span>
+              <span className="text-sm font-medium">635</span>
             </div>
           </div>
         </div>
-      </main>
-    </>
+      </div>
+    </div>
   );
 }

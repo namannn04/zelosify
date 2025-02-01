@@ -1,28 +1,27 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import PrivacyPage from "./pages/LandingPage/terms & privacy/PrivacyPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import ContactPage from "./pages/LandingPage/contact/ContactPage";
 import LoginForm from "./pages/LandingPage/authentication/LoginPage";
 import RegisterPage from "./pages/LandingPage/authentication/RegisterPage";
-import NotFound from "./pages/LandingPage/ErrorPage";
+import HomeErrorPage from "./pages/LandingPage/HomeErrorPage";
 import HomeOutlet from "./pages/LandingPage/HomeOutlet";
 import TermsPage from "./pages/LandingPage/terms & privacy/TermsPage";
 import UserOutlet from "./pages/UserDashboardPage/UserOutlet";
 import DashBoard from "./pages/UserDashboardPage/Dashboard/DashBoard";
-import Home from "./pages/UserDashboardPage/Home/Home";
 import SettingsPage from "./pages/UserDashboardPage/Settings/SettingsPage";
-import AnalyticsPage from "./pages/UserDashboardPage/Analytics/AnalyticsPage";
-import ChatPage from "./pages/UserDashboardPage/ChatBot/ChatPage";
-import Pages from "./pages/UserDashboardPage/Pages/Pages";
+import ChatPage from "./pages/UserDashboardPage/Messages/ChatPage";
+import Contracts from "./pages/UserDashboardPage/Contracts/Contracts";
+import DashboardErrorPage from "./pages/UserDashboardPage/DashboardErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeOutlet />,
-    errorElement: <NotFound />,
     children: [
       { index: true, element: <LandingPage /> },
+      { path: "*", element: <HomeErrorPage /> },
       { path: "login", element: <LoginForm /> },
       { path: "register", element: <RegisterPage /> },
       { path: "contact", element: <ContactPage /> },
@@ -30,14 +29,19 @@ const router = createBrowserRouter([
       { path: "terms", element: <TermsPage /> },
       {
         path: "user",
-        element: <UserOutlet />,
+        errorElement: <DashboardErrorPage />, // Error Page is now at the `/user` level
         children: [
-          { index: true, element: <Home /> },
-          { path: "chat", element: <ChatPage /> },
-          { path: "dashboard", element: <DashBoard /> },
-          { path: "settings", element: <SettingsPage /> },
-          { path: "analytics", element: <AnalyticsPage /> },
-          { path: "pages", element: <Pages /> },
+          {
+            path: "",
+            element: <UserOutlet />, // Normal User Layout with Sidebar/Header
+            children: [
+              { index: true, element: <DashBoard /> },
+              { path: "messages", element: <ChatPage /> },
+              { path: "settings", element: <SettingsPage /> },
+              { path: "contracts", element: <Contracts /> },
+            ],
+          },
+          { path: "*", element: <DashboardErrorPage /> }, // Catch-all for /user/*
         ],
       },
     ],

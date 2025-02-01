@@ -1,26 +1,16 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 // import { motion, AnimatePresence } from "framer-motion";
-import {
-  Home,
-  Plus,
-  BarChart,
-  FileText,
-  LineChart,
-  MessageSquare,
-  Settings,
-} from "lucide-react";
+import { BarChart, FileText, MessageSquare, Settings } from "lucide-react";
 import NavigationItem from "./NavigationItem";
 import SidebarHeader from "./SidebarHeader";
 import ChatHistory from "./ChatHistory";
 
 const navigationItems = [
-  { title: "Home", href: "/user", icon: Home },
-  { title: "New Chat", href: "/user/chat", icon: Plus },
-  { title: "Dashboard", href: "/user/dashboard", icon: BarChart },
-  { title: "Pages", href: "/user/pages", icon: FileText },
-  { title: "Analytics", href: "/user/analytics", icon: LineChart },
+  // { title: "Home", href: "/user", icon: Home },
+  { title: "Dashboard", href: "/user", icon: BarChart },
   { title: "Messages", href: "/user/messages", icon: MessageSquare },
+  { title: "Contracts", href: "/user/contracts", icon: FileText },
   { title: "Settings", href: "/user/settings", icon: Settings },
 ];
 
@@ -85,7 +75,7 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
         // transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`${
           isOpen ? "w-[16rem]" : "w-[5rem]"
-        } fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 shadow-lg flex flex-col h-screen`}
+        } fixed inset-y-0 left-0 z-40 bg-white border-r border-gray-200 shadow-lg flex flex-col h-screen`}
       >
         <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 

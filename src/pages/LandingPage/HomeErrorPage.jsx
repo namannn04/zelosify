@@ -1,20 +1,19 @@
-import React, { useEffect, useRef } from "react";
-import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom";
 import LandingNavbar from "../../components/LandingPage/LandingNavbar";
 import FooterSection from "../../components/LandingPage/footer/FooterSection";
 
-const NotFound = () => {
+export default function HomeErrorPage() {
+  const navigate = useNavigate();
   return (
-    <div>
-      <div>
-        <Helmet>
-          <title>Error Page - 404 | zelosify</title>
-        </Helmet>
-      </div>
-      <div>
-        <LandingNavbar />
-      </div>
+    <>
+      <Helmet>
+        <title>Error Page - 404 | zelosify</title>
+      </Helmet>
+
+      <LandingNavbar />
+
       <div className="min-h-screen bg-[#0F0720] flex flex-col items-center justify-center p-4">
         {/* 404 Illustration */}
         <div className="w-full max-w-md mb-8">
@@ -64,7 +63,7 @@ const NotFound = () => {
         </div>
 
         {/* Content */}
-        <div className="text-center space-y-6">
+        <div className="z-10 text-center space-y-6">
           <h1 className="text-4xl md:text-5xl font-bold text-white">
             Oops! Page Not Found.
           </h1>
@@ -74,12 +73,12 @@ const NotFound = () => {
             a different page or go to homepage with the button below.
           </p>
 
-          <Link
-            to={"/"}
+          <button
+            onClick={() => navigate("/")}
             className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-medium px-8 py-3 rounded-lg transition-colors duration-300"
           >
             Go To Home
-          </Link>
+          </button>
         </div>
 
         {/* Decorative Elements */}
@@ -90,11 +89,8 @@ const NotFound = () => {
           <div className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-purple-400 rounded-full animate-bounce" />
         </div>
       </div>
-      <div>
-        <FooterSection />
-      </div>
-    </div>
-  );
-};
 
-export default NotFound;
+      <FooterSection />
+    </>
+  );
+}

@@ -2,17 +2,19 @@ import React from "react";
 // import { motion, AnimatePresence } from "framer-motion"
 import { X, Menu } from "lucide-react";
 import Logo from "../../../assets/logos/zelosify_Dark.png";
+import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/display-name
 const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
   <div className="h-16 border-b flex items-center justify-between px-4">
     {/* <AnimatePresence> */}
     {isOpen && (
-      <h2
+      <Link
         // initial={{ opacity: 0, width: 0 }}
         // animate={{ opacity: 1, width: "auto" }}
         // exit={{ opacity: 0, width: 0 }}
         // transition={{ duration: 0.2 }}
+        to={"/user"}
         className="text-lg font-semibold text-gray-900 overflow-hidden whitespace-nowrap"
       >
         <img
@@ -22,7 +24,7 @@ const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
           height={40}
           className="object-contain"
         />
-      </h2>
+      </Link>
     )}
     {/* </AnimatePresence> */}
     <button

@@ -46,12 +46,12 @@ export default function VendorStats() {
     <div className="space-y-4">
       {/* Header Section */}
       <div className="flex justify-between items-center">
-        <div>
+        <>
           <h2 className="text-lg font-semibold text-purple-800">
             Vendor Statistics
           </h2>
           <p className="text-sm text-gray-500">Cost Summary</p>
-        </div>
+        </>
         <button className="inline-flex items-center text-sm text-gray-500 border border-gray-600 hover:bg-gray-700 hover:text-gray-100 rounded-md px-3 py-1">
           <span>Export</span>
         </button>

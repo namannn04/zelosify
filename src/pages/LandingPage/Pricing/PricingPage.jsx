@@ -1,11 +1,11 @@
-import React from 'react'
-import { Helmet } from 'react-helmet'
-import LandingNavbar from '../../../components/LandingPage/LandingNavbar'
-import PageBanner from '../../../components/LandingPage/PageBanner'
-import PricingSection from '../../../components/LandingPage/pricing/PricingSection'
-import FooterSection from '../../../components/LandingPage/FooterSection'
-import FAQSection from '../../../components/LandingPage/pricing/FAQSection'
-import BetaFeatureAnnouncement from '../../../components/LandingPage/pricing/BetaFeatureAnnouncement'
+import React from "react";
+import { Helmet } from "react-helmet-async";
+import LandingNavbar from "../../../components/LandingPage/LandingNavbar";
+// import PageBanner from "../../../components/LandingPage/PageBanner";
+// import PricingSection from "../../../components/LandingPage/pricing/PricingSection";
+import FooterSection from "../../../components/LandingPage/FooterSection";
+import FAQSection from "../../../components/LandingPage/pricing/FAQSection";
+import BetaFeatureAnnouncement from "../../../components/LandingPage/pricing/BetaFeatureAnnouncement";
 
 const PricingPage = () => {
   return (
@@ -34,9 +34,8 @@ const PricingPage = () => {
       <div>
         <FooterSection />
       </div>
-      
     </>
-  )
-}
+  );
+};
 
-export default PricingPage
+export default PricingPage;

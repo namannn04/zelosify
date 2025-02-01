@@ -3,19 +3,19 @@ import { Bell, Search } from "lucide-react";
 // import { motion } from "framer-motion"
 import UserProfile from "./UserProfile";
 
-const Header = memo(({ toggleSidebar, isSidebarOpen }) => {
+const Header = memo(({ isSidebarOpen }) => {
   return (
     <header
       className={`${
         isSidebarOpen ? "pl-[16rem]" : "pl-[5rem]"
-      } sticky top-0 z-50 bg-white border-b`}
+      } sticky top-0 z-40 bg-white border-b`}
       // initial={false}
       // animate={{
       //   paddingLeft: isSidebarOpen ? "16rem" : "5rem",
       // }}
       // transition={{ duration: 0.3, ease: "easeInOut" }}
     >
-      <div className="flex items-center justify-between h-16 px-7">
+      <div className="flex items-center justify-between h-[63px] px-6">
         <div className="flex items-center gap-4 flex-1">
           <div className="hidden md:flex items-center max-w-md flex-1">
             <div className="relative w-full">

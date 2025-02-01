@@ -63,7 +63,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 0.8rem;
+  width: 0.6rem;
 }
 
 ::-webkit-scrollbar-thumb {

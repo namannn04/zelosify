@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import ContactForm from "../../components/LandingPage/ContactPage";
 
 import FooterSection from "../../components/LandingPage/footer/FooterSection";
@@ -16,11 +16,10 @@ import { Link } from "react-router-dom";
 export default function LandingPage() {
   return (
     <>
-      <div>
-        <Helmet>
-          <title>Zelosify - AI Contract Management Tool</title>
-        </Helmet>
-      </div>
+      <Helmet>
+        <title>Zelosify - AI Contract Management Tool</title>
+      </Helmet>
+
       <div className="min-h-screen bg-[#0F0720] text-white">
         {/* Navigation */}
         <LandingNavbar />
