@@ -9,12 +9,12 @@ import NotFound from "./pages/LandingPage/ErrorPage";
 import HomeOutlet from "./pages/LandingPage/HomeOutlet";
 import TermsPage from "./pages/LandingPage/terms & privacy/TermsPage";
 import UserOutlet from "./pages/UserDashboardPage/UserOutlet";
-
 import DashBoard from "./pages/UserDashboardPage/Dashboard/DashBoard";
 import Home from "./pages/UserDashboardPage/Home/Home";
 import SettingsPage from "./pages/UserDashboardPage/Settings/SettingsPage";
 import AnalyticsPage from "./pages/UserDashboardPage/Analytics/AnalyticsPage";
 import ChatPage from "./pages/UserDashboardPage/ChatBot/ChatPage";
+import Pages from "./pages/UserDashboardPage/Pages/Pages";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +37,7 @@ const router = createBrowserRouter([
           { path: "dashboard", element: <DashBoard /> },
           { path: "settings", element: <SettingsPage /> },
           { path: "analytics", element: <AnalyticsPage /> },
+          { path: "pages", element: <Pages /> },
         ],
       },
     ],

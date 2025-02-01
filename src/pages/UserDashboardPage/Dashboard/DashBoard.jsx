@@ -38,12 +38,12 @@ export default function DashboardUser() {
         {/* Stats Grid */}
         <div className="flex flex-wrap lg:flex-nowrap gap-x-6 py-4">
           {/* First Component: VendorStats */}
-          <div className="w-full lg:w-3/5 pt-4">
+          <div className="w-full lg:w-3/5">
             <VendorStats />
           </div>
 
           {/* Second Component: Contracts Bar Chart */}
-          <div className="lg:w-2/5 ">
+          <div className="w-full lg:w-2/5">
             <ContractsChart />
           </div>
         </div>

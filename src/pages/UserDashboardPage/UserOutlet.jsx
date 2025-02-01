@@ -29,7 +29,7 @@ export default function UserOutlet() {
           toggleSidebar={toggleSidebar}
         />
         <main
-          className={`flex-1 flex-center w-full px-2 transition-all duration-300 ease-in-out ${
+          className={`flex-1 flex-center w-full px-2 ${
             isSidebarOpen ? "ml-64 lg:ml-64" : "ml-20 lg:ml-20"
           }`}
         >

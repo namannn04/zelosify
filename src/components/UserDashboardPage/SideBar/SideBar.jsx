@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 import {
   Home,
   Plus,
@@ -44,10 +44,10 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, toggleSidebar]);
 
-  const sidebarVariants = {
-    open: { width: "16rem" },
-    closed: { width: "5rem" },
-  };
+  // const sidebarVariants = {
+  //   open: { width: "16rem" },
+  //   closed: { width: "5rem" },
+  // };
 
   const memoizedNavigationItems = useMemo(
     () =>
@@ -64,26 +64,28 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
 
   return (
     <>
-      <AnimatePresence>
-        {isOpen && window.innerWidth < 1024 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black bg-opacity-20 z-40"
-            onClick={toggleSidebar}
-          />
-        )}
-      </AnimatePresence>
+      {/* <AnimatePresence> */}
+      {isOpen && window.innerWidth < 1024 && (
+        <div
+          // initial={{ opacity: 0 }}
+          // animate={{ opacity: 1 }}
+          // exit={{ opacity: 0 }}
+          // transition={{ duration: 0.2 }}
+          className="fixed inset-0 bg-black bg-opacity-20 z-40"
+          onClick={toggleSidebar}
+        />
+      )}
+      {/* </AnimatePresence> */}
 
-      <motion.aside
+      <aside
         ref={sidebarRef}
-        initial={isOpen ? "open" : "closed"}
-        animate={isOpen ? "open" : "closed"}
-        variants={sidebarVariants}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 shadow-lg flex flex-col h-screen"
+        // initial={isOpen ? "open" : "closed"}
+        // animate={isOpen ? "open" : "closed"}
+        // variants={sidebarVariants}
+        // transition={{ duration: 0.3, ease: "easeInOut" }}
+        className={`${
+          isOpen ? "w-[16rem]" : "w-[5rem]"
+        } fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 shadow-lg flex flex-col h-screen`}
       >
         <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
@@ -106,7 +108,7 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
             )}
           </div>
         </div>
-      </motion.aside>
+      </aside>
     </>
   );
 });
