@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function Contracts() {
+export default function ContractsLayout() {
   return <div>Contracts</div>;
 }

@@ -12,8 +12,11 @@ import UserOutlet from "./pages/UserDashboardPage/UserOutlet";
 import DashBoard from "./pages/UserDashboardPage/Dashboard/DashBoard";
 import SettingsPage from "./pages/UserDashboardPage/Settings/SettingsPage";
 import ChatPage from "./pages/UserDashboardPage/Messages/ChatPage";
-import Contracts from "./pages/UserDashboardPage/Contracts/Contracts";
 import DashboardErrorPage from "./pages/UserDashboardPage/DashboardErrorPage";
+import ContractsPage from "./pages/UserDashboardPage/Contracts/ContractsPage";
+import General from "./components/UserDashboardPage/Settings/General";
+import DetailedProfile from "./components/UserDashboardPage/Settings/DetailedProfile";
+import Security from "./components/UserDashboardPage/Settings/Security";
 
 const router = createBrowserRouter([
   {
@@ -29,19 +32,28 @@ const router = createBrowserRouter([
       { path: "terms", element: <TermsPage /> },
       {
         path: "user",
-        errorElement: <DashboardErrorPage />, // Error Page is now at the `/user` level
+        errorElement: <DashboardErrorPage />,
         children: [
           {
             path: "",
-            element: <UserOutlet />, // Normal User Layout with Sidebar/Header
+            element: <UserOutlet />,
             children: [
               { index: true, element: <DashBoard /> },
               { path: "messages", element: <ChatPage /> },
-              { path: "settings", element: <SettingsPage /> },
-              { path: "contracts", element: <Contracts /> },
+              {
+                path: "settings",
+                element: <SettingsPage />, // Renders SettingsLayout
+                children: [
+                  { index: true, element: <DetailedProfile /> },
+                  { path: "profile", element: <DetailedProfile /> },
+                  { path: "general", element: <General /> },
+                  { path: "security", element: <Security /> },
+                ],
+              },
+              { path: "contracts", element: <ContractsPage /> },
             ],
           },
-          { path: "*", element: <DashboardErrorPage /> }, // Catch-all for /user/*
+          { path: "*", element: <DashboardErrorPage /> },
         ],
       },
     ],

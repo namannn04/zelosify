@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 // eslint-disable-next-line react/display-name
 const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
-  <div className="h-16 border-b flex items-center justify-between px-4">
+  <div className="h-16 border-b flex items-center justify-between px-6">
     {/* <AnimatePresence> */}
     {isOpen && (
       <Link
@@ -29,7 +29,7 @@ const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
     {/* </AnimatePresence> */}
     <button
       onClick={toggleSidebar}
-      className={`p-2 rounded-md hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center ${
+      className={`rounded-md hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center ${
         isOpen ? "" : "w-full"
       }`}
     >

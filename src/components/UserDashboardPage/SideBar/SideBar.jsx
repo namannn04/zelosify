@@ -1,21 +1,34 @@
 import React, { useEffect, useRef, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // import { motion, AnimatePresence } from "framer-motion";
-import { BarChart, FileText, MessageSquare, Settings } from "lucide-react";
+import {
+  BarChart,
+  FileText,
+  LogOut,
+  MessageSquare,
+  Settings,
+} from "lucide-react";
 import NavigationItem from "./NavigationItem";
 import SidebarHeader from "./SidebarHeader";
 import ChatHistory from "./ChatHistory";
 
 const navigationItems = [
-  // { title: "Home", href: "/user", icon: Home },
   { title: "Dashboard", href: "/user", icon: BarChart },
   { title: "Messages", href: "/user/messages", icon: MessageSquare },
   { title: "Contracts", href: "/user/contracts", icon: FileText },
-  { title: "Settings", href: "/user/settings", icon: Settings },
 ];
+
+// Separate Settings & Sign Out as standalone items
+const settingsItem = {
+  title: "Settings",
+  href: "/user/settings",
+  icon: Settings,
+};
+const signOutItem = { title: "Sign Out", href: "#", icon: LogOut };
 
 const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const sidebarRef = useRef(null);
 
   useEffect(() => {
@@ -34,11 +47,7 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, toggleSidebar]);
 
-  // const sidebarVariants = {
-  //   open: { width: "16rem" },
-  //   closed: { width: "5rem" },
-  // };
-
+  // Memoized navigation items (Main Sidebar Items)
   const memoizedNavigationItems = useMemo(
     () =>
       navigationItems.map((item) => (
@@ -50,6 +59,36 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
         />
       )),
     [location.pathname, isOpen]
+  );
+
+  // Memoized footer items (Settings & Sign Out)
+  const memoizedFooterItems = useMemo(
+    () => (
+      <div className="px-3 py-4 border-t border-dashed border-gray-200">
+        {/* Settings - Prevent sidebar opening on click */}
+        <button
+          onClick={() => navigate(settingsItem.href)}
+          className={`flex items-center w-full px-4 py-2 text-gray-600 hover:bg-gray-100 transition ${
+            isOpen ? "justify-start" : "justify-center"
+          }`}
+        >
+          <settingsItem.icon className="h-5 w-5" />
+          {isOpen && <span className="ml-3">{settingsItem.title}</span>}
+        </button>
+
+        {/* Sign Out - Prevent sidebar opening on click */}
+        <button
+          onClick={() => console.log("Signing out...")}
+          className={`flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition ${
+            isOpen ? "justify-start" : "justify-center"
+          }`}
+        >
+          <signOutItem.icon className="h-5 w-5" />
+          {isOpen && <span className="ml-3">{signOutItem.title}</span>}
+        </button>
+      </div>
+    ),
+    [isOpen, navigate]
   );
 
   return (
@@ -79,6 +118,7 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
       >
         <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
+        {/* Chat history */}
         <div
           className={`flex-1 overflow-hidden ${
             isOpen ? "custom-scrollbar" : ""
@@ -92,12 +132,15 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
             <div className="px-3 py-4 space-y-1">{memoizedNavigationItems}</div>
 
             {isOpen && (
-              <div className="px-3 py-4 border-t border-gray-200">
+              <div className="px-3 py-4 border-t border-dashed border-gray-200">
                 <ChatHistory isOpen={isOpen} />
               </div>
             )}
           </div>
         </div>
+
+        {/* Footer Section: Settings & Sign Out */}
+        {memoizedFooterItems}
       </aside>
     </>
   );

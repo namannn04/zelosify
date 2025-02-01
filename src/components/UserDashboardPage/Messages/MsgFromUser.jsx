@@ -1,11 +1,10 @@
 import React from "react";
+import ProfileImage from "../Header/ProfileImage";
 
 export default function MsgFromUser() {
   return (
     <div className="flex gap-3">
-      <div className="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center font-medium">
-        JD
-      </div>
+      <ProfileImage className={"w-8 h-8 "} />
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
           <span className="font-medium text-base">John Doe</span>

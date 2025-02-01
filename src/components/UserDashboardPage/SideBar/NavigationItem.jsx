@@ -7,7 +7,7 @@ const NavigationItem = React.memo(({ item, isActive, isOpen }) => {
   return (
     <Link
       to={item.href}
-      className={`flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 ease-in-out text-sm
+      className={`flex items-center gap-2 px-3 py-2 rounded-md transition-all duration-200 ease-in-out text-sm
       ${
         isActive
           ? "bg-blue-50 text-blue-600 font-medium"

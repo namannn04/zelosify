@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../../components/UserDashboardPage/Header/Header";
 import SideBarLayout from "../../components/UserDashboardPage/SideBar/SideBarLayout";
+import SignOutConfirmation from "../../components/UI/SignOutConfirmation";
 
 export default function UserOutlet() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -41,6 +42,7 @@ export default function UserOutlet() {
 
       {/* main content */}
       <div className="flex flex-col min-h-screen bg-gray-50">
+        <SignOutConfirmation isOpen={false} />
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         <div className="flex flex-1 overflow-hidden">
           <SideBarLayout
