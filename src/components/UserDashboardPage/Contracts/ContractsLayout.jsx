@@ -58,7 +58,7 @@ export default function ContractsLayout() {
   return (
     <div className="flex h-screen bg-white rounded-lg">
       {/* Main Content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-[0.75] overflow-hidden">
         <div className="p-4">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
@@ -91,7 +91,7 @@ export default function ContractsLayout() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="px-6 py-3 text-left">
+                  <th className="px-4 py-3 text-left">
                     <input
                       type="checkbox"
                       className="rounded border-gray-300"
@@ -99,28 +99,28 @@ export default function ContractsLayout() {
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">
                     Order
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">
                     Customer
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">
                     Type
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">
                     Product
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">
                     Total
                   </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500">
                     Date
                   </th>
-                  <th className="px-6 py-3"></th>
+                  <th className="px-4 py-3"></th>
                 </tr>
               </thead>
               <tbody>
@@ -131,7 +131,7 @@ export default function ContractsLayout() {
                     onClick={() => handleOrderClick(order)}
                   >
                     <td
-                      className="px-6 py-4"
+                      className="px-4 py-4"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <input
@@ -141,10 +141,10 @@ export default function ContractsLayout() {
                         onChange={() => handleSelectOrder(order.id)}
                       />
                     </td>
-                    <td className="px-6 py-4 text-xs text-gray-900">
+                    <td className="px-4 py-4 text-xs text-gray-900">
                       {order.id}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs">
                           {order.customer.initials}
@@ -154,24 +154,24 @@ export default function ContractsLayout() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-xs text-gray-900">
+                    <td className="px-4 py-4 text-xs text-gray-900">
                       {order.type}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <span className="px-2 py-1 text-xs text-green-700 bg-green-50 rounded-full">
                         {order.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-xs">
+                    <td className="px-4 py-4 text-xs">
                       {order.products.join(" ")}
                     </td>
-                    <td className="px-6 py-4 text-xs text-gray-900">
+                    <td className="px-4 py-4 text-xs text-gray-900">
                       {order.total}
                     </td>
-                    <td className="px-6 py-4 text-xs text-gray-900">
+                    <td className="px-4 py-4 text-xs text-gray-900">
                       {order.date}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-4 py-4 text-right">
                       <button className="text-gray-400 hover:text-gray-600">
                         •••
                       </button>
@@ -185,7 +185,7 @@ export default function ContractsLayout() {
       </div>
 
       {/* Right Sidebar - Statistics */}
-      <div className="w-80 border-l border-gray-200 p-6">
+      <div className="flex-[0.25] border-l border-gray-200 p-6">
         <div className="space-y-6">
           {/* Receipt of Goods */}
           <div className="text-center">
