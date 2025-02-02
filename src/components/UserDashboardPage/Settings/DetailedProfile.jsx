@@ -2,7 +2,7 @@ import ProfileImage from "../../UI/ProfileImage";
 
 export default function DetailedProfile() {
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-8 max-w-4xl mx-auto">
       <h2 className="text-xl font-semibold text-gray-900 mb-8">My Profile</h2>
 
       {/* Profile Picture Section */}

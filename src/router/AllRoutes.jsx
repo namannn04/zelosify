@@ -16,6 +16,7 @@ import ContractsPage from "../pages/UserDashboardPage/Contracts/ContractsPage";
 import General from "../components/UserDashboardPage/Settings/General";
 import DetailedProfile from "../components/UserDashboardPage/Settings/DetailedProfile";
 import Security from "../components/UserDashboardPage/Settings/Security";
+import Billing from "../components/UserDashboardPage/Settings/Billing";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ const router = createBrowserRouter([
                   { path: "profile", element: <DetailedProfile /> },
                   { path: "general", element: <General /> },
                   { path: "security", element: <Security /> },
+                  { path: "billing", element: <Billing /> },
                 ],
               },
             ],
