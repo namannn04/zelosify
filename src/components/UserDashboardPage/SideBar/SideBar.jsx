@@ -26,7 +26,7 @@ const settingsItem = {
 };
 const signOutItem = { title: "Sign Out", href: "#", icon: LogOut };
 
-const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
+const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const sidebarRef = useRef(null);
@@ -78,7 +78,7 @@ const Sidebar = React.memo(({ isOpen, toggleSidebar }) => {
 
         {/* Sign Out - Prevent sidebar opening on click */}
         <button
-          onClick={() => console.log("Signing out...")}
+          onClick={() => setSignOutPopUp((prev) => !prev)}
           className={`flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition ${
             isOpen ? "justify-start" : "justify-center"
           }`}

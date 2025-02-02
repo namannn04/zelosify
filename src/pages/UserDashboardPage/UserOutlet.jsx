@@ -5,6 +5,7 @@ import SideBarLayout from "../../components/UserDashboardPage/SideBar/SideBarLay
 import SignOutConfirmation from "../../components/UI/SignOutConfirmation";
 
 export default function UserOutlet() {
+  const [signOutPopUp, setSignOutPopUp] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -42,10 +43,14 @@ export default function UserOutlet() {
 
       {/* main content */}
       <div className="flex flex-col min-h-screen bg-gray-50">
-        <SignOutConfirmation isOpen={false} />
+        <SignOutConfirmation
+          setSignOutPopUp={setSignOutPopUp}
+          isOpen={signOutPopUp}
+        />
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         <div className="flex flex-1 overflow-hidden">
           <SideBarLayout
+            setSignOutPopUp={setSignOutPopUp}
             isSidebarOpen={isSidebarOpen}
             toggleSidebar={toggleSidebar}
           />

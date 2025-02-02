@@ -1,4 +1,8 @@
-export default function SignOutConfirmation({ isOpen, onClose, onConfirm }) {
+export default function SignOutConfirmation({
+  isOpen,
+  setSignOutPopUp,
+  onConfirm,
+}) {
   if (!isOpen) return null;
 
   return (
@@ -10,7 +14,7 @@ export default function SignOutConfirmation({ isOpen, onClose, onConfirm }) {
         <p className="text-gray-600 mb-6">Are you sure to sign out?</p>
         <div className="flex justify-end space-x-4">
           <button
-            onClick={onClose}
+            onClick={() => setSignOutPopUp((prev) => !prev)}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none"
           >
             Cancel

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Sidebar from "./SideBar";
 
-function SideBarLayout({ isSidebarOpen, toggleSidebar }) {
+function SideBarLayout({ setSignOutPopUp, isSidebarOpen, toggleSidebar }) {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024 && !isSidebarOpen) {
@@ -13,7 +13,13 @@ function SideBarLayout({ isSidebarOpen, toggleSidebar }) {
     return () => window.removeEventListener("resize", handleResize);
   }, [isSidebarOpen, toggleSidebar]);
 
-  return <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />;
+  return (
+    <Sidebar
+      setSignOutPopUp={setSignOutPopUp}
+      isOpen={isSidebarOpen}
+      toggleSidebar={toggleSidebar}
+    />
+  );
 }
 
 export default SideBarLayout;
