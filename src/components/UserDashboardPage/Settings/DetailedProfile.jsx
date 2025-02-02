@@ -40,7 +40,7 @@ export default function DetailedProfile() {
           </div>
           <input
             type="text"
-            defaultValue="johndoe123"
+            defaultValue="johndoe1234"
             className="cursor-not-allowed w-full pl-8 p-3 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
             disabled
           />
