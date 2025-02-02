@@ -3,14 +3,14 @@ export default function OrderDetailsPopup({ order, onClose }) {
     <div className="fixed inset-0 bg-black/50 flex items-start justify-center pt-20 z-50">
       <div className="bg-white rounded-lg shadow-xl w-[500px]">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between p-4 border-b bg-black">
           <div className="flex items-center gap-3">
-            <div className="text-sm text-gray-600">Order #4567</div>
+            <div className="text-sm text-white">Order #4567</div>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
+              className="text-gray-200 hover:text-gray-400"
             >
               <svg
                 className="w-5 h-5"
@@ -89,7 +89,7 @@ export default function OrderDetailsPopup({ order, onClose }) {
           </div>
 
           {/* Total */}
-          <div className="mt-6 pt-4 border-t">
+          <div className="mt-6 pt-4 border-t border-dashed">
             <div className="flex justify-between">
               <span className="font-medium">Total:</span>
               <span className="font-medium">$1,927.89</span>
@@ -104,13 +104,10 @@ export default function OrderDetailsPopup({ order, onClose }) {
               ↑ Export
             </button>
             <button className="px-3 py-1.5 text-sm border rounded-md hover:bg-gray-50">
-              📋 Duplicate
-            </button>
-            <button className="px-3 py-1.5 text-sm border rounded-md hover:bg-gray-50">
               🖨 Print
             </button>
           </div>
-          <button className="text-gray-400 hover:text-gray-600">•••</button>
+          <button className="text-gray-600">•••</button>
         </div>
       </div>
     </div>

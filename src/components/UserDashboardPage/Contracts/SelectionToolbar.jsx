@@ -23,9 +23,6 @@ export default function SelectionToolbar({ selectedCount }) {
       <button className="px-3 py-1.5 text-sm border border-gray-700 rounded-md hover:bg-gray-800">
         🖨 Print
       </button>
-      <button className="px-3 py-1.5 text-sm border border-gray-700 rounded-md hover:bg-gray-800">
-        📋 Duplicate
-      </button>
       <button className="p-1 hover:bg-gray-800 rounded">•••</button>
     </div>
   );

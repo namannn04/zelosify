@@ -185,7 +185,7 @@ export default function ContractsLayout() {
       </div>
 
       {/* Right Sidebar - Statistics */}
-      <div className="flex-[0.25] border-l border-gray-200 p-6">
+      <div className="flex-[0.25] border-l border-dashed border-gray-200 p-6">
         <div className="space-y-6">
           {/* Receipt of Goods */}
           <div className="text-center">
