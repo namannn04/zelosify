@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { User, Bell, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import ProfileImage from "./ProfileImage";
+import ProfileImage from "../../UI/ProfileImage";
 
 const UserProfile = React.memo(() => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);

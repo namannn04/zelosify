@@ -1,4 +1,4 @@
-import ProfileImage from "../Header/ProfileImage";
+import ProfileImage from "../../UI/ProfileImage";
 
 export default function DetailedProfile() {
   return (
@@ -41,7 +41,7 @@ export default function DetailedProfile() {
           <input
             type="text"
             defaultValue="johndoe123"
-            className="w-full pl-8 p-3 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
+            className="cursor-not-allowed w-full pl-8 p-3 rounded-md border border-gray-200 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
             disabled
           />
         </div>

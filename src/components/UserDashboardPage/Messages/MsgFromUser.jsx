@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileImage from "../Header/ProfileImage";
+import ProfileImage from "../../UI/ProfileImage";
 
 export default function MsgFromUser() {
   return (

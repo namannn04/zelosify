@@ -17,12 +17,12 @@ const ChatHistory = React.memo(({ isOpen }) => {
       { id: 8, title: "Quarterly Goals Setting", date: "2w ago" },
       { id: 9, title: "New Feature Brainstorming", date: "3w ago" },
       { id: 10, title: "Customer Feedback Analysis", date: "3w ago" },
-      { id: 5, title: "Client Presentation Review", date: "1w ago" },
-      { id: 6, title: "UX Design Workshop", date: "1w ago" },
-      { id: 7, title: "Budget Review", date: "2w ago" },
-      { id: 8, title: "Quarterly Goals Setting", date: "2w ago" },
-      { id: 9, title: "New Feature Brainstorming", date: "3w ago" },
-      { id: 10, title: "Customer Feedback Analysis", date: "3w ago" },
+      { id: 11, title: "Client Presentation Review", date: "1w ago" },
+      { id: 12, title: "UX Design Workshop", date: "1w ago" },
+      { id: 13, title: "Budget Review", date: "2w ago" },
+      { id: 14, title: "Quarterly Goals Setting", date: "2w ago" },
+      { id: 15, title: "New Feature Brainstorming", date: "3w ago" },
+      { id: 16, title: "Customer Feedback Analysis", date: "3w ago" },
     ],
     []
   );
