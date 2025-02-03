@@ -1,24 +1,36 @@
 import React, { useEffect, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-// import { motion, AnimatePresence } from "framer-motion";
 import {
   BarChart,
-  FileText,
   LogOut,
   MessageSquare,
   Settings,
+  CreditCard,
+  Truck,
+  FileSignature,
+  Headset,
 } from "lucide-react";
 import NavigationItem from "./NavigationItem";
 import SidebarHeader from "./SidebarHeader";
 import ChatHistory from "./ChatHistory";
 
-const navigationItems = [
+const overviewItems = [
   { title: "Dashboard", href: "/user", icon: BarChart },
   { title: "Messages", href: "/user/messages", icon: MessageSquare },
-  { title: "Contracts", href: "/user/contracts", icon: FileText },
 ];
 
-// Separate Settings & Sign Out as standalone items
+const contractItems = [
+  { title: "Payments", href: "/user/payments", icon: CreditCard },
+  { title: "Tracking", href: "/user/tracking", icon: Truck },
+  { title: "Requests", href: "/user/requests", icon: FileSignature },
+];
+
+const supportItem = {
+  title: "Support",
+  href: "/user/support",
+  icon: Headset,
+};
+
 const settingsItem = {
   title: "Settings",
   href: "/user/settings",
@@ -47,78 +59,79 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen, toggleSidebar]);
 
-  // Memoized navigation items (Main Sidebar Items)
-  const memoizedNavigationItems = useMemo(
-    () =>
-      navigationItems.map((item) => (
-        <NavigationItem
-          key={item.title}
-          item={item}
-          isActive={location.pathname === item.href}
-          isOpen={isOpen}
-        />
-      )),
-    [location.pathname, isOpen]
+  const renderNavigationItems = (items) => {
+    return items.map((item) => (
+      <NavigationItem
+        key={item.title}
+        item={item}
+        isActive={location.pathname === item.href}
+        isOpen={isOpen}
+      />
+    ));
+  };
+
+  const memoizedOverviewItems = useMemo(
+    () => renderNavigationItems(overviewItems),
+    [location.pathname, isOpen, overviewItems] // Added overviewItems to dependencies
   );
 
-  // Memoized footer items (Settings & Sign Out)
+  const memoizedContractItems = useMemo(
+    () => renderNavigationItems(contractItems),
+    [location.pathname, isOpen, contractItems] // Added contractItems to dependencies
+  );
+
   const memoizedFooterItems = useMemo(
     () => (
       <div className="px-3 py-4 border-t border-dashed border-gray-200">
-        {/* Settings - Prevent sidebar opening on click */}
+        <button
+          onClick={() => navigate(supportItem.href)}
+          className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 hover:bg-gray-100 transition ${
+            isOpen ? "justify-start" : "justify-center"
+          }`}
+        >
+          <supportItem.icon className="h-5 w-5" />
+          {isOpen && <span>{supportItem.title}</span>}
+        </button>
         <button
           onClick={() => navigate(settingsItem.href)}
-          className={`flex items-center w-full px-4 py-2 text-gray-600 hover:bg-gray-100 transition ${
+          className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 hover:bg-gray-100 transition ${
             isOpen ? "justify-start" : "justify-center"
           }`}
         >
           <settingsItem.icon className="h-5 w-5" />
-          {isOpen && <span className="ml-3">{settingsItem.title}</span>}
+          {isOpen && <span>{settingsItem.title}</span>}
         </button>
-
-        {/* Sign Out - Prevent sidebar opening on click */}
         <button
           onClick={() => setSignOutPopUp((prev) => !prev)}
-          className={`flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition ${
+          className={`flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition ${
             isOpen ? "justify-start" : "justify-center"
           }`}
         >
           <signOutItem.icon className="h-5 w-5" />
-          {isOpen && <span className="ml-3">{signOutItem.title}</span>}
+          {isOpen && <span>{signOutItem.title}</span>}
         </button>
       </div>
     ),
-    [isOpen, navigate]
+    [isOpen, navigate, setSignOutPopUp]
   );
 
   return (
     <>
-      {/* <AnimatePresence> */}
       {isOpen && window.innerWidth < 1024 && (
         <div
-          // initial={{ opacity: 0 }}
-          // animate={{ opacity: 1 }}
-          // exit={{ opacity: 0 }}
-          // transition={{ duration: 0.2 }}
           className="fixed inset-0 bg-black bg-opacity-20 z-40"
           onClick={toggleSidebar}
         />
       )}
-      {/* </AnimatePresence> */}
 
       <aside
         ref={sidebarRef}
-        // initial={isOpen ? "open" : "closed"}
-        // animate={isOpen ? "open" : "closed"}
-        // variants={sidebarVariants}
-        // transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`${
           isOpen ? "w-[16rem]" : "w-[5rem]"
         } fixed inset-y-0 left-0 z-40 bg-white border-r border-gray-200 shadow-lg flex flex-col h-screen`}
       >
         <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
-        {/* Chat history */}
         <div
           className={`flex-1 overflow-hidden ${
             isOpen ? "custom-scrollbar" : ""
@@ -129,9 +142,24 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
               isOpen ? "overflow-y-auto" : "overflow-y-hidden"
             }`}
           >
-            <div className="px-3 py-4 space-y-1">{memoizedNavigationItems}</div>
+            <div className="px-3 py-4 space-y-4">
+              {isOpen && (
+                <h2 className="text-xs font-bold text-gray-500 px-4">
+                  OVERVIEW
+                </h2>
+              )}
+              <div className="space-y-1">{memoizedOverviewItems}</div>
 
-            {isOpen && (
+              {isOpen && (
+                <h2 className="text-xs font-bold text-gray-500 border-t border-dashed px-4 pt-6">
+                  CONTRACTS
+                </h2>
+              )}
+              <div className="space-y-1">{memoizedContractItems}</div>
+            </div>
+
+            {/* Chat history */}
+            {isOpen && location.pathname === "/user/messages" && (
               <div className="px-3 py-4 border-t border-dashed border-gray-200">
                 <ChatHistory isOpen={isOpen} />
               </div>

@@ -99,7 +99,7 @@ export default function TestimonialsSection() {
                       </div>
                     </div>
                     <>
-                      <h3 className="font-semibold text-white text-lg">
+                      <h3 className="font-bold text-white text-lg">
                         {testimonial.name}
                       </h3>
                       <p className="text-sm text-purple-300">

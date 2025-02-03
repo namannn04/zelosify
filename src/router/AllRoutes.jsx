@@ -12,11 +12,14 @@ import DashBoard from "../pages/UserDashboardPage/Dashboard/DashBoard";
 import SettingsPage from "../pages/UserDashboardPage/Settings/SettingsPage";
 import ChatPage from "../pages/UserDashboardPage/Messages/ChatPage";
 import DashboardErrorPage from "../pages/UserDashboardPage/DashboardErrorPage";
-import ContractsPage from "../pages/UserDashboardPage/Contracts/ContractsPage";
+import PaymentsPage from "../pages/UserDashboardPage/Payments/PaymentsPage";
 import General from "../components/UserDashboardPage/Settings/General";
 import DetailedProfile from "../components/UserDashboardPage/Settings/DetailedProfile";
 import Security from "../components/UserDashboardPage/Settings/Security";
 import Billing from "../components/UserDashboardPage/Settings/Billing";
+import SupportPage from "../pages/UserDashboardPage/Support/SupportPage";
+import RequestsPage from "../pages/UserDashboardPage/Requests/RequestsPage";
+import TrackingPage from "../pages/UserDashboardPage/Tracking/TrackingPage";
 
 const router = createBrowserRouter([
   {
@@ -40,7 +43,10 @@ const router = createBrowserRouter([
             children: [
               { index: true, element: <DashBoard /> },
               { path: "messages", element: <ChatPage /> },
-              { path: "contracts", element: <ContractsPage /> },
+              { path: "payments", element: <PaymentsPage /> },
+              { path: "support", element: <SupportPage /> },
+              { path: "requests", element: <RequestsPage /> },
+              { path: "tracking", element: <TrackingPage /> },
               {
                 path: "settings",
                 element: <SettingsPage />, // Renders SettingsLayout

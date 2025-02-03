@@ -28,9 +28,7 @@ const data = [
 export default function VendorInsightsChart() {
   return (
     <div className="bg-white rounded-xl border border-gray-100 py-6 px-2">
-      <h2 className="text-lg font-semibold text-[#1e0e4b] mb-6">
-        Vendor Insights
-      </h2>
+      <h2 className="text-lg font-bold text-[#1e0e4b] mb-6">Vendor Insights</h2>
       <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart

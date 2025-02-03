@@ -47,7 +47,7 @@ export default function VendorStats() {
       {/* Header Section */}
       <div className="flex justify-between items-center">
         <>
-          <h2 className="text-lg font-semibold text-purple-800">
+          <h2 className="text-lg font-bold text-purple-800">
             Vendor Statistics
           </h2>
           <p className="text-sm text-gray-500">Cost Summary</p>
@@ -70,7 +70,7 @@ export default function VendorStats() {
               <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
             </div>
             <div className="space-y-1">
-              <div className="text-2xl font-semibold text-gray-900">
+              <div className="text-2xl font-bold text-gray-900">
                 {stat.value}
               </div>
               <div className="text-sm text-gray-700">{stat.label}</div>

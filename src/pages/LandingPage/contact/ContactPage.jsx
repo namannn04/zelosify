@@ -115,7 +115,7 @@ export default function ContactPage() {
                                 </div>
 
                                 <div>
-                                    <h4 className="text-xl font-semibold text-white mb-4">Follow Us</h4>
+                                    <h4 className="text-xl font-bold text-white mb-4">Follow Us</h4>
                                     <div className="flex space-x-4">
                                         <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors duration-300">
                                             <Facebook className="w-6 h-6" />

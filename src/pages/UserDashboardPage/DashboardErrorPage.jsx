@@ -25,7 +25,7 @@ export default function DashboardErrorPage() {
 
       <main className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-max mx-auto text-center">
-          <p className="text-base font-semibold text-black">404</p>
+          <p className="text-base font-bold text-black">404</p>
           <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             Page not found
           </h1>

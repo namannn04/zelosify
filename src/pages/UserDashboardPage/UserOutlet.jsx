@@ -42,7 +42,7 @@ export default function UserOutlet() {
       </div>
 
       {/* main content */}
-      <div className="flex flex-col min-h-screen bg-gray-50">
+      <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
         <SignOutConfirmation
           setSignOutPopUp={setSignOutPopUp}
           isOpen={signOutPopUp}

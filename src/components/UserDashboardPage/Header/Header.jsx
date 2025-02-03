@@ -1,19 +1,82 @@
-import { memo } from "react";
-import { Bell, Search } from "lucide-react";
-// import { motion } from "framer-motion"
+// Header.js
+import { memo, useEffect, useState, useRef } from "react";
+import { Moon, Search, Sun } from "lucide-react";
 import UserProfile from "./UserProfile";
+import Notification from "./Notification";
 
 const Header = memo(({ isSidebarOpen }) => {
+  const getInitialTheme = () => {
+    if (typeof window !== "undefined") {
+      return (
+        localStorage.getItem("theme") === "dark" ||
+        (!localStorage.getItem("theme") &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      );
+    }
+    return false;
+  };
+
+  const [isDarkMode, setIsDarkMode] = useState(getInitialTheme);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const notificationRef = useRef(null);
+  const profileRef = useRef(null);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = () => setIsDarkMode((prev) => !prev);
+
+  // Unified function to close both when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Toggle Notifications
+  const toggleNotifications = (e) => {
+    e.stopPropagation();
+    setShowNotifications((prev) => !prev && !showNotifications);
+    if (!showNotifications) {
+      setIsProfileOpen(false); // Close profile if notification opens
+    }
+  };
+
+  // Toggle Profile
+  const toggleProfile = (e) => {
+    e.stopPropagation();
+    setIsProfileOpen((prev) => !prev);
+    if (!isProfileOpen) {
+      setShowNotifications(false); // Close notifications if profile opens
+    }
+  };
+
   return (
     <header
       className={`${
         isSidebarOpen ? "pl-[16rem]" : "pl-[5rem]"
-      } sticky top-0 z-40 bg-white border-b`}
-      // initial={false}
-      // animate={{
-      //   paddingLeft: isSidebarOpen ? "16rem" : "5rem",
-      // }}
-      // transition={{ duration: 0.3, ease: "easeInOut" }}
+      } sticky top-0 z-40 bg-white dark:bg-gray-900 border-b dark:border-gray-700`}
     >
       <div className="flex items-center justify-between h-[63px] px-6">
         <div className="flex items-center gap-4 flex-1">
@@ -23,23 +86,57 @@ const Header = memo(({ isSidebarOpen }) => {
               <input
                 type="text"
                 placeholder="Search..."
-                className="pl-8 pr-4 py-2 w-full bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors"
+                className="pl-8 pr-4 py-2 w-full bg-gray-100 dark:bg-gray-800 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-gray-500"
               />
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="relative">
-            <button className="p-2 rounded-md hover:bg-gray-100 transition-colors">
-              <Bell className="h-5 w-5 text-gray-600" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-          </div>
+          {/* Toggle Theme Button */}
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="sr-only peer"
+              checked={isDarkMode}
+              onChange={toggleTheme}
+            />
+            <div className="w-12 h-6 bg-gray-200 dark:bg-gray-700 dark:border dark:border-gray-700 rounded-full peer peer-checked:after:translate-x-6 rtl:peer-checked:after:-translate-x-6 after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-black">
+              {isDarkMode ? (
+                <Moon className="absolute left-1 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white" />
+              ) : (
+                <Sun className="absolute right-1 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black" />
+              )}
+            </div>
+          </label>
 
-          <UserProfile />
+          {/* Bell Icon to Open Notifications */}
+          {/* <div className="relative">
+            <button
+              onClick={toggleNotifications}
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <Bell className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
+            </button>
+          </div> */}
+
+          <UserProfile
+            toggleNotifications={toggleNotifications}
+            isProfileOpen={isProfileOpen}
+            toggleProfile={toggleProfile}
+            profileRef={profileRef}
+          />
         </div>
       </div>
+
+      {/* Notification Popup */}
+      {showNotifications && (
+        <Notification
+          notificationRef={notificationRef}
+          setShowNotifications={setShowNotifications}
+        />
+      )}
     </header>
   );
 });

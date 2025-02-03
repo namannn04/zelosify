@@ -15,7 +15,7 @@ const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
         // exit={{ opacity: 0, width: 0 }}
         // transition={{ duration: 0.2 }}
         to={"/user"}
-        className="text-lg font-semibold text-gray-900 overflow-hidden whitespace-nowrap"
+        className="text-lg font-bold text-gray-900 overflow-hidden whitespace-nowrap"
       >
         <img
           src={Logo}

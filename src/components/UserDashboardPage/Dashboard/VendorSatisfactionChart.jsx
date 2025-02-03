@@ -41,7 +41,7 @@ const CustomTooltip = ({ active, payload }) => {
 export default function VendorSatisfactionChart() {
   return (
     <div className="bg-white rounded-xl border border-gray-100 py-6 px-2">
-      <h2 className="text-lg font-semibold text-[#1e0e4b] mb-6">
+      <h2 className="text-lg font-bold text-[#1e0e4b] mb-6">
         Vendor Satisfaction
       </h2>
       <div className="h-[300px]">

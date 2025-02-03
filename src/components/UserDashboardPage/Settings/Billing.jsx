@@ -1,7 +1,7 @@
 export default function Billing() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-xl font-semibold text-gray-900 mb-8">Billing</h2>
+      <h2 className="text-xl font-bold text-gray-900 mb-8">Billing</h2>
 
       {/* Current Plan Section */}
       <div className="mb-12 bg-white p-6 rounded-lg border border-dotted border-black">
@@ -24,7 +24,7 @@ export default function Billing() {
       </div>
 
       {/* Payment Method Section */}
-      <div className="mb-12">
+      {/* <div className="mb-12">
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           Payment Method
         </h3>
@@ -40,10 +40,10 @@ export default function Billing() {
             Edit
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* Billing History Section */}
-      <div>
+      {/* <div>
         <h3 className="text-lg font-medium text-gray-900 mb-4">
           Billing History
         </h3>
@@ -79,7 +79,7 @@ export default function Billing() {
                     {invoice.amount}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    <span className="px-2 inline-flex text-xs leading-5 font-bold rounded-full bg-green-100 text-green-800">
                       {invoice.status}
                     </span>
                   </td>
@@ -93,7 +93,7 @@ export default function Billing() {
             </tbody>
           </table>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -3,9 +3,15 @@ import { ChevronDown } from "lucide-react";
 export default function General() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-xl font-semibold text-gray-900 mb-8">
-        My Notifications
-      </h2>
+      <div className="flex justify-between items-start">
+        <h2 className="text-xl font-bold text-gray-900 mb-8">
+          My Notifications
+        </h2>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" className="sr-only peer" defaultChecked />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+        </label>
+      </div>
 
       <div className="space-y-8">
         {/* Notification Checkboxes */}
@@ -43,9 +49,10 @@ export default function General() {
           </div>
         </div>
 
-        {/* Toggle Switches */}
+        {/* Notifications */}
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
+          {/* Mobile push notifications */}
+          {/* <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-medium text-gray-900">
                 Mobile push notifications
@@ -59,8 +66,9 @@ export default function General() {
               <input type="checkbox" className="sr-only peer" defaultChecked />
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
             </label>
-          </div>
+          </div> */}
 
+          {/* Desktop Notification */}
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-medium text-gray-900">
@@ -77,6 +85,7 @@ export default function General() {
             </label>
           </div>
 
+          {/* Email Notification */}
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-medium text-gray-900">
@@ -96,7 +105,7 @@ export default function General() {
 
         {/* My Settings Section */}
         <div className="space-y-6">
-          <h2 className="text-lg font-semibold text-gray-900">My Settings</h2>
+          <h2 className="text-lg font-bold text-gray-900">My Settings</h2>
 
           <div className="flex items-center justify-between">
             <div>
@@ -109,22 +118,6 @@ export default function General() {
               Light
               <ChevronDown className="ml-1 h-4 w-4" />
             </button>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-medium text-gray-900">
-                Two-factor authentication
-              </h3>
-              <p className="text-sm text-gray-500">
-                Keep your account secure by enabling 2FA via SMS or using a
-                temporary one-time passcode (TOTP).
-              </p>
-            </div>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" className="sr-only peer" />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
-            </label>
           </div>
 
           <div className="flex items-center justify-between">

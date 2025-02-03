@@ -1,4 +1,4 @@
-import { useLocation, Outlet } from "react-router-dom";
+import { useLocation, Outlet, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SettingsSidebar from "./SettingsSidebar";
 
@@ -15,7 +15,12 @@ export default function SettingsLayout() {
       {/* Top header with Settings > Current Page */}
       <header className="bg-white border-b border-dashed border-gray-200 px-6 py-4">
         <div className="flex items-center">
-          <span className="text-2xl font-semibold text-gray-900">Settings</span>
+          <Link
+            to={"/user/settings"}
+            className="text-2xl font-bold text-gray-900"
+          >
+            Settings
+          </Link>
           <svg
             className="mx-2 h-4 w-4 text-gray-400"
             fill="none"

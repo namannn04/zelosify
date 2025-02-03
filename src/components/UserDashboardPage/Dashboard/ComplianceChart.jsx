@@ -62,7 +62,7 @@ export default function ComplianceChart() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-gray-700 font-medium">Actual compliance</span>
-            <span className="text-emerald-500 font-semibold">8.823</span>
+            <span className="text-emerald-500 font-bold">8.823</span>
           </div>
         </div>
 
@@ -72,7 +72,7 @@ export default function ComplianceChart() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-gray-700 font-medium">Target compliance</span>
-            <span className="text-amber-500 font-semibold">12.122</span>
+            <span className="text-amber-500 font-bold">12.122</span>
           </div>
         </div>
       </div>

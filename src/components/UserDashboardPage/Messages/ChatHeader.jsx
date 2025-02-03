@@ -4,7 +4,7 @@ import React from "react";
 export default function ChatHeader() {
   return (
     <div className="flex items-center justify-between p-4 border-b text-sm">
-      <h2 className="text-xl font-semibold">Zelosify AI Chat</h2>
+      <h2 className="text-xl font-bold">Zelosify AI Chat</h2>
       <div className="flex items-center gap-2">
         <div className="group relative">
           <button className="p-2 hover:bg-gray-100 rounded-full">

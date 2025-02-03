@@ -5,11 +5,11 @@ export default function Security() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-xl font-semibold text-gray-900 mb-8">Security</h2>
+      <h2 className="text-xl font-bold text-gray-900 mb-8">Security</h2>
 
       {/* Password Section */}
       <div className="mb-12">
@@ -96,7 +96,7 @@ export default function Security() {
             </div>
           </div>
 
-          <button className="px-4 py-2 text-sm text-white bg-gray-900 rounded-lg hover:bg-gray-800">
+          <button className="px-2 py-1 text-sm text-white bg-gray-900 rounded-lg hover:bg-gray-800">
             Update Password
           </button>
         </div>
@@ -113,7 +113,7 @@ export default function Security() {
           </p>
         </div>
 
-        <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+        <div className="flex items-center gap-1 justify-between p-4 border border-gray-200 rounded-lg">
           <div>
             <p className="text-sm font-medium text-gray-900">
               Two-Factor Authentication
@@ -121,7 +121,7 @@ export default function Security() {
             <p className="text-sm text-gray-500">
               {twoFactorEnabled
                 ? "Two-factor authentication is enabled"
-                : "Protect your account with 2FA"}
+                : "Keep your account secure by enabling 2FA via SMS or using a temporary one-time passcode (TOTP)"}
             </p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer">
@@ -137,7 +137,7 @@ export default function Security() {
       </div>
 
       {/* Login History */}
-      <div className="mb-12">
+      {/* <div className="mb-12">
         <div className="mb-6">
           <h3 className="text-base font-medium text-gray-900 mb-1">
             Login History
@@ -199,10 +199,10 @@ export default function Security() {
             </table>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Connected Devices */}
-      <div>
+      {/* <div>
         <div className="mb-6">
           <h3 className="text-base font-medium text-gray-900 mb-1">
             Connected Devices
@@ -249,7 +249,7 @@ export default function Security() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

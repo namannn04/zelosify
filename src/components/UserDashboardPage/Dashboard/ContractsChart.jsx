@@ -25,7 +25,7 @@ export default function ContractsChart() {
   return (
     <div className="w-full bg-white rounded-xl border border-gray-100 py-6 px-2">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-semibold text-[#1e0e4b]">
+        <h2 className="text-lg font-bold text-[#1e0e4b]">
           Total Contracts approved
         </h2>
       </div>

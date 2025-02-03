@@ -62,7 +62,7 @@ export default function DashboardUser() {
         <ComplianceChart />
         {/* Top Vendor Items */}
         <div className="bg-white rounded-lg p-6 border border-gray-100">
-          <h2 className="text-lg font-semibold mb-6">Top Vendor Items</h2>
+          <h2 className="text-lg font-bold mb-6">Top Vendor Items</h2>
           <div className="space-y-6">
             {vendorItems.map((item) => (
               <div key={item.id}>
@@ -85,9 +85,7 @@ export default function DashboardUser() {
 
         {/* Volume vs Service Level */}
         <div className="bg-white rounded-lg p-6 border border-gray-100">
-          <h2 className="text-lg font-semibold mb-6">
-            Volume vs Service Level
-          </h2>
+          <h2 className="text-lg font-bold mb-6">Volume vs Service Level</h2>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={volumeServiceData} barSize={20}>
