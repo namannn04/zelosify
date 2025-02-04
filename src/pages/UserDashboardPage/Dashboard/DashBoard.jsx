@@ -32,7 +32,7 @@ const volumeServiceData = [
 
 export default function DashboardUser() {
   return (
-    <div className="px-6 py-2 bg-gray-50">
+    <div className="px-6 py-2 bg-gray-50 dark:bg-gray-900">
       {/* Stats Grid */}
       <div className="flex flex-wrap lg:flex-nowrap gap-x-6 py-4">
         {/* First Component: VendorStats */}
@@ -61,20 +61,24 @@ export default function DashboardUser() {
       <div className="grid grid-cols-3 gap-6">
         <ComplianceChart />
         {/* Top Vendor Items */}
-        <div className="bg-white rounded-lg p-6 border border-gray-100">
-          <h2 className="text-lg font-bold mb-6">Top Vendor Items</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-100 dark:border-gray-700">
+          <h2 className="text-lg font-bold mb-6 text-gray-900 dark:text-white">
+            Top Vendor Items
+          </h2>
           <div className="space-y-6">
             {vendorItems.map((item) => (
               <div key={item.id}>
                 <div className="flex justify-between mb-2">
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-gray-600 dark:text-gray-300">
                     {item.id}. {item.name}
                   </div>
-                  <div className="text-sm font-medium">{item.percentage}</div>
+                  <div className="text-sm font-medium text-gray-900 dark:text-white">
+                    {item.percentage}
+                  </div>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-blue-500 rounded-full"
+                    className="h-full bg-blue-500 dark:bg-blue-400 rounded-full"
                     style={{ width: `${item.popularity}%` }}
                   ></div>
                 </div>
@@ -84,14 +88,16 @@ export default function DashboardUser() {
         </div>
 
         {/* Volume vs Service Level */}
-        <div className="bg-white rounded-lg p-6 border border-gray-100">
-          <h2 className="text-lg font-bold mb-6">Volume vs Service Level</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-100 dark:border-gray-700">
+          <h2 className="text-lg font-bold mb-6 text-gray-900 dark:text-white">
+            Volume vs Service Level
+          </h2>
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={volumeServiceData} barSize={20}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" stroke="#2d2d2d" />
+                <XAxis dataKey="name" stroke="#2d2d2d" />
+                <YAxis stroke="#2d2d2d" />
                 <Tooltip />
                 <Bar dataKey="volume" fill="#3b82f6" />
                 <Bar dataKey="services" fill="#10b981" />
@@ -100,12 +106,20 @@ export default function DashboardUser() {
           </div>
           <div className="flex items-center justify-between mt-4">
             <div className="flex items-center space-x-2">
-              <span className="text-sm">Volume</span>
-              <span className="text-sm font-medium">1,135</span>
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                Volume
+              </span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                1,135
+              </span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm">Services</span>
-              <span className="text-sm font-medium">635</span>
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                Services
+              </span>
+              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                635
+              </span>
             </div>
           </div>
         </div>

@@ -47,12 +47,14 @@ export default function VendorStats() {
       {/* Header Section */}
       <div className="flex justify-between items-center">
         <>
-          <h2 className="text-lg font-bold text-purple-800">
+          <h2 className="text-lg font-bold text-black dark:text-white">
             Vendor Statistics
           </h2>
-          <p className="text-sm text-gray-500">Cost Summary</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Cost Summary
+          </p>
         </>
-        <button className="inline-flex items-center text-sm text-gray-500 border border-gray-600 hover:bg-gray-700 hover:text-gray-100 rounded-md px-3 py-1">
+        <button className="inline-flex items-center text-sm text-gray-500 dark:text-gray-300 border border-gray-600 dark:border-gray-700 hover:bg-gray-700 hover:text-gray-100 rounded-md px-3 py-1">
           <span>Export</span>
         </button>
       </div>
@@ -62,7 +64,7 @@ export default function VendorStats() {
         {stats.map((stat, i) => (
           <div
             key={i}
-            className={`${stat.bgColor} rounded-xl p-4 space-y-3 shadow-lg`}
+            className={`${stat.bgColor} rounded-xl p-4 space-y-3 shadow-lg dark:shadow-gray-800`}
           >
             <div
               className={`${stat.iconBg} w-10 h-10 rounded-full flex items-center justify-center`}

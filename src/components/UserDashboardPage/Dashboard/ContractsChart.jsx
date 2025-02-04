@@ -23,10 +23,10 @@ const data = [
 
 export default function ContractsChart() {
   return (
-    <div className="w-full bg-white rounded-xl border border-gray-100 py-6 px-2">
+    <div className="w-full bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 py-6 px-2">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-bold text-[#1e0e4b]">
-          Total Contracts approved
+        <h2 className="text-lg font-bold text-[#1e0e4b] dark:text-white">
+          Total Contracts Approved
         </h2>
       </div>
       <div className="h-[220px]">
@@ -39,18 +39,21 @@ export default function ContractsChart() {
               strokeDasharray="3 3"
               vertical={false}
               stroke="#E5E7EB"
+              className="dark:stroke-gray-600"
             />
             <XAxis
               dataKey="day"
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#94A3B8", fontSize: 14 }}
+              className="dark:text-gray-300"
             />
             <YAxis
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#94A3B8", fontSize: 14 }}
               tickFormatter={(value) => `${value / 1000}k`}
+              className="dark:text-gray-300"
             />
             <Tooltip
               contentStyle={{
@@ -58,6 +61,8 @@ export default function ContractsChart() {
                 border: "1px solid #E5E7EB",
                 borderRadius: "8px",
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                className:
+                  "dark:bg-gray-700 dark:border-gray-600 dark:text-white",
               }}
             />
             <Legend
@@ -65,6 +70,7 @@ export default function ContractsChart() {
               height={36}
               iconType="circle"
               iconSize={8}
+              className="dark:text-gray-300"
             />
             <Bar
               dataKey="online"

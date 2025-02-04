@@ -80,41 +80,6 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
     [location.pathname, isOpen, contractItems] // Added contractItems to dependencies
   );
 
-  const memoizedFooterItems = useMemo(
-    () => (
-      <div className="px-3 py-4 border-t border-dashed border-gray-200">
-        <button
-          onClick={() => navigate(supportItem.href)}
-          className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 hover:bg-gray-100 transition ${
-            isOpen ? "justify-start" : "justify-center"
-          }`}
-        >
-          <supportItem.icon className="h-5 w-5" />
-          {isOpen && <span>{supportItem.title}</span>}
-        </button>
-        <button
-          onClick={() => navigate(settingsItem.href)}
-          className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 hover:bg-gray-100 transition ${
-            isOpen ? "justify-start" : "justify-center"
-          }`}
-        >
-          <settingsItem.icon className="h-5 w-5" />
-          {isOpen && <span>{settingsItem.title}</span>}
-        </button>
-        <button
-          onClick={() => setSignOutPopUp((prev) => !prev)}
-          className={`flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition ${
-            isOpen ? "justify-start" : "justify-center"
-          }`}
-        >
-          <signOutItem.icon className="h-5 w-5" />
-          {isOpen && <span>{signOutItem.title}</span>}
-        </button>
-      </div>
-    ),
-    [isOpen, navigate, setSignOutPopUp]
-  );
-
   return (
     <>
       {isOpen && window.innerWidth < 1024 && (
@@ -128,7 +93,7 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
         ref={sidebarRef}
         className={`${
           isOpen ? "w-[16rem]" : "w-[5rem]"
-        } fixed inset-y-0 left-0 z-40 bg-white border-r border-gray-200 shadow-lg flex flex-col h-screen`}
+        } fixed inset-y-0 left-0 z-40 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-lg flex flex-col h-screen`}
       >
         <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
@@ -144,14 +109,14 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
           >
             <div className="px-3 py-4 space-y-4">
               {isOpen && (
-                <h2 className="text-xs font-bold text-gray-500 px-4">
+                <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 px-4">
                   OVERVIEW
                 </h2>
               )}
               <div className="space-y-1">{memoizedOverviewItems}</div>
 
               {isOpen && (
-                <h2 className="text-xs font-bold text-gray-500 border-t border-dashed px-4 pt-6">
+                <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 border-t border-dashed dark:border-gray-700 px-4 pt-6">
                   CONTRACTS
                 </h2>
               )}
@@ -160,7 +125,7 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
 
             {/* Chat history */}
             {isOpen && location.pathname === "/user/messages" && (
-              <div className="px-3 py-4 border-t border-dashed border-gray-200">
+              <div className="px-3 py-4 border-t border-dashed border-gray-200 dark:border-gray-700">
                 <ChatHistory isOpen={isOpen} />
               </div>
             )}
@@ -168,7 +133,35 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
         </div>
 
         {/* Footer Section: Settings & Sign Out */}
-        {memoizedFooterItems}
+        <div className="px-3 py-4 border-t border-dashed border-gray-200 dark:border-gray-700">
+          <button
+            onClick={() => navigate(supportItem.href)}
+            className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
+              isOpen ? "justify-start" : "justify-center"
+            }`}
+          >
+            <supportItem.icon className="h-5 w-5" />
+            {isOpen && <span>{supportItem.title}</span>}
+          </button>
+          <button
+            onClick={() => navigate(settingsItem.href)}
+            className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
+              isOpen ? "justify-start" : "justify-center"
+            }`}
+          >
+            <settingsItem.icon className="h-5 w-5" />
+            {isOpen && <span>{settingsItem.title}</span>}
+          </button>
+          <button
+            onClick={() => setSignOutPopUp((prev) => !prev)}
+            className={`flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
+              isOpen ? "justify-start" : "justify-center"
+            }`}
+          >
+            <signOutItem.icon className="h-5 w-5" />
+            {isOpen && <span>{signOutItem.title}</span>}
+          </button>
+        </div>
       </aside>
     </>
   );

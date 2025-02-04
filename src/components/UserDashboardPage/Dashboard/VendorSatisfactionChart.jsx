@@ -23,7 +23,7 @@ const data = [
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 border border-gray-100 rounded-lg shadow-sm">
+      <div className="bg-white p-3 border border-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
         {payload.map((entry, index) => (
           <div key={index} className="text-sm">
             <span className="font-medium" style={{ color: entry.color }}>
@@ -40,8 +40,8 @@ const CustomTooltip = ({ active, payload }) => {
 
 export default function VendorSatisfactionChart() {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 py-6 px-2">
-      <h2 className="text-lg font-bold text-[#1e0e4b] mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 py-6 px-2">
+      <h2 className="text-lg font-bold text-[#1e0e4b] dark:text-white mb-6">
         Vendor Satisfaction
       </h2>
       <div className="h-[300px]">
@@ -64,12 +64,14 @@ export default function VendorSatisfactionChart() {
               strokeDasharray="3 3"
               vertical={false}
               stroke="#E5E7EB"
+              className="dark:stroke-gray-600"
             />
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#94A3B8", fontSize: 12 }}
+              className="dark:text-gray-300"
             />
             <YAxis
               axisLine={false}
@@ -77,6 +79,7 @@ export default function VendorSatisfactionChart() {
               tick={{ fill: "#94A3B8", fontSize: 12 }}
               domain={[70, 100]}
               tickFormatter={(value) => `${value}%`}
+              className="dark:text-gray-300"
             />
             <Tooltip content={<CustomTooltip />} />
             <Line
@@ -107,13 +110,17 @@ export default function VendorSatisfactionChart() {
       <div className="flex items-center justify-center gap-8 mt-4">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-[#3b82f6]"></div>
-          <span className="text-sm text-gray-500">Last Month</span>
-          <span className="text-sm font-medium">80%</span>
+          <span className="text-sm text-gray-500 dark:text-gray-300">
+            Last Month
+          </span>
+          <span className="text-sm font-medium dark:text-gray-300">80%</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-[#10b981]"></div>
-          <span className="text-sm text-gray-500">This Month</span>
-          <span className="text-sm font-medium">90%</span>
+          <span className="text-sm text-gray-500 dark:text-gray-300">
+            This Month
+          </span>
+          <span className="text-sm font-medium dark:text-gray-300">90%</span>
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Statistics({ setIsSidebarVisible }) {
   return (
-    <div className="flex-[0.25] border-l border-dashed border-gray-200 p-4">
+    <div className="flex-[0.25] border-l border-dashed border-gray-200 p-4 dark:border-gray-700 dark:bg-gray-800">
       <div className="space-y-6">
         {/* TOTAL BILL PAYABLE */}
         <div className="text-center">
@@ -12,13 +12,16 @@ export default function Statistics({ setIsSidebarVisible }) {
               <ArrowRight
                 onClick={() => setIsSidebarVisible(false)}
                 role="button"
+                className="text-gray-900 dark:text-gray-100"
               />
             </div>
             <div className="flex flex-col items-left justify-between mb-4">
-              <h3 className="text-lg font-bold text-left">
+              <h3 className="text-lg font-bold text-left text-gray-900 dark:text-gray-100">
                 TOTAL BILL PAYABLE
               </h3>
-              <button className="text-sm text-gray-500 text-left">Jan ▾</button>
+              <button className="text-sm text-gray-500 dark:text-gray-400 text-left">
+                Jan ▾
+              </button>
             </div>
           </div>
           <div className="relative inline-block">
@@ -43,8 +46,12 @@ export default function Statistics({ setIsSidebarVisible }) {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-bold">$2.2m</span>
-              <span className="text-xs text-gray-500">242 contracts</span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                $2.2m
+              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                242 contracts
+              </span>
             </div>
           </div>
         </div>
@@ -52,19 +59,29 @@ export default function Statistics({ setIsSidebarVisible }) {
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <span className="text-xl font-bold">$864,600</span>
-            <p className="text-sm text-gray-500">95 shipments</p>
+            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              $864,600
+            </span>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              95 shipments
+            </p>
           </div>
           <div>
-            <span className="text-xl font-bold">$1.34m</span>
-            <p className="text-sm text-gray-500">147 pickups</p>
+            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              $1.34m
+            </span>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              147 pickups
+            </p>
           </div>
         </div>
 
         {/* Total Budget */}
         <div>
           <div className="flex justify-between items-center mb-2">
-            <h3 className="text-sm font-medium text-gray-500">TOTAL BUDGET</h3>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              TOTAL BUDGET
+            </h3>
           </div>
           <div className="space-y-2">
             <div className="w-full h-2 flex rounded-full overflow-hidden">
@@ -81,16 +98,24 @@ export default function Statistics({ setIsSidebarVisible }) {
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                <span className="text-xs text-gray-600">Paid</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400">
+                  Paid
+                </span>
               </div>
-              <span className="text-xs text-gray-600">89%</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                89%
+              </span>
             </div>
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <div className="w-3 h-3 rounded-full bg-gray-400 mr-2"></div>
-                <span className="text-xs text-gray-600">Available</span>
+                <span className="text-xs text-gray-600 dark:text-gray-400">
+                  Available
+                </span>
               </div>
-              <span className="text-xs text-gray-600">11%</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                11%
+              </span>
             </div>
           </div>
         </div>
@@ -98,37 +123,45 @@ export default function Statistics({ setIsSidebarVisible }) {
         {/* Overview */}
         <div>
           <div className="flex justify-between items-center mb-2">
-            <h3 className="text-sm font-medium text-gray-500">OVERVIEW</h3>
+            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              OVERVIEW
+            </h3>
           </div>
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-xl font-bold">$2,246.75</span>
-                <p className="text-sm text-gray-500">Average</p>
+                <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  $2,246.75
+                </span>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Average
+                </p>
               </div>
               <div>
-                <span className="text-xl font-bold">$2.2m</span>
-                <p className="text-sm text-gray-500">Total revenue</p>
+                <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  $2.2m
+                </span>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Total revenue
+                </p>
               </div>
             </div>
-            {/* <div className="grid grid-cols-2 gap-4">
-            <div>
-              <span className="text-xl font-bold">16 min</span>
-              <p className="text-sm text-gray-500">Processing time</p>
-            </div>
-            <div>
-              <span className="text-xl font-bold">1.7</span>
-              <p className="text-sm text-gray-500">Avg. items/order</p>
-            </div>
-          </div> */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-xl font-bold">0.32%</span>
-                <p className="text-sm text-gray-500">Pending contracts</p>
+                <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  0.32%
+                </span>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Pending contracts
+                </p>
               </div>
               <div>
-                <span className="text-xl font-bold">0.51%</span>
-                <p className="text-sm text-gray-500">Rejection rate</p>
+                <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  0.51%
+                </span>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Rejection rate
+                </p>
               </div>
             </div>
           </div>

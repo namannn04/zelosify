@@ -1,22 +1,30 @@
 export default function Billing() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-xl font-bold text-gray-900 mb-8">Billing</h2>
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-8">
+        Billing
+      </h2>
 
       {/* Current Plan Section */}
-      <div className="mb-12 bg-white p-6 rounded-lg border border-dotted border-black">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Current Plan</h3>
+      <div className="mb-12 bg-white dark:bg-gray-800 p-6 rounded-lg border border-dotted border-black dark:border-gray-600">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
+          Current Plan
+        </h3>
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-2xl font-bold text-gray-900">Pro Plan</p>
-            <p className="text-sm text-gray-600">Billed annually</p>
+            <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              Pro Plan
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Billed annually
+            </p>
           </div>
-          <button className="px-2 py-1 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors">
+          <button className="px-2 py-1 bg-gray-900 dark:bg-white text-white dark:text-black rounded-md hover:bg-gray-800 dark:hover:bg-gray-300 transition-colors">
             Upgrade Plan
           </button>
         </div>
-        <div className="mt-4 p-4 bg-gray-50 rounded-md">
-          <p className="text-sm text-gray-600">
+        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-md">
+          <p className="text-sm text-gray-600 dark:text-gray-300">
             Your next billing date is{" "}
             <span className="font-medium">August 1, 2023</span>
           </p>

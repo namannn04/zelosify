@@ -3,7 +3,11 @@ import Pagination from "../../UI/Pagination";
 const leads = [
   {
     id: 1,
-    company: "Intellias",
+    contract: "Intellias",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "intellias.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "$150.0M",
@@ -11,7 +15,11 @@ const leads = [
   },
   {
     id: 2,
-    company: "Kia America",
+    contract: "Kia America",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "kia.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "Not available",
@@ -19,7 +27,11 @@ const leads = [
   },
   {
     id: 3,
-    company: "Fisker",
+    contract: "Fisker",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "fiskerinc.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "$200.1M",
@@ -27,7 +39,11 @@ const leads = [
   },
   {
     id: 4,
-    company: "Lucid Motors",
+    contract: "Lucid Motors",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "lucidmotors.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "$639.4M",
@@ -35,7 +51,11 @@ const leads = [
   },
   {
     id: 5,
-    company: "First Brands Group, LLC",
+    contract: "First Brands Group, LLC",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "firstbrandsgroup.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "$2500.0M",
@@ -43,7 +63,11 @@ const leads = [
   },
   {
     id: 6,
-    company: "Karma Automotive",
+    contract: "Karma Automotive",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "karmaautomotive.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "$24.2M",
@@ -51,7 +75,11 @@ const leads = [
   },
   {
     id: 7,
-    company: "Oliver Wyman",
+    contract: "Oliver Wyman",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "oliverwyman.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "$2500.0M",
@@ -59,7 +87,11 @@ const leads = [
   },
   {
     id: 8,
-    company: "Waymo",
+    contract: "Waymo",
+    vendorName: "AAA",
+    from: "Feb 1, 2025",
+    to: "March 1, 2025",
+    totalDays: "30",
     domain: "waymo.com",
     logo: "/placeholder.svg?height=40&width=40",
     revenue: "$1400.0M",
@@ -76,10 +108,10 @@ export default function TrackingLayout() {
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              My Leads
+              Tracking
             </h1>
             <button className="px-4 py-2 bg-black text-white rounded-md text-sm hover:bg-slate-900 dark:bg-gray-800 dark:hover:bg-gray-700">
-              <span>+</span> Create Lead
+              <span>+</span> Create
             </button>
           </div>
 
@@ -109,13 +141,22 @@ export default function TrackingLayout() {
               <thead className="bg-gray-50 dark:bg-gray-700">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Company
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Revenue
+                    Contract
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Social Profiles
+                    Vendor Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    From
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    TO
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    Total Days
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                    Amount
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                     People
@@ -130,9 +171,9 @@ export default function TrackingLayout() {
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="ml-4">
+                        <div className="">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {lead.company}
+                            {lead.contract}
                           </div>
                           <div className="text-sm text-gray-500 dark:text-gray-400">
                             {lead.domain}
@@ -140,13 +181,21 @@ export default function TrackingLayout() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-900 dark:text-white">
-                      {lead.revenue}
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      <div className="flex gap-2">{lead.vendorName}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex gap-2">
-                        {/* Icons remain unchanged */}
-                      </div>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      <div className="flex gap-2">{lead.from}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      <div className="flex gap-2">{lead.to}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      <div className="flex gap-2">{lead.totalDays} </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      {lead.revenue}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       <button className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-xs font-medium rounded text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">

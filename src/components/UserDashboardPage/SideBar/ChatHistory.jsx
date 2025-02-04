@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { Clock, ChevronRight, MessageSquare } from "lucide-react";
-// import { motion, AnimatePresence } from "framer-motion";
 
 const ChatHistory = React.memo(({ isOpen }) => {
   const [showAllHistory, setShowAllHistory] = useState(false);
@@ -40,22 +39,18 @@ const ChatHistory = React.memo(({ isOpen }) => {
     (chat) => (
       <button
         key={chat.id}
-        className="w-full flex items-center gap-1 py-1.5 text-sm text-gray-600 hover:bg-gray-100 transition-colors rounded-md"
+        className="w-full flex items-center gap-1 py-1.5 text-sm text-gray-600 hover:bg-gray-100 transition-colors rounded-md 
+        dark:text-gray-300 dark:hover:bg-gray-700"
       >
-        <MessageSquare className="h-4 w-4 shrink-0 text-gray-400" />
-        {/* <AnimatePresence> */}
+        <MessageSquare className="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-400" />
         {isOpen && (
-          <div
-            // initial={{ opacity: 0, width: 0 }}
-            // animate={{ opacity: 1, width: "auto" }}
-            // exit={{ opacity: 0, width: 0 }}
-            className="flex items-center justify-between w-full overflow-hidden"
-          >
+          <div className="flex items-center justify-between w-full overflow-hidden">
             <span className="text-xs truncate">{chat.title}</span>
-            <span className="text-xs text-gray-400 shrink-0">{chat.date}</span>
+            <span className="text-xs text-gray-400 dark:text-gray-400 shrink-0">
+              {chat.date}
+            </span>
           </div>
         )}
-        {/* </AnimatePresence> */}
       </button>
     ),
     [isOpen]
@@ -63,7 +58,7 @@ const ChatHistory = React.memo(({ isOpen }) => {
 
   return (
     <div className="space-y-2 pl-3">
-      <div className="flex items-center gap-2 text-sm font-medium text-gray-600">
+      <div className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300">
         <Clock className="h-5 w-5" />
         {isOpen && <span>Recent Chats</span>}
       </div>
@@ -73,7 +68,8 @@ const ChatHistory = React.memo(({ isOpen }) => {
       {chatHistory.length > 3 && isOpen && (
         <button
           onClick={toggleShowAllHistory}
-          className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
+          className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors 
+          dark:text-blue-400 dark:hover:text-blue-500"
         >
           {showAllHistory ? "Show less" : "Show more"}
           <ChevronRight

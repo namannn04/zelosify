@@ -8,14 +8,18 @@ export default function Security() {
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <h2 className="text-xl font-bold text-gray-900 mb-8">Security</h2>
+    <div className="p-8 max-w-4xl mx-auto dark:bg-gray-900 dark:text-white">
+      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-8">
+        Security
+      </h2>
 
       {/* Password Section */}
       <div className="mb-12">
         <div className="mb-6">
-          <h3 className="text-base font-medium text-gray-900 mb-1">Password</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="text-base font-medium text-gray-900 dark:text-white mb-1">
+            Password
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-300">
             Please enter your current password to change your password
           </p>
         </div>
@@ -23,19 +27,19 @@ export default function Security() {
         <div className="space-y-4">
           {/* Current Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Current Password
             </label>
             <div className="relative">
               <input
                 type={showCurrentPassword ? "text" : "password"}
-                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-900"
+                className="w-full px-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-gray-900 dark:bg-gray-800 dark:text-white"
                 placeholder="Enter your current password"
               />
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-300"
               >
                 {showCurrentPassword ? (
                   <EyeOffIcon className="w-5 h-5" />
@@ -48,19 +52,19 @@ export default function Security() {
 
           {/* New Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               New Password
             </label>
             <div className="relative">
               <input
                 type={showNewPassword ? "text" : "password"}
-                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-900"
+                className="w-full px-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-gray-900 dark:bg-gray-800 dark:text-white"
                 placeholder="Enter new password"
               />
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-300"
               >
                 {showNewPassword ? (
                   <EyeOffIcon className="w-5 h-5" />
@@ -73,19 +77,19 @@ export default function Security() {
 
           {/* Confirm New Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Confirm New Password
             </label>
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                className="w-full px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-900"
+                className="w-full px-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-gray-900 dark:bg-gray-800 dark:text-white"
                 placeholder="Confirm new password"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-300"
               >
                 {showConfirmPassword ? (
                   <EyeOffIcon className="w-5 h-5" />
@@ -96,7 +100,7 @@ export default function Security() {
             </div>
           </div>
 
-          <button className="px-2 py-1 text-sm text-white bg-gray-900 rounded-lg hover:bg-gray-800">
+          <button className="px-2 py-1 text-sm text-white bg-gray-900 rounded-lg hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600">
             Update Password
           </button>
         </div>
@@ -105,20 +109,20 @@ export default function Security() {
       {/* Two-Factor Authentication */}
       <div className="mb-12">
         <div className="mb-6">
-          <h3 className="text-base font-medium text-gray-900 mb-1">
+          <h3 className="text-base font-medium text-gray-900 dark:text-white mb-1">
             Two-Factor Authentication
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-300">
             Add an extra layer of security to your account
           </p>
         </div>
 
-        <div className="flex items-center gap-1 justify-between p-4 border border-gray-200 rounded-lg">
+        <div className="flex items-center gap-1 justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div>
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
               Two-Factor Authentication
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-300">
               {twoFactorEnabled
                 ? "Two-factor authentication is enabled"
                 : "Keep your account secure by enabling 2FA via SMS or using a temporary one-time passcode (TOTP)"}
@@ -131,125 +135,10 @@ export default function Security() {
               checked={twoFactorEnabled}
               onChange={() => setTwoFactorEnabled(!twoFactorEnabled)}
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900"></div>
+            <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
           </label>
         </div>
       </div>
-
-      {/* Login History */}
-      {/* <div className="mb-12">
-        <div className="mb-6">
-          <h3 className="text-base font-medium text-gray-900 mb-1">
-            Login History
-          </h3>
-          <p className="text-sm text-gray-500">
-            Recent login activity on your account
-          </p>
-        </div>
-
-        <div className="border border-gray-200 rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-gray-50">
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
-                    Date & Time
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
-                    Device
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
-                    Location
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500">
-                    IP Address
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                <tr className="bg-white">
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    Today, 2:15 PM
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    Chrome on Windows
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    San Francisco, US
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    192.168.1.1
-                  </td>
-                </tr>
-                <tr className="bg-white">
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    Yesterday, 4:30 PM
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    Safari on macOS
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    New York, US
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">
-                    192.168.1.2
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div> */}
-
-      {/* Connected Devices */}
-      {/* <div>
-        <div className="mb-6">
-          <h3 className="text-base font-medium text-gray-900 mb-1">
-            Connected Devices
-          </h3>
-          <p className="text-sm text-gray-500">
-            Devices that are currently logged into your account
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                💻
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  MacBook Pro - Chrome
-                </p>
-                <p className="text-sm text-gray-500">
-                  Active now - San Francisco
-                </p>
-              </div>
-            </div>
-            <button className="px-3 py-1 text-sm text-red-600 hover:text-red-700">
-              Revoke
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                📱
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-900">
-                  iPhone 12 - Safari
-                </p>
-                <p className="text-sm text-gray-500">3 hours ago - New York</p>
-              </div>
-            </div>
-            <button className="px-3 py-1 text-sm text-red-600 hover:text-red-700">
-              Revoke
-            </button>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

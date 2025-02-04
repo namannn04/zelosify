@@ -27,8 +27,10 @@ const data = [
 
 export default function VendorInsightsChart() {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 py-6 px-2">
-      <h2 className="text-lg font-bold text-[#1e0e4b] mb-6">Vendor Insights</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 py-6 px-2">
+      <h2 className="text-lg font-bold text-[#1e0e4b] dark:text-white mb-6">
+        Vendor Insights
+      </h2>
       <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -39,17 +41,20 @@ export default function VendorInsightsChart() {
               strokeDasharray="3 3"
               vertical={false}
               stroke="#E5E7EB"
+              className="dark:stroke-gray-600"
             />
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#94A3B8", fontSize: 12 }}
+              className="dark:text-gray-300"
             />
             <YAxis
               axisLine={false}
               tickLine={false}
               tick={{ fill: "#94A3B8", fontSize: 12 }}
+              className="dark:text-gray-300"
             />
             <Tooltip
               contentStyle={{
@@ -57,6 +62,8 @@ export default function VendorInsightsChart() {
                 border: "1px solid #E5E7EB",
                 borderRadius: "8px",
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                className:
+                  "dark:bg-gray-700 dark:border-gray-600 dark:text-white",
               }}
             />
             <Line
@@ -85,14 +92,18 @@ export default function VendorInsightsChart() {
             className="w-4 h-4 rounded-full"
             style={{ backgroundColor: "#8b5cf6" }}
           ></span>
-          <span className="text-sm text-gray-600">Old Vendors</span>
+          <span className="text-sm text-gray-600 dark:text-gray-300">
+            Old Vendors
+          </span>
         </div>
         <div className="flex items-center space-x-2">
           <span
             className="w-4 h-4 rounded-full"
             style={{ backgroundColor: "#ef4444" }}
           ></span>
-          <span className="text-sm text-gray-600">New Vendors</span>
+          <span className="text-sm text-gray-600 dark:text-gray-300">
+            New Vendors
+          </span>
         </div>
       </div>
     </div>

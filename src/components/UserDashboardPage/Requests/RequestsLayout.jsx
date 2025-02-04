@@ -1,3 +1,4 @@
+import { Check, X } from "lucide-react";
 import Pagination from "../../UI/Pagination";
 
 const requests = [
@@ -12,7 +13,7 @@ const requests = [
     access: "AWS",
     resource: "PII data",
     permissions: ["view", "edit", "delete", "manage"],
-    requestedOn: "2024/06/12",
+    requestedOn: "Jun 6, 2024",
   },
   {
     id: 2,
@@ -25,7 +26,7 @@ const requests = [
     access: "AWS",
     resource: "Prod_EKS",
     permissions: ["edit", "delete"],
-    requestedOn: "2024/10/21",
+    requestedOn: "Jun 6, 2024",
   },
   {
     id: 3,
@@ -38,7 +39,7 @@ const requests = [
     access: "AWS",
     resource: "Prod_S3",
     permissions: ["view", "edit", "delete", "manage"],
-    requestedOn: "2024/09/18",
+    requestedOn: "Jun 6, 2024",
   },
   {
     id: 4,
@@ -51,7 +52,7 @@ const requests = [
     access: "Snowflake",
     resource: "Revenue Data",
     permissions: ["view"],
-    requestedOn: "2024/03/09",
+    requestedOn: "Jun 6, 2024",
   },
   {
     id: 5,
@@ -64,7 +65,7 @@ const requests = [
     access: "Snowflake",
     resource: "Revenue Data",
     permissions: ["view"],
-    requestedOn: "2024/09/16",
+    requestedOn: "Jun 6, 2024",
   },
   {
     id: 6,
@@ -77,7 +78,7 @@ const requests = [
     access: "AWS",
     resource: "Prod_Env",
     permissions: ["view", "edit", "delete", "manage"],
-    requestedOn: "2024/04/03",
+    requestedOn: "Jun 6, 2024",
   },
   {
     id: 7,
@@ -90,7 +91,7 @@ const requests = [
     access: "AWS",
     resource: "PII data",
     permissions: ["view"],
-    requestedOn: "2024/12/12",
+    requestedOn: "Jun 6, 2024",
   },
 ];
 
@@ -248,10 +249,15 @@ export default function RequestsLayout() {
                   <td className="px-4 py-4 text-sm">{request.requestedOn}</td>
                   <td className="px-4 py-4">
                     <div className="flex items-center gap-2">
-                      <button className="px-3 py-1.5 text-xs border border-gray-600 rounded-md hover:bg-gray-700 hover:text-white transition-colors">
+                      {/* Approve Button - Green */}
+                      <button className="px-3 py-1.5 text-xs border border-green-600 text-green-600 rounded-md flex items-center gap-1 hover:bg-green-600 hover:text-white transition-colors">
+                        <Check className="h-4 w-4" />
                         Approve
                       </button>
-                      <button className="px-3 py-1.5 text-xs border border-gray-600 rounded-md hover:bg-gray-700 hover:text-white transition-colors">
+
+                      {/* Deny Button - Red */}
+                      <button className="px-3 py-1.5 text-xs border border-red-600 text-red-600 rounded-md flex items-center gap-1 hover:bg-red-600 hover:text-white transition-colors">
+                        <X className="h-4 w-4" />
                         Deny
                       </button>
                     </div>

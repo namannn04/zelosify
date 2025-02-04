@@ -22,8 +22,8 @@ const data = [
 
 export default function ComplianceChart() {
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-6">
-      <h2 className="text-xl font-bold text-[#1e0e4b] mb-8">
+    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-6">
+      <h2 className="text-xl font-bold text-[#1e0e4b] dark:text-white mb-8">
         Compliance Target vs Reality
       </h2>
       <div className="h-[300px] mb-6">
@@ -57,22 +57,30 @@ export default function ComplianceChart() {
 
       <div className="space-y-4">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center">
-            <ShoppingBag className="w-5 h-5 text-emerald-500" />
+          <div className="w-10 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-900 flex items-center justify-center">
+            <ShoppingBag className="w-5 h-5 text-emerald-500 dark:text-emerald-300" />
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-gray-700 font-medium">Actual compliance</span>
-            <span className="text-emerald-500 font-bold">8.823</span>
+            <span className="text-gray-700 dark:text-gray-300 font-medium">
+              Actual compliance
+            </span>
+            <span className="text-emerald-500 dark:text-emerald-300 font-bold">
+              8.823
+            </span>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
-            <Glasses className="w-5 h-5 text-amber-500" />
+          <div className="w-10 h-10 rounded-lg bg-amber-50 dark:bg-amber-900 flex items-center justify-center">
+            <Glasses className="w-5 h-5 text-amber-500 dark:text-amber-300" />
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-gray-700 font-medium">Target compliance</span>
-            <span className="text-amber-500 font-bold">12.122</span>
+            <span className="text-gray-700 dark:text-gray-300 font-medium">
+              Target compliance
+            </span>
+            <span className="text-amber-500 dark:text-amber-300 font-bold">
+              12.122
+            </span>
           </div>
         </div>
       </div>

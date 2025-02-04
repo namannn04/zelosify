@@ -11,18 +11,18 @@ export default function SettingsLayout() {
   }, [location.pathname]);
 
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen bg-white dark:bg-gray-900">
       {/* Top header with Settings > Current Page */}
-      <header className="bg-white border-b border-dashed border-gray-200 px-6 py-4">
+      <header className="bg-white dark:bg-gray-900 border-b border-dashed border-gray-200 dark:border-gray-700 px-6 py-4">
         <div className="flex items-center">
           <Link
             to={"/user/settings"}
-            className="text-2xl font-bold text-gray-900"
+            className="text-2xl font-bold text-gray-900 dark:text-white"
           >
             Settings
           </Link>
           <svg
-            className="mx-2 h-4 w-4 text-gray-400"
+            className="mx-2 h-4 w-4 text-gray-400 dark:text-gray-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -34,7 +34,7 @@ export default function SettingsLayout() {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-500 dark:text-gray-400">
             {activePath.includes("profile") || activePath === "/user/settings"
               ? "My Profile"
               : activePath.includes("general")
