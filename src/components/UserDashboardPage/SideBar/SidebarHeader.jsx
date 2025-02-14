@@ -1,26 +1,24 @@
-import React from "react";
 import { X, Menu } from "lucide-react";
-import { Link } from "react-router-dom";
-import LightLogo from "../../../assets/logos/zelosify_Dark.png";
-import DarkLogo from "../../../assets/logos/main-logo.png";
+import { memo } from "react";
+import Link from "next/link";
 
 // eslint-disable-next-line react/display-name
-const SidebarHeader = React.memo(({ isOpen, toggleSidebar }) => (
+const SidebarHeader = memo(({ isOpen, toggleSidebar }) => (
   <div className="h-16 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
     {isOpen && (
       <Link
-        to={"/user"}
+        href={"/user"}
         className="text-lg font-bold text-gray-900 dark:text-gray-100 overflow-hidden whitespace-nowrap"
       >
         <img
-          src={LightLogo}
+          src={"/assets/logos/zelosify_Dark.png"}
           alt="Zelosify Light Logo"
           width={120}
           height={40}
           className="object-contain block dark:hidden"
         />
         <img
-          src={DarkLogo}
+          src={"/assets/logos/main-logo.png"}
           alt="Zelosify Dark Logo"
           width={120}
           height={40}

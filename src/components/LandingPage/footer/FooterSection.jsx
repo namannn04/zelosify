@@ -1,6 +1,5 @@
+import Link from "next/link";
 import CTASection from "../CTASection";
-import Logo from "../../../assets/logos/main-logo.png";
-import { Link } from "react-router-dom";
 
 export default function FooterSection() {
   const footerLinks = {
@@ -28,24 +27,28 @@ export default function FooterSection() {
 
       {/* Newsletter Section */}
       {/* <div className="max-w-7xl mx-auto px-4 py-12">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                    <>
-                        <h3 className="text-2xl font-bold text-white mb-2">News & Update</h3>
-                        <p className="text-purple-200">Keep up to date with everything about our tool</p>
-                    </>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              News & Update
+            </h3>
+            <p className="text-purple-200">
+              Keep up to date with everything about our tool
+            </p>
+          </>
 
-                    <div className="flex flex-col md:flex-row w-full md:w-auto gap-4">
-                        <input
-                            type="email"
-                            placeholder="Enter your Email"
-                            className="flex-1 px-4 py-3 rounded-lg bg-[#1A1033] border border-purple-900/50 text-white placeholder-purple-300/50 focus:outline-none focus:ring-2 focus:ring-purple-600"
-                        />
-                        <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg whitespace-nowrap transition-colors duration-300">
-                            Subscribe
-                        </button>
-                    </div>
-                </div>
-            </div> */}
+          <div className="flex flex-col md:flex-row w-full md:w-auto gap-4">
+            <input
+              type="email"
+              placeholder="Enter your Email"
+              className="flex-1 px-4 py-3 rounded-lg bg-[#1A1033] border border-purple-900/50 text-white placeholder-purple-300/50 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            />
+            <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg whitespace-nowrap transition-colors duration-300">
+              Subscribe
+            </button>
+          </div>
+        </div>
+      </div> */}
 
       {/* Footer Links */}
       <div className="border-t border-purple-900/50 mt-12">
@@ -56,11 +59,11 @@ export default function FooterSection() {
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-2 mb-6">
                 <Link
-                  to="/"
+                  href="/"
                   className="flex items-center justify-center space-x-2 h-full "
                 >
                   <img
-                    src={Logo}
+                    src={"/assets/logos/main-logo.png"}
                     alt="Zelosify Logo"
                     className="h-8 w-auto sm:h-10"
                   />
@@ -109,7 +112,7 @@ export default function FooterSection() {
                   {links.map((link) => (
                     <li key={link.name}>
                       <Link
-                        to={link.to}
+                        href={link.to}
                         className="text-purple-200 hover:text-white transition-colors duration-300"
                       >
                         {link.name}

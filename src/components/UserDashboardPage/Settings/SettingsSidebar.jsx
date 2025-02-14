@@ -1,5 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function SettingsSidebar({ activePath }) {
   return (
@@ -12,10 +11,10 @@ export default function SettingsSidebar({ activePath }) {
           </h3>
           <div className="space-y-1">
             <Link
-              to="/user/settings/profile"
+              href="/user/settings"
               className={`flex items-center text-sm ${
                 activePath === "/user/settings" ||
-                activePath.includes("profile")
+                activePath?.includes("profile")
                   ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
                   : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
               } px-3 py-2 rounded-md`}
@@ -23,9 +22,9 @@ export default function SettingsSidebar({ activePath }) {
               My Profile
             </Link>
             <Link
-              to="/user/settings/general"
+              href="/user/settings/general"
               className={`flex items-center text-sm ${
-                activePath.includes("general")
+                activePath?.includes("general")
                   ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
                   : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
               } px-3 py-2 rounded-md`}
@@ -42,9 +41,9 @@ export default function SettingsSidebar({ activePath }) {
           </h3>
           <div className="space-y-1">
             <Link
-              to="/user/settings/security"
+              href="/user/settings/security"
               className={`flex items-center text-sm ${
-                activePath.includes("security")
+                activePath?.includes("security")
                   ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
                   : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
               } px-3 py-2 rounded-md`}
@@ -52,9 +51,9 @@ export default function SettingsSidebar({ activePath }) {
               Security
             </Link>
             <Link
-              to="/user/settings/billing"
+              href="/user/settings/billing"
               className={`flex items-center text-sm ${
-                activePath.includes("billing")
+                activePath?.includes("billing")
                   ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
                   : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
               } px-3 py-2 rounded-md`}

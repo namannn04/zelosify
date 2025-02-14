@@ -1,9 +1,10 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function CTASection() {
   const canvasRef = useRef(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -98,7 +99,7 @@ export default function CTASection() {
           </h2>
 
           <button
-            onClick={() => navigate("/user")}
+            onClick={() => router.push("/user")}
             className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg transition-colors duration-300"
           >
             Join Private Beta

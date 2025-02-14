@@ -1,5 +1,5 @@
+import Pagination from "@/components/UI/Pagination";
 import { Check, X } from "lucide-react";
-import Pagination from "../../UI/Pagination";
 
 const requests = [
   {

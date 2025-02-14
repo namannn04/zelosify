@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import ContactUs from "./ContactUs";
 // import FAQ from "./FAQ";

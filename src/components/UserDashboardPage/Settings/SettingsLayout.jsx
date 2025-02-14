@@ -1,14 +1,16 @@
-import { useLocation, Outlet, Link } from "react-router-dom";
+"use client";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import SettingsSidebar from "./SettingsSidebar";
 
-export default function SettingsLayout() {
-  const location = useLocation();
-  const [activePath, setActivePath] = useState("/user/settings/profile");
+export default function SettingsLayout({ children }) {
+  const pathname = usePathname();
+  const [activePath, setActivePath] = useState("/user/settings");
 
   useEffect(() => {
-    setActivePath(location.pathname);
-  }, [location.pathname]);
+    setActivePath(pathname);
+  }, [pathname]);
 
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-gray-900">
@@ -16,7 +18,7 @@ export default function SettingsLayout() {
       <header className="bg-white dark:bg-gray-900 border-b border-dashed border-gray-200 dark:border-gray-700 px-6 py-4">
         <div className="flex items-center">
           <Link
-            to={"/user/settings"}
+            href="/user/settings"
             className="text-2xl font-bold text-gray-900 dark:text-white"
           >
             Settings
@@ -35,13 +37,14 @@ export default function SettingsLayout() {
             />
           </svg>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {activePath.includes("profile") || activePath === "/user/settings"
+            {activePath?.includes("profile") ||
+            (activePath && activePath === "/user/settings")
               ? "My Profile"
-              : activePath.includes("general")
+              : activePath?.includes("general")
               ? "General"
-              : activePath.includes("security")
+              : activePath?.includes("security")
               ? "Security"
-              : activePath.includes("billing")
+              : activePath?.includes("billing")
               ? "Billing"
               : "My Profile"}
           </span>
@@ -54,9 +57,7 @@ export default function SettingsLayout() {
         <SettingsSidebar activePath={activePath} />
 
         {/* Dynamic Settings Content */}
-        <div className="flex-1 overflow-auto">
-          <Outlet />
-        </div>
+        <div className="flex-1 overflow-auto">{children}</div>
       </div>
     </div>
   );

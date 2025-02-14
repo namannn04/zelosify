@@ -1,7 +1,8 @@
-import React, { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Clock, ChevronRight, MessageSquare } from "lucide-react";
+import { memo } from "react";
 
-const ChatHistory = React.memo(({ isOpen }) => {
+const ChatHistory = memo(({ isOpen }) => {
   const [showAllHistory, setShowAllHistory] = useState(false);
 
   const chatHistory = useMemo(

@@ -1,120 +1,137 @@
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { animateScroll } from 'react-scroll'; // Ensure this is imported
+"use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { animateScroll } from "react-scroll"; // Ensure this is imported
 
 const MobileMenu = ({ isMenuOpen, closeMenu, isActive }) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const menuVariants = {
-        closed: { x: '100%', opacity: 0 },
-        open: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 30 } },
-    };
+  const router = useRouter();
+  const menuVariants = {
+    closed: { x: "100%", opacity: 0 },
+    open: {
+      x: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 30 },
+    },
+  };
 
-    const linkVariants = {
-        closed: { y: 20, opacity: 0 },
-        open: { y: 0, opacity: 1 },
-    };
+  const linkVariants = {
+    closed: { y: 20, opacity: 0 },
+    open: { y: 0, opacity: 1 },
+  };
 
-    // Function to handle scrolling to the "features" section
-    const handleScrollToFeatures = () => {
-        if (location.pathname !== '/') {
-            // Navigate to the home page first
-            navigate('/');
-            // Use a timeout to ensure the home page is rendered before triggering the scroll
-            setTimeout(() => {
-                animateScroll.scrollTo(document.querySelector('#features').offsetTop - 50, {
-                    duration: 500,
-                    smooth: true,
-                });
-            }, 200); // Adjust the timeout duration as needed
-        } else {
-            // If already on the home page, scroll to the "features" section directly
-            animateScroll.scrollTo(document.querySelector('#features').offsetTop - 50, {
-                duration: 500,
-                smooth: true,
-            });
+  // Function to handle scrolling to the "features" section
+  const handleScrollToFeatures = () => {
+    if (router.pathname !== "/") {
+      // Navigate to the home page first
+      router.push("/");
+      // Use a timeout to ensure the home page is rendered before triggering the scroll
+      setTimeout(() => {
+        animateScroll.scrollTo(
+          document.querySelector("#features").offsetTop - 50,
+          {
+            duration: 500,
+            smooth: true,
+          }
+        );
+      }, 200); // Adjust the timeout duration as needed
+    } else {
+      // If already on the home page, scroll to the "features" section directly
+      animateScroll.scrollTo(
+        document.querySelector("#features").offsetTop - 50,
+        {
+          duration: 500,
+          smooth: true,
         }
-    };
+      );
+    }
+  };
 
-    return (
-        <motion.div
-            initial="closed"
-            animate={isMenuOpen ? 'open' : 'closed'}
-            variants={menuVariants}
-            className="md:hidden fixed inset-0 bg-gradient-to-br from-[#1A1033] to-[#0F0720] flex flex-col items-stretch justify-start p-6 overflow-y-auto"
+  return (
+    <motion.div
+      initial="closed"
+      animate={isMenuOpen ? "open" : "closed"}
+      variants={menuVariants}
+      className="md:hidden fixed inset-0 bg-gradient-to-br from-[#1A1033] to-[#0F0720] flex flex-col items-stretch justify-start p-6 overflow-y-auto"
+    >
+      <div className="flex justify-end mb-8">
+        <button
+          onClick={closeMenu}
+          className="p-2 rounded-full bg-purple-900/30 hover:bg-purple-900/50 transition-colors duration-300"
         >
-            <div className="flex justify-end mb-8">
-                <button
-                    onClick={closeMenu}
-                    className="p-2 rounded-full bg-purple-900/30 hover:bg-purple-900/50 transition-colors duration-300"
-                >
-                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+          <svg
+            className="w-6 h-6 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
 
-            <nav className="flex flex-col space-y-4">
-                <motion.div variants={linkVariants}>
-                    <Link
-                        to="/"
-                        className={`${isActive('/') ? 'bg-purple-600 text-white' : 'text-white hover:bg-purple-900/30'
+      <nav className="flex flex-col space-y-4">
+        <motion.div variants={linkVariants}>
+          <Link
+            href="/"
+            className={`${
+              isActive("/")
+                ? "bg-purple-600 text-white"
+                : "text-white hover:bg-purple-900/30"
+            } block px-6 py-4 rounded-xl text-lg font-medium transition-colors duration-300 transform hover:scale-105`}
+            onClick={closeMenu}
+          >
+            Home
+          </Link>
+        </motion.div>
+        <motion.div variants={linkVariants}>
+          <button
+            className={` 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-900/30'
                             } block px-6 py-4 rounded-xl text-lg font-medium transition-colors duration-300 transform hover:scale-105`}
-                        onClick={closeMenu}
-                    >
-                        Home
-                    </Link>
-                </motion.div>
-                <motion.div variants={linkVariants}>
-                    <button
-                        className={` 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-900/30'
-                            } block px-6 py-4 rounded-xl text-lg font-medium transition-colors duration-300 transform hover:scale-105`}
-                        onClick={() => {
-                            handleScrollToFeatures();
-                            closeMenu();
-                        }}
-                    >
-                        Features
-                    </button>
-                </motion.div>
-                {/* <motion.div variants={linkVariants}>
-                    <Link
-                        to="/pricing"
-                        className={`${isActive('/pricing') ? 'bg-purple-600 text-white' : 'text-purple-200 hover:bg-purple-900/30'
-                            } block px-6 py-4 rounded-xl text-lg font-medium transition-colors duration-300 transform hover:scale-105`}
-                        onClick={closeMenu}
-                    >
-                        Pricing
-                    </Link>
-                </motion.div> */}
-                <motion.div variants={linkVariants}>
-                    <Link
-                        to="/contact"
-                        className={`${isActive('/contact') ? 'bg-purple-600 text-white' : 'text-white hover:bg-purple-900/30'
-                            } block px-6 py-4 rounded-xl text-lg font-medium transition-colors duration-300 transform hover:scale-105`}
-                        onClick={closeMenu}
-                    >
-                        Contact
-                    </Link>
-                </motion.div>
-            </nav>
+            onClick={() => {
+              handleScrollToFeatures();
+              closeMenu();
+            }}
+          >
+            Features
+          </button>
+        </motion.div>
 
-            <motion.div
-                variants={linkVariants}
-                transition={{ delay: 0.4 }}
-                className="mt-auto pt-6 border-t border-purple-800/30"
-            >
-                <Link
-                    to="/login"
-                    className="block px-6 py-4 bg-purple-600 hover:bg-purple-700 text-white text-lg font-medium rounded-xl text-center transition-colors duration-300 transform hover:scale-105"
-                    onClick={closeMenu}
-                >
-                    Sign in
-                </Link>
-            </motion.div>
+        <motion.div variants={linkVariants}>
+          <Link
+            href="/contact"
+            className={`${
+              isActive("/contact")
+                ? "bg-purple-600 text-white"
+                : "text-white hover:bg-purple-900/30"
+            } block px-6 py-4 rounded-xl text-lg font-medium transition-colors duration-300 transform hover:scale-105`}
+            onClick={closeMenu}
+          >
+            Contact
+          </Link>
+        </motion.div>
+      </nav>
 
-            {/* <motion.div
+      <motion.div
+        variants={linkVariants}
+        transition={{ delay: 0.4 }}
+        className="mt-auto pt-6 border-t border-purple-800/30"
+      >
+        <Link
+          href="/login"
+          className="block px-6 py-4 bg-purple-600 hover:bg-purple-700 text-white text-lg font-medium rounded-xl text-center transition-colors duration-300 transform hover:scale-105"
+          onClick={closeMenu}
+        >
+          Sign in
+        </Link>
+      </motion.div>
+
+      {/* <motion.div
                 variants={linkVariants}
                 transition={{ delay: 0.5 }}
                 className="mt-6 flex justify-center space-x-4"
@@ -153,9 +170,8 @@ const MobileMenu = ({ isMenuOpen, closeMenu, isActive }) => {
                     </svg>
                 </a>
             </motion.div> */}
-        </motion.div>
-    );
+    </motion.div>
+  );
 };
 
 export default MobileMenu;
-

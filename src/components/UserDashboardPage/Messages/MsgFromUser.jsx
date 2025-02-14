@@ -14,7 +14,7 @@ export default function MsgFromUser() {
             Just now
           </span>
         </div>
-        <div className="inline-block max-w-[70%] bg-gray-200 dark:bg-gray-800 rounded-lg p-3">
+        <div className="inline-block max-w-[70%] bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
           <p className="text-gray-900 dark:text-white">
             Generate 5 attention-grabbing headlines for an article about AI Chat
             Copywriter

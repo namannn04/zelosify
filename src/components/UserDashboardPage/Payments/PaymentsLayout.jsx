@@ -1,10 +1,11 @@
+"use client";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import OrderDetailsPopup from "./OrderDetailsPopup";
 import SelectionToolbar from "./SelectionToolbar";
 import Statistics from "./Statistics";
 import Filters from "./Filters";
-import Pagination from "../../UI/Pagination";
+import Pagination from "@/components/UI/Pagination";
 
 const contracts = [
   {

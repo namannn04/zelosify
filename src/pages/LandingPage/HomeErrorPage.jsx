@@ -1,17 +1,13 @@
-import React from "react";
-import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
-import LandingNavbar from "../../components/LandingPage/LandingNavbar";
-import FooterSection from "../../components/LandingPage/footer/FooterSection";
+"use client";
+
+import LandingNavbar from "@/components/LandingPage/LandingNavbar";
+import FooterSection from "@/components/LandingPage/footer/FooterSection";
+import { useRouter } from "next/navigation";
 
 export default function HomeErrorPage() {
-  const navigate = useNavigate();
+  const router = useRouter();
   return (
     <>
-      <Helmet>
-        <title>Error Page - 404 | zelosify</title>
-      </Helmet>
-
       <LandingNavbar />
 
       <div className="min-h-screen bg-[#0F0720] flex flex-col items-center justify-center p-4">
@@ -74,7 +70,7 @@ export default function HomeErrorPage() {
           </p>
 
           <button
-            onClick={() => navigate("/")}
+            onClick={() => router.push("/")}
             className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-medium px-8 py-3 rounded-lg transition-colors duration-300"
           >
             Go To Home

@@ -1,38 +1,18 @@
 // Header.js
-import { memo, useEffect, useState, useRef } from "react";
+"use client";
+import { memo, useEffect, useState, useRef, useContext } from "react";
 import { Moon, Search, Sun } from "lucide-react";
 import UserProfile from "./UserProfile";
 import Notification from "./Notification";
+import ThemeContext from "@/context/Theme/ThemeContext";
 
 const Header = memo(({ isSidebarOpen }) => {
-  const getInitialTheme = () => {
-    if (typeof window !== "undefined") {
-      return (
-        localStorage.getItem("zelosify_theme") === "dark" ||
-        (!localStorage.getItem("zelosify_theme") &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      );
-    }
-    return false;
-  };
-
-  const [isDarkMode, setIsDarkMode] = useState(getInitialTheme);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
 
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("zelosify_theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("zelosify_theme", "light");
-    }
-  }, [isDarkMode]);
-
-  const toggleTheme = () => setIsDarkMode((prev) => !prev);
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   // Unified function to close both when clicking outside
   useEffect(() => {

@@ -1,5 +1,4 @@
-import React from "react";
-import TrackingLayout from "../../../components/UserDashboardPage/Tracking/TrackingLayout";
+import TrackingLayout from "@/components/UserDashboardPage/Tracking/TrackingLayout";
 
 export default function TrackingPage() {
   return (

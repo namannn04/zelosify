@@ -1,19 +1,19 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
-import LandingNavbar from "../../../components/LandingPage/LandingNavbar";
-import FooterSection from "../../../components/LandingPage/footer/FooterSection";
-import {
-  Sparkles,
-  MapPin,
-  Mail,
-  Phone,
-  Facebook,
-  Twitter,
-  Linkedin,
-} from "lucide-react";
-import ContactForm from "../../../components/LandingPage/contact/ContactForm";
+import { useState, useEffect } from "react";
+
+import LandingNavbar from "@/components/LandingPage/LandingNavbar";
+import FooterSection from "@/components/LandingPage/footer/FooterSection";
+// import {
+//   Sparkles,
+//   MapPin,
+//   Mail,
+//   Phone,
+//   Facebook,
+//   Twitter,
+//   Linkedin,
+// } from "lucide-react";
+import ContactForm from "@/components/LandingPage/contact/ContactForm";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -34,20 +34,15 @@ export default function ContactPage() {
     setProgress(newProgress);
   }, [formData]);
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleInputChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   return (
     <>
-      <div>
-        <Helmet>
-          <title>Contact Us | zelosify</title>
-        </Helmet>
-      </div>
       <div>
         <LandingNavbar />
       </div>

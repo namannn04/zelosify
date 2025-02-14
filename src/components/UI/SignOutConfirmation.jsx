@@ -23,7 +23,7 @@ export default function SignOutConfirmation({
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 text-sm font-medium text-white bg-black dark:bg-gray-600 rounded-md hover:bg-gray-800 dark:hover:bg-gray-700 focus:outline-none"
+            className="px-4 py-2 text-sm font-medium text-white bg-black dark:bg-white dark:text-black rounded-md hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none"
           >
             Sign Out
           </button>

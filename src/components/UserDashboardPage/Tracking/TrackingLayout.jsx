@@ -1,4 +1,4 @@
-import Pagination from "../../UI/Pagination";
+import Pagination from "@/components/UI/Pagination";
 
 const leads = [
   {

@@ -1,11 +1,11 @@
-import React from "react";
+import ProfileImage from "@/components/UI/ProfileImage";
 import { User, Bell, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import ProfileImage from "../../UI/ProfileImage";
+import { useRouter } from "next/navigation";
+import { memo } from "react";
 
-const UserProfile = React.memo(
+const UserProfile = memo(
   ({ toggleNotifications, isProfileOpen, toggleProfile, profileRef }) => {
-    const navigate = useNavigate();
+    const router = useRouter();
 
     return (
       <div className="relative" ref={profileRef}>
@@ -41,7 +41,7 @@ const UserProfile = React.memo(
             {/* Profile Settings */}
             <button
               onClick={() => {
-                navigate("/user/settings/profile");
+                router.push("/user/settings");
               }}
               className="flex w-full items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
             >

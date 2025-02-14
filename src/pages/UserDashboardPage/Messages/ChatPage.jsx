@@ -1,5 +1,4 @@
-import React from "react";
-import ChatLayout from "../../../components/UserDashboardPage/Messages/ChatLayout";
+import ChatLayout from "@/components/UserDashboardPage/Messages/ChatLayout";
 
 export default function ChatPage() {
   return (

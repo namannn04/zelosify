@@ -1,5 +1,4 @@
-import React from "react";
-import RequestsLayout from "../../../components/UserDashboardPage/Requests/RequestsLayout";
+import RequestsLayout from "@/components/UserDashboardPage/Requests/RequestsLayout";
 
 export default function RequestPage() {
   return (

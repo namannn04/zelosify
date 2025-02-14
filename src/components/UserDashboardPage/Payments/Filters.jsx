@@ -1,5 +1,4 @@
 import { Upload } from "lucide-react";
-import React from "react";
 
 export default function Filters() {
   return (

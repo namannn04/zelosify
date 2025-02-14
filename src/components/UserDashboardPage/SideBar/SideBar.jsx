@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+"use client";
+import { useEffect, useRef, useMemo, memo } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import {
   BarChart,
   LogOut,
@@ -38,9 +39,9 @@ const settingsItem = {
 };
 const signOutItem = { title: "Sign Out", href: "#", icon: LogOut };
 
-const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
+  const pathname = usePathname();
+  const router = useRouter();
   const sidebarRef = useRef(null);
 
   useEffect(() => {
@@ -64,7 +65,7 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
       <NavigationItem
         key={item.title}
         item={item}
-        isActive={location.pathname === item.href}
+        isActive={pathname === item.href}
         isOpen={isOpen}
       />
     ));
@@ -72,12 +73,12 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
 
   const memoizedOverviewItems = useMemo(
     () => renderNavigationItems(overviewItems),
-    [location.pathname, isOpen, overviewItems] // Added overviewItems to dependencies
+    [pathname, isOpen, overviewItems]
   );
 
   const memoizedContractItems = useMemo(
     () => renderNavigationItems(contractItems),
-    [location.pathname, isOpen, contractItems] // Added contractItems to dependencies
+    [pathname, isOpen, contractItems]
   );
 
   return (
@@ -124,7 +125,7 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
             </div>
 
             {/* Chat history */}
-            {isOpen && location.pathname === "/user/messages" && (
+            {isOpen && pathname === "/user/messages" && (
               <div className="px-3 py-4 border-t border-dashed border-gray-200 dark:border-gray-700">
                 <ChatHistory isOpen={isOpen} />
               </div>
@@ -135,7 +136,7 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
         {/* Footer Section: Settings & Sign Out */}
         <div className="px-3 py-4 border-t border-dashed border-gray-200 dark:border-gray-700">
           <button
-            onClick={() => navigate(supportItem.href)}
+            onClick={() => router.push(supportItem.href)}
             className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
               isOpen ? "justify-start" : "justify-center"
             }`}
@@ -144,7 +145,7 @@ const Sidebar = React.memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
             {isOpen && <span>{supportItem.title}</span>}
           </button>
           <button
-            onClick={() => navigate(settingsItem.href)}
+            onClick={() => router.push(settingsItem.href)}
             className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
               isOpen ? "justify-start" : "justify-center"
             }`}

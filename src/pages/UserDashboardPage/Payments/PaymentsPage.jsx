@@ -1,7 +1,6 @@
-import React from "react";
-import PaymentsLayout from "../../../components/UserDashboardPage/Payments/PaymentsLayout";
+import PaymentsLayout from "@/components/UserDashboardPage/Payments/PaymentsLayout";
 
-export default function ContractsPage() {
+export default function PaymentsPage() {
   return (
     <div className="w-full px-6 py-2">
       <PaymentsLayout />

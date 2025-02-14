@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+"use client";
 
 export default function PrivacyPolicy() {
   const handleAnchorClick = (e, sectionId) => {

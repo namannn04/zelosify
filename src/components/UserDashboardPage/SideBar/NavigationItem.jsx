@@ -1,11 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { memo } from "react";
 
-const NavigationItem = React.memo(({ item, isActive, isOpen }) => {
+const NavigationItem = memo(({ item, isActive, isOpen }) => {
   const Icon = item.icon;
   return (
     <Link
-      to={item.href}
+      href={item.href}
       className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm
       ${
         isActive
