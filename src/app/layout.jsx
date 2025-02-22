@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import AllProviders from "@/context/AllProviders";
+import AllProviders from "@/contexts/AllProviders";
 import { Poppins } from "next/font/google";
 
 // Font config

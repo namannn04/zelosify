@@ -7,7 +7,19 @@ export default {
   ],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        primary: "var(--primary)",
+        secondary: "var(--secondary)",
+        tertiary: "var(--tertiary)",
+        border: "var(--border)",
+        ring: "var(--ring)",
+        focus: "var(--focus)",
+        chartLine: "var(--chart-line)",
+      },
+    },
   },
   plugins: [],
 };

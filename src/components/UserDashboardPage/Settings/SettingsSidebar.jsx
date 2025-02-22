@@ -41,6 +41,16 @@ export default function SettingsSidebar({ activePath }) {
           </h3>
           <div className="space-y-1">
             <Link
+              href="/user/settings/people"
+              className={`flex items-center text-sm ${
+                activePath?.includes("people")
+                  ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
+              } px-3 py-2 rounded-md`}
+            >
+              People
+            </Link>
+            <Link
               href="/user/settings/security"
               className={`flex items-center text-sm ${
                 activePath?.includes("security")

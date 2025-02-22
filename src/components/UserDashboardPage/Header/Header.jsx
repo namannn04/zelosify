@@ -1,18 +1,17 @@
-// Header.js
 "use client";
-import { memo, useEffect, useState, useRef, useContext } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 import { Moon, Search, Sun } from "lucide-react";
 import UserProfile from "./UserProfile";
 import Notification from "./Notification";
-import ThemeContext from "@/context/Theme/ThemeContext";
+import { useTheme } from "next-themes";
 
 const Header = memo(({ isSidebarOpen }) => {
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [showNotifications, setShowNotifications] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   const notificationRef = useRef(null);
   const profileRef = useRef(null);
-
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   // Unified function to close both when clicking outside
   useEffect(() => {
@@ -34,22 +33,21 @@ const Header = memo(({ isSidebarOpen }) => {
     };
   }, []);
 
+  // Get current theme (Use resolvedTheme to correctly detect system theme)
+  const currentTheme = theme === "system" ? resolvedTheme : theme;
+
   // Toggle Notifications
   const toggleNotifications = (e) => {
     e.stopPropagation();
-    setShowNotifications((prev) => !prev && !showNotifications);
-    if (!showNotifications) {
-      setIsProfileOpen(false); // Close profile if notification opens
-    }
+    setShowNotifications((prev) => !prev);
+    setIsProfileOpen(false); // Close profile if notification opens
   };
 
   // Toggle Profile
   const toggleProfile = (e) => {
     e.stopPropagation();
     setIsProfileOpen((prev) => !prev);
-    if (!isProfileOpen) {
-      setShowNotifications(false); // Close notifications if profile opens
-    }
+    setShowNotifications(false); // Close notifications if profile opens
   };
 
   return (
@@ -78,11 +76,13 @@ const Header = memo(({ isSidebarOpen }) => {
             <input
               type="checkbox"
               className="sr-only peer"
-              checked={isDarkMode}
-              onChange={toggleTheme}
+              checked={currentTheme === "dark"} //  Ensure correct theme detection
+              onChange={() =>
+                setTheme(currentTheme === "dark" ? "light" : "dark")
+              }
             />
             <div className="w-12 h-6 bg-gray-200 dark:bg-gray-700 dark:border dark:border-gray-700 rounded-full peer peer-checked:after:translate-x-6 rtl:peer-checked:after:-translate-x-6 after:content-[''] after:absolute after:top-[4px] after:start-[4px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-black">
-              {isDarkMode ? (
+              {currentTheme === "dark" ? (
                 <Moon className="absolute left-1 top-1/2 transform -translate-y-1/2 h-4 w-4 text-white" />
               ) : (
                 <Sun className="absolute right-1 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black" />

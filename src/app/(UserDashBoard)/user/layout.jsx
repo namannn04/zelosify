@@ -7,6 +7,11 @@ import { useState, useEffect, useCallback } from "react";
 export default function UserDashboardlayout({ children }) {
   const [signOutPopUp, setSignOutPopUp] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -21,6 +26,8 @@ export default function UserDashboardlayout({ children }) {
   const toggleSidebar = useCallback(() => {
     setIsSidebarOpen((prev) => !prev);
   }, []);
+
+  if (!mounted) return null;
 
   return (
     <>

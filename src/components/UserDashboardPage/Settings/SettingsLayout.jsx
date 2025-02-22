@@ -46,6 +46,8 @@ export default function SettingsLayout({ children }) {
               ? "Security"
               : activePath?.includes("billing")
               ? "Billing"
+              : activePath?.includes("people")
+              ? "People"
               : "My Profile"}
           </span>
         </div>
