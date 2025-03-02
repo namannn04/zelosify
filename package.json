@@ -1,6 +1,7 @@
 {
   "name": "frontend-next",
   "version": "0.1.0",
+  "description": "Nextjs frontend for whole service",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack -p 5173",
