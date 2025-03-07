@@ -53,18 +53,18 @@ const Header = memo(({ isSidebarOpen }) => {
   return (
     <header
       className={`${
-        isSidebarOpen ? "pl-[16rem]" : "pl-[5rem]"
-      } sticky top-0 z-40 bg-white dark:bg-gray-900 border-b dark:border-gray-700`}
+        isSidebarOpen ? "pl-[12rem]" : "pl-[5rem]"
+      } h-16 flex items-center justify-between sticky top-0 z-40 bg-white dark:bg-gray-900 border-b dark:border-gray-700`}
     >
-      <div className="flex items-center justify-between h-[63px] px-6">
+      <div className="flex items-center justify-between px-6 w-full">
         <div className="flex items-center gap-4 flex-1">
           <div className="hidden md:flex items-center max-w-md flex-1">
             <div className="relative w-full">
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search..."
-                className="pl-8 pr-4 py-2 w-full bg-gray-100 dark:bg-gray-800 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-gray-500"
+                placeholder="Search"
+                className="pl-8 pr-4 py-2 w-full border border-border rounded-md bg-background focus:outline-none focus:ring-1 focus:ring-ring"
               />
             </div>
           </div>

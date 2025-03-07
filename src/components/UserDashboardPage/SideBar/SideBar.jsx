@@ -7,10 +7,10 @@ import {
   MessageSquare,
   Settings,
   CreditCard,
-  Truck,
   FileSignature,
   Headset,
 } from "lucide-react";
+import { FaDollarSign } from "react-icons/fa6";
 import NavigationItem from "./NavigationItem";
 import SidebarHeader from "./SidebarHeader";
 import ChatHistory from "./ChatHistory";
@@ -22,7 +22,7 @@ const overviewItems = [
 
 const contractItems = [
   { title: "Payments", href: "/user/payments", icon: CreditCard },
-  { title: "Tracking", href: "/user/tracking", icon: Truck },
+  { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
   { title: "Requests", href: "/user/requests", icon: FileSignature },
 ];
 
@@ -93,16 +93,12 @@ const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
       <aside
         ref={sidebarRef}
         className={`${
-          isOpen ? "w-[16rem]" : "w-[5rem]"
+          isOpen ? "w-[12rem]" : "w-[5rem]"
         } fixed inset-y-0 left-0 z-40 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-lg flex flex-col h-screen`}
       >
         <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
-        <div
-          className={`flex-1 overflow-hidden ${
-            isOpen ? "custom-scrollbar" : ""
-          }`}
-        >
+        <div className={`flex-1 overflow-hidden`}>
           <div
             className={`h-full ${
               isOpen ? "overflow-y-auto" : "overflow-y-hidden"
@@ -137,7 +133,7 @@ const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
         <div className="px-3 py-4 border-t border-dashed border-gray-200 dark:border-gray-700">
           <button
             onClick={() => router.push(supportItem.href)}
-            className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
+            className={`rounded-md flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
               isOpen ? "justify-start" : "justify-center"
             }`}
           >
@@ -146,7 +142,7 @@ const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
           </button>
           <button
             onClick={() => router.push(settingsItem.href)}
-            className={`flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
+            className={`rounded-md flex gap-2 items-center w-full px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
               isOpen ? "justify-start" : "justify-center"
             }`}
           >
@@ -155,7 +151,7 @@ const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
           </button>
           <button
             onClick={() => setSignOutPopUp((prev) => !prev)}
-            className={`flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
+            className={`rounded-md flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
               isOpen ? "justify-start" : "justify-center"
             }`}
           >

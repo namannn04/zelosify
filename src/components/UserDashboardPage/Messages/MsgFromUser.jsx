@@ -7,9 +7,7 @@ export default function MsgFromUser() {
       <ProfileImage className="w-8 h-8" />
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
-          <span className="font-medium text-base text-gray-900 dark:text-white">
-            John Doe
-          </span>
+          <span className="font-medium text-base">John Doe</span>
           <span className="text-gray-500 dark:text-gray-400 text-xs">
             Just now
           </span>

@@ -7,7 +7,7 @@ export default function Notification({
   return (
     <div
       ref={notificationRef}
-      className="absolute right-6 mt-0 w-80 bg-white dark:bg-gray-900 rounded-md shadow-lg dark:shadow-gray-900/20 border border-gray-100 dark:border-gray-800"
+      className="absolute right-6 mt-80 w-80 bg-white dark:bg-gray-900 rounded-md shadow-lg dark:shadow-gray-900/20 border border-gray-100 dark:border-gray-800"
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800">
         <h3 className="font-medium text-gray-900 dark:text-white">

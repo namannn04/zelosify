@@ -37,7 +37,7 @@ export default function InputArea() {
   };
 
   return (
-    <div className="border-t px-4 pt-4 text-sm bg-white rounded-b-lg dark:bg-gray-900 dark:border-gray-700">
+    <div className="border-t border-border rounded-b-lg p-3 text-sm bg-background">
       <div className="relative flex items-center">
         <textarea
           ref={textareaRef}
@@ -46,7 +46,7 @@ export default function InputArea() {
           onKeyDown={handleKeyDown}
           placeholder="Send a message"
           rows={1}
-          className="border w-full px-12 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-1 focus:ring-gray-200 dark:border-gray-700 dark:focus:ring-gray-600 resize-none overflow-y-auto custom-scrollbar min-h-[50px] max-h-[200px] text-gray-900 dark:text-white"
+          className="border border-border w-full px-12 py-3 rounded-lg bg-tableHeader focus:outline-none focus:ring-1 focus:ring-gray-200 dark:focus:ring-gray-600 resize-none overflow-y-auto min-h-[50px] max-h-[200px]"
         />
 
         <div className="absolute right-3 flex items-center">
@@ -64,10 +64,10 @@ export default function InputArea() {
         </div>
       </div>
 
-      <div className="mt-2 mb-1 text-xs text-gray-400 dark:text-gray-500 text-center">
+      {/* <div className="mt-2 mb-1 text-xs text-gray-400 dark:text-gray-500 text-center">
         Model may generate inaccurate information about people, places, or
         facts.
-      </div>
+      </div> */}
     </div>
   );
 }

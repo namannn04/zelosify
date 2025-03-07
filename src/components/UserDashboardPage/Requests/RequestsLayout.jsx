@@ -1,109 +1,116 @@
 import Pagination from "@/components/UI/Pagination";
-import { Check, X } from "lucide-react";
+import { Check, Filter, Search, X } from "lucide-react";
 
 const requests = [
   {
     id: 1,
+    contractNo: "a2fdw3",
     identity: {
       name: "Dylan Parker",
       email: "dparker@chat.com",
     },
     source: "AWS",
-    role: "S3_Admin",
+    amount: "$1200",
+
     access: "AWS",
-    resource: "PII data",
-    permissions: ["view", "edit", "delete", "manage"],
+
     requestedOn: "Jun 6, 2024",
   },
   {
     id: 2,
+    contractNo: "a2fdw3",
     identity: {
       name: "Russell Giles",
       email: "rgiles@chat.com",
     },
     source: "AWS",
-    role: "Prod_Dev",
+    amount: "$1200",
+
     access: "AWS",
-    resource: "Prod_EKS",
-    permissions: ["edit", "delete"],
+
     requestedOn: "Jun 6, 2024",
   },
   {
     id: 3,
+    contractNo: "a2fdw3",
     identity: {
       name: "Clark Hood",
       email: "chood@chat.com",
     },
     source: "AWS",
-    role: "Prod_Dev",
+    amount: "$1200",
+
     access: "AWS",
-    resource: "Prod_S3",
-    permissions: ["view", "edit", "delete", "manage"],
+
     requestedOn: "Jun 6, 2024",
   },
   {
     id: 4,
+    contractNo: "a2fdw3",
     identity: {
       name: "Kiana Ponce",
       email: "kponce@chat.com",
     },
     source: "Okta",
-    role: "Sales",
+    amount: "$1200",
+
     access: "Snowflake",
-    resource: "Revenue Data",
-    permissions: ["view"],
+
     requestedOn: "Jun 6, 2024",
   },
   {
     id: 5,
+    contractNo: "a2fdw3",
     identity: {
       name: "Fred Beck",
       email: "fbeck@chat.com",
     },
     source: "Okta",
-    role: "Sales",
+    amount: "$1200",
+
     access: "Snowflake",
-    resource: "Revenue Data",
-    permissions: ["view"],
+
     requestedOn: "Jun 6, 2024",
   },
   {
     id: 6,
+    contractNo: "a2fdw3",
     identity: {
       name: "Tianna Mendez",
       email: "tmendez@chat.com",
     },
     source: "AWS",
-    role: "Admin",
+    amount: "$1200",
+
     access: "AWS",
-    resource: "Prod_Env",
-    permissions: ["view", "edit", "delete", "manage"],
+
     requestedOn: "Jun 6, 2024",
   },
   {
     id: 7,
+    contractNo: "a2fdw3",
     identity: {
       name: "Zaki Eaton",
       email: "zeaton@chat.com",
     },
     source: "AWS",
-    role: "S3_Viewer",
+    amount: "$1200",
+
     access: "AWS",
-    resource: "PII data",
-    permissions: ["view"],
+
     requestedOn: "Jun 6, 2024",
   },
 ];
 
 export default function RequestsLayout() {
   return (
-    <div className="min-h-screen bg-white text-black dark:bg-[#0F172A] dark:text-gray-100">
+    <div className="min-h-screen text-foreground bg-background">
       <div className="px-6 py-4">
         <h1 className="text-2xl font-bold mb-6">Requests</h1>
 
         {/* Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-gray-200 dark:bg-[#1E293B] rounded-lg p-4">
+          <div className="rounded-lg border border-border p-4">
             <div className="flex justify-between items-start mb-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Active Requests (This Month)
@@ -117,7 +124,7 @@ export default function RequestsLayout() {
               <span className="ml-2 text-xs text-emerald-500">↑ 2%</span>
             </div>
           </div>
-          <div className="bg-gray-200 dark:bg-[#1E293B] rounded-lg p-4">
+          <div className="rounded-lg border border-border p-4">
             <div className="flex justify-between items-start mb-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Avg. Approval Time (This Month)
@@ -131,7 +138,7 @@ export default function RequestsLayout() {
               <span className="ml-2 text-xs text-red-500">↑ 5%</span>
             </div>
           </div>
-          <div className="bg-gray-200 dark:bg-[#1E293B] rounded-lg p-4">
+          <div className="rounded-lg border border-border p-4">
             <div className="flex justify-between items-start mb-2">
               <span className="text-sm text-gray-600 dark:text-gray-400">
                 Completed Requests (This Month)
@@ -147,49 +154,44 @@ export default function RequestsLayout() {
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex gap-2 mb-6">
-          <button className="px-3 py-1.5 text-white bg-black dark:bg-[#1E293B] text-sm rounded-md flex items-center gap-2">
-            All time
-            <span className="text-gray-400">×</span>
+        {/* Filter and Search */}
+        <div className="flex items-center justify-between gap-2 mb-6">
+          <button className="px-3 py-1.5 bg-foreground text-background text-sm rounded-md flex items-center gap-2">
+            Filter
+            <Filter className="w-4 h-4" />
           </button>
-          <button className="px-3 py-1.5 bg-gray-200 dark:bg-[#1E293B] text-sm rounded-md flex items-center gap-2">
-            AWS, Snowflake
-            <span className="text-gray-400">×</span>
-          </button>
-          <button className="px-3 py-1.5 bg-gray-200 dark:bg-[#1E293B] text-sm rounded-md flex items-center gap-2">
-            More filters
-            <span className="text-gray-400">≡</span>
-          </button>
+
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-secondary" />
+            <input
+              type="text"
+              placeholder="Search"
+              className="pl-9 pr-4 py-2 text-sm border border-border rounded-md bg-background focus:outline-none focus:ring-1 focus:ring-ring w-64"
+            />
+          </div>
         </div>
 
         {/* Table */}
-        <div className="bg-gray-200 dark:bg-[#1E293B] rounded-lg overflow-hidden">
+        <div className="rounded-lg overflow-hidden border border-border">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-300 dark:border-gray-700">
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Identity
+              <tr className="border-b border-border bg-tableHeader">
+                <th className="px-4 py-3 text-left text-sm font-medium text-primary">
+                  Contract No.
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Source
+                <th className="px-4 py-3 text-left text-sm font-medium text-primary">
+                  Raised By
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Role/Group
+                <th className="px-4 py-3 text-left text-sm font-medium text-primary">
+                  Business Unit
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Access
+                <th className="px-4 py-3 text-left text-sm font-medium text-primary">
+                  Amount
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Resource
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Permissions
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                   Requested On
                 </th>
-                <th className="px-4 py-3 text-left text-sm font-medium text-gray-600 dark:text-gray-400">
+                <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                   Action
                 </th>
               </tr>
@@ -197,7 +199,15 @@ export default function RequestsLayout() {
 
             <tbody>
               {requests.map((request) => (
-                <tr key={request.id} className="border-b border-gray-700/50">
+                <tr
+                  key={request.id}
+                  className="border-b border-border hover:bg-tableHeader"
+                >
+                  <td className="px-4 py-4">
+                    <div className="text-sm font-medium">
+                      {request.contractNo}
+                    </div>
+                  </td>
                   <td className="px-4 py-4">
                     <div>
                       <div className="text-sm font-medium">
@@ -215,36 +225,8 @@ export default function RequestsLayout() {
                   </td>
                   <td className="px-4 py-4">
                     <span className="inline-flex items-center justify-center px-2 py-1 rounded text-xs">
-                      {request.role}
+                      {request.amount}
                     </span>
-                  </td>
-                  <td className="px-4 py-4">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded text-xs">
-                      {request.access}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4">
-                    <span className="inline-flex items-center justify-center px-2 py-1 rounded text-xs">
-                      {request.resource}
-                    </span>
-                  </td>
-                  <td className="px-4 py-4">
-                    <div className="flex gap-1">
-                      {request.permissions.map((permission, index) => (
-                        <span
-                          key={index}
-                          className={`w-2 h-2 rounded-full ${
-                            permission === "view"
-                              ? "bg-purple-500"
-                              : permission === "edit"
-                              ? "bg-blue-500"
-                              : permission === "delete"
-                              ? "bg-indigo-500"
-                              : "bg-pink-500"
-                          }`}
-                        />
-                      ))}
-                    </div>
                   </td>
                   <td className="px-4 py-4 text-sm">{request.requestedOn}</td>
                   <td className="px-4 py-4">

@@ -1,10 +1,9 @@
 "use client";
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Filter, Search } from "lucide-react";
 import OrderDetailsPopup from "./OrderDetailsPopup";
 import SelectionToolbar from "./SelectionToolbar";
 import Statistics from "./Statistics";
-import Filters from "./Filters";
 import Pagination from "@/components/UI/Pagination";
 
 const contracts = [
@@ -35,6 +34,69 @@ const contracts = [
     date: "Jun 19",
     people: "zzz@gmail.com",
   },
+  {
+    id: "#192341",
+    customer: { initials: "EH", name: "Esther Howard" },
+    type: "Shipping",
+    status: "Active",
+    total: "$3,127.00",
+    date: "Jun 19",
+    people: "xxx@gmail.com",
+  },
+  {
+    id: "#092540",
+    customer: { initials: "DM", name: "David Miller" },
+    type: "Pickups",
+    status: "Active",
+    total: "$864.00",
+    date: "Jun 19",
+    people: "yyy@gmail.com",
+  },
+  {
+    id: "#192531",
+    customer: { initials: "JM", name: "James Moore" },
+    type: "Shipping",
+    status: "Active",
+    total: "$1,527.00",
+    date: "Jun 19",
+    people: "zzz@gmail.com",
+  },
+  {
+    id: "#192571",
+    customer: { initials: "EH", name: "Esther Howard" },
+    type: "Shipping",
+    status: "Active",
+    total: "$3,127.00",
+    date: "Jun 19",
+    people: "xxx@gmail.com",
+  },
+  {
+    id: "#192240",
+    customer: { initials: "DM", name: "David Miller" },
+    type: "Pickups",
+    status: "Active",
+    total: "$864.00",
+    date: "Jun 19",
+    people: "yyy@gmail.com",
+  },
+  {
+    id: "#198539",
+    customer: { initials: "JM", name: "James Moore" },
+    type: "Shipping",
+    status: "Active",
+    total: "$1,527.00",
+    date: "Jun 19",
+    people: "zzz@gmail.com",
+  },
+  {
+    id: "#192541",
+    customer: { initials: "EH", name: "Esther Howard" },
+    type: "Shipping",
+    status: "Active",
+    total: "$3,127.00",
+    date: "Jun 19",
+    people: "xxx@gmail.com",
+  },
 ];
 
 export default function PaymentsLayout() {
@@ -63,67 +125,79 @@ export default function PaymentsLayout() {
   };
 
   return (
-    <div className="flex h-screen bg-white dark:bg-gray-900 rounded-lg">
+    <div className="flex h-screen bg-background px-2">
       {/* Main Content */}
-      <div className={`flex-1 overflow-hidden transition-all duration-300`}>
+      <div className={`flex-1 overflow-y-auto transition-all duration-300`}>
         <div className="p-4">
           {/* Header */}
           <div className="flex justify-between mb-4">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              Payments
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground">Payments</h1>
             {!isSidebarVisible && (
               <ArrowLeft
-                className="cursor-pointer text-gray-900 dark:text-gray-100"
+                className="cursor-pointer text-foreground"
                 onClick={() => setIsSidebarVisible(true)}
               />
             )}
           </div>
 
-          {/* Filters */}
-          <Filters />
+          {/* Filter and Search */}
+          <div className="flex items-center justify-between gap-2 mb-6">
+            <button className="px-3 py-1.5 bg-foreground text-background text-sm rounded-md flex items-center gap-2">
+              Filter
+              <Filter className="w-4 h-4" />
+            </button>
+
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-secondary" />
+              <input
+                type="text"
+                placeholder="Search"
+                className="pl-9 pr-4 py-2 text-sm border border-border rounded-md bg-background focus:outline-none focus:ring-1 focus:ring-ring w-64"
+              />
+            </div>
+          </div>
 
           {/* Table */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
+          <div className="border border-border rounded-lg overflow-hidden">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-tableHeader">
+                <tr className="border-b border-border">
                   <th className="px-4 py-3 text-left">
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 dark:border-gray-600"
+                      className="rounded border border-border"
                       checked={selectedOrders.length === contracts.length}
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                     Contract No.
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                     Vendor name
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                     Type
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                     Status
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                     Total
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
+                  <th className="px-4 py-3 text-left text-sm font-medium text-primary">
                     Date
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-500 dark:text-gray-400">
-                    People
+                  <th className="px-4 py-3 text-left text-sm font-medium text-primary">
+                    Approver
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {contracts.map((contract) => (
+                {contracts.map((contract, index) => (
                   <tr
-                    key={contract.id}
-                    className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
+                    key={index}
+                    className="border-b border-border hover:bg-tableHeader cursor-pointer"
                     onClick={() => handleOrderClick(contract)}
                   >
                     <td
@@ -132,25 +206,25 @@ export default function PaymentsLayout() {
                     >
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 dark:border-gray-600"
+                        className="rounded border border-border"
                         checked={selectedOrders.includes(contract.id)}
                         onChange={() => handleSelectOrder(contract.id)}
                       />
                     </td>
-                    <td className="px-4 py-4 text-xs text-gray-900 dark:text-gray-100">
+                    <td className="px-4 py-4 text-xs text-foreground">
                       {contract.id}
                     </td>
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-600 flex items-center justify-center text-xs text-gray-900 dark:text-gray-100">
+                        <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-600 flex items-center justify-center text-xs text-foreground">
                           {contract.customer.initials}
                         </div>
-                        <span className="text-xs text-gray-900 dark:text-gray-100">
+                        <span className="text-xs text-foreground">
                           {contract.customer.name}
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-4 text-xs text-gray-900 dark:text-gray-100">
+                    <td className="px-4 py-4 text-xs text-foreground">
                       {contract.type}
                     </td>
                     <td className="px-4 py-4">
@@ -158,13 +232,13 @@ export default function PaymentsLayout() {
                         {contract.status}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-xs text-gray-900 dark:text-gray-100">
+                    <td className="px-4 py-4 text-xs text-foreground">
                       {contract.total}
                     </td>
-                    <td className="px-4 py-4 text-xs text-gray-900 dark:text-gray-100">
+                    <td className="px-4 py-4 text-xs text-foreground">
                       {contract.date}
                     </td>
-                    <td className="px-4 py-4 text-xs text-gray-900 dark:text-gray-100">
+                    <td className="px-4 py-4 text-xs text-foreground">
                       {contract.people}
                     </td>
                   </tr>

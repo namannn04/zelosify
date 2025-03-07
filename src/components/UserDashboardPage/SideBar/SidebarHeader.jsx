@@ -4,7 +4,7 @@ import Link from "next/link";
 
 // eslint-disable-next-line react/display-name
 const SidebarHeader = memo(({ isOpen, toggleSidebar }) => (
-  <div className="h-16 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
+  <div className="h-16 border-b border-gray-200 dark:border-gray-700 flex gap-7 items-center justify-between px-5">
     {isOpen && (
       <Link
         href={"/user"}
@@ -33,9 +33,9 @@ const SidebarHeader = memo(({ isOpen, toggleSidebar }) => (
       }`}
     >
       {isOpen ? (
-        <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+        <X className="h-7 w-7 p-1 text-gray-600 dark:text-gray-300" />
       ) : (
-        <Menu className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+        <Menu className="h-7 w-7 p-1 text-gray-600 dark:text-gray-300" />
       )}
     </button>
   </div>

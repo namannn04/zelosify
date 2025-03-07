@@ -49,7 +49,7 @@ export default function UserDashboardlayout({ children }) {
       </div>
 
       {/* main content */}
-      <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col min-h-screen bg-background">
         <SignOutConfirmation
           setSignOutPopUp={setSignOutPopUp}
           isOpen={signOutPopUp}
@@ -63,7 +63,7 @@ export default function UserDashboardlayout({ children }) {
           />
           <main
             className={`relative flex-1 justify-between items-center w-full ${
-              isSidebarOpen ? "ml-64 lg:ml-64" : "ml-20"
+              isSidebarOpen ? "ml-48" : "ml-20"
             }`}
           >
             {children}

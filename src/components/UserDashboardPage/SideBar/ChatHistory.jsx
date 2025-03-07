@@ -40,7 +40,7 @@ const ChatHistory = memo(({ isOpen }) => {
     (chat) => (
       <button
         key={chat.id}
-        className="w-full flex items-center gap-1 py-1.5 text-sm text-gray-600 hover:bg-gray-100 transition-colors rounded-md 
+        className="w-full flex items-center gap-1 py-1.5 px-1 text-sm text-gray-600 hover:bg-gray-100 transition-colors rounded-md 
         dark:text-gray-300 dark:hover:bg-gray-700"
       >
         <MessageSquare className="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-400" />
@@ -63,9 +63,7 @@ const ChatHistory = memo(({ isOpen }) => {
         <Clock className="h-5 w-5" />
         {isOpen && <span>Recent Chats</span>}
       </div>
-      <div className="space-y-1 px-3">
-        {displayedHistory.map(renderChatItem)}
-      </div>
+      <div className="space-y-1">{displayedHistory.map(renderChatItem)}</div>
       {chatHistory.length > 3 && isOpen && (
         <button
           onClick={toggleShowAllHistory}

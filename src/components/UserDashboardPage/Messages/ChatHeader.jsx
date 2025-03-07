@@ -2,8 +2,8 @@ import { Maximize, Plus, Settings, Trash } from "lucide-react";
 
 export default function ChatHeader() {
   return (
-    <div className="flex items-center justify-between p-4 border-b dark:border-gray-700 rounded-t-lg text-sm bg-white dark:bg-gray-800 dark:text-white">
-      <h2 className="text-xl font-bold">Zelosify AI Chat</h2>
+    <div className="flex items-center justify-between p-4 border-b border-border rounded-t-lg text-sm">
+      <h2 className="text-2xl font-bold">Zelosify AI Chat</h2>
       <div className="flex items-center gap-2">
         <div className="group relative">
           <button className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
@@ -32,7 +32,7 @@ export default function ChatHeader() {
           </span>
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600">
+        <button className="flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-full hover:bg-gray-800 dark:hover:bg-gray-200">
           <Plus className="w-4 h-4" />
           New Chat
         </button>

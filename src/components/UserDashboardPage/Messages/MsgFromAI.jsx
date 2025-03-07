@@ -4,12 +4,10 @@ import InteractionTools from "./InteractionTools";
 export default function MsgFromAI() {
   return (
     <div className="flex gap-3">
-      <div className="w-8 h-8 rounded-full bg-[url('/favicon.ico')] bg-cover bg-center flex-shrink-0"></div>
+      <div className="w-8 h-8 rounded-full bg-[url('/favicon.ico')] dark:bg-[url('/favicon1.ico')] bg-cover bg-center flex-shrink-0"></div>
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
-          <span className="flex-center font-medium text-base text-gray-900 dark:text-white">
-            Zelosify AI
-          </span>
+          <span className="flex-center font-medium text-base">Zelosify AI</span>
           <span className="text-gray-500 dark:text-gray-400 text-xs">
             Just now
           </span>

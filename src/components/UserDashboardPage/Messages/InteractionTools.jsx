@@ -1,4 +1,4 @@
-import { Copy, Share2, ThumbsDown, ThumbsUp } from "lucide-react";
+import { Copy, ThumbsDown, ThumbsUp } from "lucide-react";
 
 export default function InteractionTools() {
   return (
@@ -15,9 +15,9 @@ export default function InteractionTools() {
         <button className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-sm py-1 rounded transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-105">
           <Copy className="w-5 h-5" />
         </button>
-        <button className="p-1 rounded-full transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-105 group">
+        {/* <button className="p-1 rounded-full transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:scale-105 group">
           <Share2 className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-200" />
-        </button>
+        </button> */}
       </div>
     </div>
   );

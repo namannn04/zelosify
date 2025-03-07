@@ -2,7 +2,7 @@ import TrackingLayout from "@/components/UserDashboardPage/Tracking/TrackingLayo
 
 export default function TrackingPage() {
   return (
-    <div className="w-full px-6 py-2">
+    <div className="w-full">
       <TrackingLayout />
     </div>
   );

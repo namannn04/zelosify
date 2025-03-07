@@ -18,6 +18,8 @@ export default {
         ring: "var(--ring)",
         focus: "var(--focus)",
         chartLine: "var(--chart-line)",
+        tableHeader: "var(--table-header)",
+        scrollBar: "var(--scroll-bar)",
       },
     },
   },

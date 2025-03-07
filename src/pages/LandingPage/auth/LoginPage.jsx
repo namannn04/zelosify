@@ -6,7 +6,6 @@ import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 import { BsMicrosoft } from "react-icons/bs";
-import LoadingSpinner from "@/components/UI/LoadingSpinner";
 import SocialButton from "@/components/UI/SocialButton";
 import Link from "next/link";
 import axiosInstance from "@/utils/axios/AxiosInstance";
@@ -180,7 +179,7 @@ export default function LoginPage() {
           disabled={isLoading}
           className="w-full bg-black dark:bg-white text-white dark:text-black py-2 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50"
         >
-          {isLoading ? <LoadingSpinner /> : "Sign In"}
+          {isLoading ? "Loading..." : "Sign In"}
         </motion.button>
       </form>
 

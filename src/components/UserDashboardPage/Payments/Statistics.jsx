@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function Statistics({ setIsSidebarVisible }) {
   return (
-    <div className="flex-[0.25] border-l border-dashed border-gray-200 p-4 dark:border-gray-700 dark:bg-gray-800">
+    <div className="flex-[0.25] p-4">
       <div className="space-y-6">
         {/* TOTAL BILL PAYABLE */}
         <div className="text-center">
@@ -61,17 +61,17 @@ export default function Statistics({ setIsSidebarVisible }) {
             <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
               $864,600
             </span>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            {/* <p className="text-sm text-gray-500 dark:text-gray-400">
               95 shipments
-            </p>
+            </p> */}
           </div>
           <div>
             <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
               $1.34m
             </span>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            {/* <p className="text-sm text-gray-500 dark:text-gray-400">
               147 pickups
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -133,7 +133,7 @@ export default function Statistics({ setIsSidebarVisible }) {
                   $2,246.75
                 </span>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Average
+                  Average Expense
                 </p>
               </div>
               <div>
@@ -141,7 +141,7 @@ export default function Statistics({ setIsSidebarVisible }) {
                   $2.2m
                 </span>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Total revenue
+                  Total Expense
                 </p>
               </div>
             </div>

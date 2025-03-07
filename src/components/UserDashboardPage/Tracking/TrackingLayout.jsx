@@ -1,4 +1,5 @@
 import Pagination from "@/components/UI/Pagination";
+import { Filter, Search } from "lucide-react";
 
 const leads = [
   {
@@ -9,9 +10,7 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "intellias.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "$150.0M",
-    socials: ["linkedin", "twitter"],
+    amount: "$150.0M",
   },
   {
     id: 2,
@@ -21,9 +20,7 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "kia.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "Not available",
-    socials: ["linkedin"],
+    amount: "Not available",
   },
   {
     id: 3,
@@ -33,9 +30,7 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "fiskerinc.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "$200.1M",
-    socials: ["linkedin"],
+    amount: "$200.1M",
   },
   {
     id: 4,
@@ -45,9 +40,7 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "lucidmotors.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "$639.4M",
-    socials: ["linkedin", "twitter"],
+    amount: "$639.4M",
   },
   {
     id: 5,
@@ -57,9 +50,7 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "firstbrandsgroup.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "$2500.0M",
-    socials: ["linkedin"],
+    amount: "$2500.0M",
   },
   {
     id: 6,
@@ -69,9 +60,7 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "karmaautomotive.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "$24.2M",
-    socials: ["linkedin", "twitter"],
+    amount: "$24.2M",
   },
   {
     id: 7,
@@ -81,9 +70,7 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "oliverwyman.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "$2500.0M",
-    socials: ["linkedin", "twitter"],
+    amount: "$2500.0M",
   },
   {
     id: 8,
@@ -93,82 +80,72 @@ const leads = [
     to: "March 1, 2025",
     totalDays: "30",
     domain: "waymo.com",
-    logo: "/placeholder.svg?height=40&width=40",
-    revenue: "$1400.0M",
-    socials: ["linkedin", "twitter"],
+    amount: "$1400.0M",
   },
 ];
 
 export default function TrackingLayout() {
   return (
-    <div className="flex bg-white dark:bg-gray-900 rounded-lg">
+    <div className="flex bg-background px-2">
       {/* Main Content */}
       <div className="flex-1">
         <div className="p-4">
           {/* Header */}
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Tracking
-            </h1>
-            <button className="px-4 py-2 bg-black text-white rounded-md text-sm hover:bg-slate-900 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <h1 className="text-2xl font-bold text-foreground">Tracking</h1>
+            <button className="px-3 py-1.5 bg-foreground text-background rounded-md text-sm">
               <span>+</span> Create
             </button>
           </div>
 
-          <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Showing 25 leads in this campaign
-          </div>
+          {/* Filter and Search */}
+          <div className="flex items-center justify-between gap-2 mb-6">
+            <button className="px-3 py-1.5 bg-foreground text-background text-sm rounded-md flex items-center gap-2">
+              Filter
+              <Filter className="w-4 h-4" />
+            </button>
 
-          {/* Search and Filter */}
-          <div className="flex gap-4 mb-8">
-            <div className="relative flex-shrink-0">
-              <select className="appearance-none w-64 px-3 py-2 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm">
-                <option>Automotive Industry Outreach Campaign</option>
-              </select>
-            </div>
-            <div className="flex-1 relative">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-secondary" />
               <input
                 type="text"
-                placeholder="Search leads..."
-                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 text-sm"
+                placeholder="Search"
+                className="pl-9 pr-4 py-2 text-sm border border-border rounded-md bg-background focus:outline-none focus:ring-1 focus:ring-ring w-64"
               />
             </div>
           </div>
 
           {/* Table */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-700">
+          <div className="border border-border rounded-lg overflow-hidden">
+            <table className="min-w-full divide-y divide-border">
+              <thead className="bg-tableHeader">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    Contract
+                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
+                    Contract No
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
                     Vendor Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
                     From
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    TO
+                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
+                    To
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
                     Total Days
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                    People
+                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
+                    Owned By
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="divide-y divide-border">
                 {leads.map((lead) => (
-                  <tr
-                    key={lead.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800"
-                  >
+                  <tr key={lead.id} className="hover:bg-tableHeader">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="">
@@ -182,24 +159,24 @@ export default function TrackingLayout() {
                       </div>
                     </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex gap-2">{lead.vendorName}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex gap-2">{lead.from}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex gap-2">{lead.to}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                       <div className="flex gap-2">{lead.totalDays} </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      {lead.revenue}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
+                      {lead.amount}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       <button className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-xs font-medium rounded text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        View People
+                        View {lead.contract}
                       </button>
                     </td>
                   </tr>
