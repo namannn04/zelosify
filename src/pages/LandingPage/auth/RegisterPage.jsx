@@ -105,9 +105,17 @@ export default function Register() {
       <div className="flex flex-col justify-center items-center gap-2">
         <img
           src={"/assets/logos/zelosify_Dark.png"}
+          alt="Zelosify Light Logo"
+          width={120}
+          height={40}
+          className="object-contain block dark:hidden"
+        />
+        <img
+          src={"/assets/logos/main-logo.png"}
           alt="Zelosify Dark Logo"
           width={120}
           height={40}
+          className="object-contain hidden dark:block"
         />
 
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
@@ -308,12 +316,12 @@ export default function Register() {
           <SocialButton
             icon={FcGoogle}
             onClick={handleGoogleLogin}
-            label="Sign up with Google"
+            label="Google"
           />
           <SocialButton
             icon={BsMicrosoft}
             onClick={handleMicrosoftLogin}
-            label="Sign up with Microsoft"
+            label="Microsoft"
           />
         </div>
       </div>
