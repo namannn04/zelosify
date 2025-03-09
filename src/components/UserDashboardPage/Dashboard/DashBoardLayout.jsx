@@ -1,5 +1,5 @@
 import ContractSpent from "./ContractsSpent/ContractSpent";
-import LineGraph from "./LineGraph/LineGraph";
+// import LineGraph from "./LineGraph/LineGraph";
 
 export default function DashBoardLayout() {
   return (
@@ -7,7 +7,7 @@ export default function DashBoardLayout() {
       {/* Contracts spent and import functions */}
       <ContractSpent />
       {/* LineGraph */}
-      <LineGraph />
+      {/* <LineGraph /> */}
     </div>
   );
 }
