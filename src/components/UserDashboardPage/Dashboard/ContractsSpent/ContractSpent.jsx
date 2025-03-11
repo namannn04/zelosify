@@ -207,7 +207,7 @@ export default function ContractSpent() {
         {metrics.map((metric, index) => (
           <div
             key={index}
-            className="bg-background p-2 rounded-lg shadow-sm border border-border"
+            className="bg-background p-2 rounded-lg border border-border"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-800">

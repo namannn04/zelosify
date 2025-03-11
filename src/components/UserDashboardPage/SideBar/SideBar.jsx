@@ -2,13 +2,13 @@
 import { useEffect, useRef, useMemo, memo } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  BarChart,
   LogOut,
-  MessageSquare,
   Settings,
   CreditCard,
   FileSignature,
   Headset,
+  Home,
+  Sparkles,
 } from "lucide-react";
 import { FaDollarSign } from "react-icons/fa6";
 import NavigationItem from "./NavigationItem";
@@ -16,8 +16,8 @@ import SidebarHeader from "./SidebarHeader";
 import ChatHistory from "./ChatHistory";
 
 const overviewItems = [
-  { title: "Dashboard", href: "/user", icon: BarChart },
-  { title: "Messages", href: "/user/messages", icon: MessageSquare },
+  { title: "Home", href: "/user", icon: Home },
+  { title: "AI Chat", href: "/user/messages", icon: Sparkles },
 ];
 
 const contractItems = [
