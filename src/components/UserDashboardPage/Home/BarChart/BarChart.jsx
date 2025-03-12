@@ -9,12 +9,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/UI/shadcn/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/components/UI/shadcn/chart";
 
 const chartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },

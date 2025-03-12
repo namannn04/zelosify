@@ -156,7 +156,7 @@ const metrics = [
   {
     icon: <UserIcon className="w-6 h-6 text-orange-500" />,
     value: "250",
-    label: "Total Number of Active Contracts",
+    label: "Total Active Contracts",
     change: { type: "increase", value: "12 more than last quarter" },
   },
   {
