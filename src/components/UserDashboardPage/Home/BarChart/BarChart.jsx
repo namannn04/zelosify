@@ -200,7 +200,7 @@ export default function BarChartComponent() {
                 >
                   <SelectValue placeholder="All Vendors" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
+                <SelectContent className="rounded-xl bg-background text-foreground">
                   <SelectItem value="All Vendors" className="rounded-lg">
                     All Vendors
                   </SelectItem>
@@ -208,7 +208,7 @@ export default function BarChartComponent() {
                     <SelectItem
                       key={vendor}
                       value={vendor}
-                      className="rounded-lg"
+                      className="rounded-lg hover:bg-tableHeader"
                     >
                       {vendor}
                     </SelectItem>
@@ -226,7 +226,7 @@ export default function BarChartComponent() {
                 >
                   <SelectValue placeholder="Last 180 days" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
+                <SelectContent className="rounded-xl bg-background text-foreground">
                   <SelectItem value="180d" className="rounded-lg">
                     Last 180 days
                   </SelectItem>
@@ -249,12 +249,16 @@ export default function BarChartComponent() {
                 >
                   <SelectValue placeholder="All Types" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
+                <SelectContent className="rounded-xl bg-background text-foreground">
                   <SelectItem value="All Types" className="rounded-lg">
                     All Types
                   </SelectItem>
                   {Object.keys(spendTypeData).map((type) => (
-                    <SelectItem key={type} value={type} className="rounded-lg">
+                    <SelectItem
+                      key={type}
+                      value={type}
+                      className="rounded-lg hover:bg-tableHeader"
+                    >
                       {type}
                     </SelectItem>
                   ))}

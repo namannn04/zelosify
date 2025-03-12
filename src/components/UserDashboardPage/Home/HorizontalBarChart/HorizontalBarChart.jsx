@@ -144,7 +144,6 @@ export default function HorizantalBarChartComponent() {
                 Total Contract Value
               </div>
               <div className="mt-1 flex items-center">
-                <DollarSign className="mr-1 h-4 w-4 text-primary" />
                 <span className="text-xl font-bold text-primary">
                   {formatCurrency(totalAmount)}
                 </span>
