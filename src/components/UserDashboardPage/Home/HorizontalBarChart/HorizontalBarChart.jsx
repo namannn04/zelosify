@@ -179,6 +179,7 @@ export default function HorizantalBarChartComponent() {
                   axisLine={false}
                 />
                 <Tooltip
+                  cursor={false}
                   formatter={(value) => formatCurrency(value)}
                   labelFormatter={(value) => `Category: ${value}`}
                   contentStyle={{
