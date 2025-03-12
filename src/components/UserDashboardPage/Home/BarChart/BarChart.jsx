@@ -302,6 +302,7 @@ export default function BarChartComponent() {
                 style={{ fontSize: "12px", fill: "var(--foreground)" }}
               />
               <ChartTooltip
+                cursor={false}
                 content={
                   <ChartTooltipContent
                     className="w-[200px] bg-background"
@@ -313,7 +314,14 @@ export default function BarChartComponent() {
                         year: "numeric",
                       });
                     }}
-                    formatter={(value) => `$${value.toLocaleString()}`}
+                    formatter={(value, name, props) => {
+                      const color = vendorColors[name]; // Get the color for the vendor
+                      return (
+                        <span style={{ color }}>
+                          {name}: ${value.toLocaleString()}
+                        </span>
+                      );
+                    }}
                   />
                 }
               />
