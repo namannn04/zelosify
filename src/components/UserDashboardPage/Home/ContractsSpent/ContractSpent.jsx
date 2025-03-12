@@ -167,15 +167,15 @@ const metrics = [
   },
   {
     icon: <StackIcon className="w-6 h-6 text-purple-500" />,
-    value: "38",
+    value: "$3.8M",
     label: "Total Contract Amount Spent",
     change: { type: "decrease", value: "4% less than last quarter" },
   },
   {
     icon: <BookIcon className="w-6 h-6 text-blue-500" />,
-    value: "8",
+    value: "48",
     label: "Total Vendor Count",
-    change: { type: "increase", value: "Without changes" },
+    change: { type: "increase", value: "5 new vendors this quarter" },
   },
 ];
 
