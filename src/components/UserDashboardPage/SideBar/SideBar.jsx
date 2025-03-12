@@ -13,7 +13,6 @@ import {
 import { FaDollarSign } from "react-icons/fa6";
 import NavigationItem from "./NavigationItem";
 import SidebarHeader from "./SidebarHeader";
-import ChatHistory from "./ChatHistory";
 
 const overviewItems = [
   { title: "Home", href: "/user", icon: Home },
@@ -117,15 +116,10 @@ const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
                   CONTRACTS
                 </h2>
               )}
-              <div className="space-y-1">{memoizedContractItems}</div>
-            </div>
-
-            {/* Chat history */}
-            {isOpen && pathname === "/user/messages" && (
-              <div className="px-3 py-4 border-t border-dashed border-gray-200 dark:border-gray-700">
-                <ChatHistory isOpen={isOpen} />
+              <div className="space-y-1 pb-4 border-b border-dashed border-border">
+                {memoizedContractItems}
               </div>
-            )}
+            </div>
           </div>
         </div>
 
