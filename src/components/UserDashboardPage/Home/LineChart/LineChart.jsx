@@ -1,0 +1,279 @@
+"use client";
+
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Legend } from "recharts";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/UI/shadcn/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/UI/shadcn/chart";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/UI/shadcn/select";
+import CircleLoader from "@/components/UI/loaders/CircleLoader";
+import { useContext, useEffect, useMemo, useState } from "react";
+import ContractSpendContext from "@/contexts/DashBoard/ContractSpend/ContractSpendContext";
+
+export default function LineChartComponent() {
+  const [selectedVendor, setSelectedVendor] = useState("All Vendors");
+  const [selectedTimeRange, setSelectedTimeRange] = useState("365d");
+  const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
+
+  const {
+    allVendors,
+    industries,
+    isLoading,
+    error,
+    getFilteredData,
+    getVendorsToShow,
+    createChartConfig,
+    vendorColors,
+  } = useContext(ContractSpendContext);
+
+  // Update localStorage when selectedVendor changes (for other components to detect)
+  useEffect(() => {
+    localStorage.setItem("selectedVendor", selectedVendor);
+  }, [selectedVendor]);
+
+  // Get filtered data based on selected filters
+  const filteredData = useMemo(() => {
+    // Ensure getFilteredData is a function
+    if (typeof getFilteredData !== "function") {
+      console.error("getFilteredData is not a function:", getFilteredData);
+      return [];
+    }
+    return getFilteredData(selectedVendor, selectedTimeRange, selectedIndustry);
+  }, [selectedVendor, selectedTimeRange, selectedIndustry, getFilteredData]);
+
+  // Get list of vendors to show based on filters
+  const vendorsToShow = useMemo(() => {
+    // Ensure getVendorsToShow is a function
+    if (typeof getVendorsToShow !== "function") {
+      console.error("getVendorsToShow is not a function:", getVendorsToShow);
+      return [];
+    }
+    return getVendorsToShow(selectedVendor, selectedIndustry);
+  }, [selectedVendor, selectedIndustry, getVendorsToShow]);
+
+  // Create chart config based on vendors to show
+  const chartConfig = useMemo(() => {
+    // Ensure createChartConfig is a function
+    if (typeof createChartConfig !== "function") {
+      console.error("createChartConfig is not a function:", createChartConfig);
+      return {};
+    }
+    return createChartConfig(vendorsToShow);
+  }, [vendorsToShow, createChartConfig]);
+
+  // Error state component
+  const renderError = () => (
+    <div className="flex justify-center items-center h-[350px] w-full text-red-500">
+      Error loading chart data: {error}
+    </div>
+  );
+
+  // Empty data state component
+  const renderEmptyState = () => (
+    <div className="flex justify-center items-center h-[350px] w-full text-gray-500">
+      No data available for the selected filters. Please try different filters.
+    </div>
+  );
+
+  return (
+    <div className="p-4">
+      <Card>
+        <CardHeader className="flex flex-col space-y-0 border-b border-border p-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <CardTitle>Contract Spend Trends</CardTitle>
+              <CardDescription>
+                Visualizing contract expenditures over time
+              </CardDescription>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Select value={selectedVendor} onValueChange={setSelectedVendor}>
+                <SelectTrigger
+                  className="w-[160px] rounded-lg"
+                  aria-label="Select vendor"
+                >
+                  <SelectValue placeholder="All Vendors" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl bg-background text-foreground">
+                  <SelectItem value="All Vendors" className="rounded-lg">
+                    All Vendors
+                  </SelectItem>
+                  {allVendors.map((vendor) => (
+                    <SelectItem
+                      key={vendor}
+                      value={vendor}
+                      className="rounded-lg hover:bg-tableHeader"
+                    >
+                      {vendor}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={selectedTimeRange}
+                onValueChange={setSelectedTimeRange}
+              >
+                <SelectTrigger
+                  className="w-[160px] rounded-lg"
+                  aria-label="Select time range"
+                >
+                  <SelectValue placeholder="Full Year" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl bg-background text-foreground">
+                  <SelectItem value="all" className="rounded-lg">
+                    All Time
+                  </SelectItem>
+                  <SelectItem value="365d" className="rounded-lg">
+                    Full Year
+                  </SelectItem>
+                  <SelectItem value="180d" className="rounded-lg">
+                    Last 180 days
+                  </SelectItem>
+                  <SelectItem value="90d" className="rounded-lg">
+                    Last 90 days
+                  </SelectItem>
+                  <SelectItem value="70d" className="rounded-lg">
+                    Last 70 days
+                  </SelectItem>
+                  <SelectItem value="30d" className="rounded-lg">
+                    Last 30 days
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={selectedIndustry}
+                onValueChange={setSelectedIndustry}
+              >
+                <SelectTrigger
+                  className="w-[180px] rounded-lg"
+                  aria-label="Select industry"
+                >
+                  <SelectValue placeholder="All Industries" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl bg-background text-foreground">
+                  <SelectItem value="All Industries" className="rounded-lg">
+                    All Industries
+                  </SelectItem>
+                  {industries &&
+                    industries.map((industry) => (
+                      <SelectItem
+                        key={industry}
+                        value={industry}
+                        className="rounded-lg hover:bg-tableHeader"
+                      >
+                        {industry}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="px-2 sm:p-6">
+          {isLoading ? (
+            <CircleLoader />
+          ) : error ? (
+            renderError()
+          ) : !filteredData ||
+            filteredData.length === 0 ||
+            !vendorsToShow ||
+            vendorsToShow.length === 0 ? (
+            renderEmptyState()
+          ) : (
+            <ChartContainer
+              config={chartConfig}
+              className="aspect-auto h-[350px] w-full"
+            >
+              <AreaChart
+                accessibilityLayer
+                data={filteredData}
+                margin={{
+                  left: 12,
+                  right: 12,
+                  bottom: 20,
+                }}
+              >
+                <CartesianGrid vertical={false} stroke="var(--border)" />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tickFormatter={(value) => {
+                    const [year, month] = value.split("-");
+                    const date = new Date(year, parseInt(month) - 1);
+                    return date.toLocaleDateString("en-US", {
+                      month: "short",
+                      year: "numeric",
+                    });
+                  }}
+                  style={{ fontSize: "12px", fill: "var(--foreground)" }}
+                />
+                <YAxis
+                  tickFormatter={(value) => `$${value / 1000}k`}
+                  style={{ fontSize: "12px", fill: "var(--foreground)" }}
+                />
+                <ChartTooltip
+                  cursor={{ stroke: "var(--muted)" }}
+                  content={
+                    <ChartTooltipContent
+                      className="w-[200px] bg-background"
+                      labelFormatter={(value) => {
+                        const [year, month] = value.split("-");
+                        const date = new Date(year, parseInt(month) - 1);
+                        return date.toLocaleDateString("en-US", {
+                          month: "long",
+                          year: "numeric",
+                        });
+                      }}
+                      formatter={(value, name, props) => {
+                        const color =
+                          vendorColors[name] || "hsl(var(--chart-1))";
+                        return (
+                          <span style={{ color }}>
+                            {name}: ${value.toLocaleString()}
+                          </span>
+                        );
+                      }}
+                    />
+                  }
+                />
+                {vendorsToShow.map((vendor) => (
+                  <Area
+                    key={vendor}
+                    type="monotone"
+                    dataKey={vendor}
+                    stroke={vendorColors[vendor] || "hsl(var(--chart-1))"}
+                    fill={vendorColors[vendor] || "hsl(var(--chart-1))"}
+                    fillOpacity={0.2}
+                    name={vendor}
+                    activeDot={{ r: 6 }}
+                    stackId="1"
+                  />
+                ))}
+                <Legend />
+              </AreaChart>
+            </ChartContainer>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

@@ -1,7 +1,9 @@
 "use client";
 import { ArrowDownIcon, Upload } from "lucide-react";
 import ImportPopUp from "../ImportDoc/ImportPopUp";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import HeaderMetricsContext from "@/contexts/DashBoard/HeaderMetrics/HeaderMetricsContext";
+import CardSkeleton from "@/components/UI/loaders/CardSkeleton";
 
 /* Icon Components */
 const UserIcon = (props) => (
@@ -152,35 +154,35 @@ const UpArrow = (props) => (
   </svg>
 );
 
-const metrics = [
-  {
-    icon: <UserIcon className="w-6 h-6 text-orange-500" />,
-    value: "250",
-    label: "Total Active Contracts",
-    change: { type: "increase", value: "12 more than last quarter" },
-  },
-  {
-    icon: <DownloadIcon className="w-6 h-6 text-red-500" />,
-    value: "200",
-    label: "Contracts in Progress",
-    change: { type: "increase", value: "0.2% more than last quarter" },
-  },
-  {
-    icon: <StackIcon className="w-6 h-6 text-purple-500" />,
-    value: "$3.8M",
-    label: "Total Contract Amount Spent",
-    change: { type: "decrease", value: "4% less than last quarter" },
-  },
-  {
-    icon: <BookIcon className="w-6 h-6 text-blue-500" />,
-    value: "48",
-    label: "Total Vendor Count",
-    change: { type: "increase", value: "5 new vendors this quarter" },
-  },
-];
+// Map icons to their respective components
+const iconMapping = {
+  user: UserIcon,
+  download: DownloadIcon,
+  stack: StackIcon,
+  book: BookIcon,
+};
 
-export default function ContractSpent() {
+export default function HeaderMetrics() {
   const [isImportOpen, setIsImportOpen] = useState(false);
+  const { isLoading, error, getFormattedMetrics } =
+    useContext(HeaderMetricsContext);
+
+  // Function to get the correct icon component
+  const getIcon = (iconName) => {
+    const IconComponent = iconMapping[iconName] || UserIcon;
+    const colors = {
+      user: "text-orange-500",
+      download: "text-red-500",
+      stack: "text-purple-500",
+      book: "text-blue-500",
+    };
+
+    return (
+      <IconComponent
+        className={`w-6 h-6 ${colors[iconName] || "text-primary"}`}
+      />
+    );
+  };
 
   return (
     <div className="p-4">
@@ -203,43 +205,58 @@ export default function ContractSpent() {
       />
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-4 gap-4">
-        {metrics.map((metric, index) => (
-          <div
-            key={index}
-            className="bg-background p-2 rounded-lg border border-border"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-800">
-                {metric.icon}
+      {isLoading ? (
+        <div className="grid grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            // custom loading sleleton
+            <CardSkeleton key={i} />
+          ))}
+        </div>
+      ) : error ? (
+        <div className="text-red-500 p-4 h-[152px] flex-center">
+          Error loading metrics: {error}
+        </div>
+      ) : (
+        <div className="grid grid-cols-4 gap-4">
+          {getFormattedMetrics().map((metric, index) => (
+            <div
+              key={index}
+              className="bg-background p-2 rounded-lg border border-border"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-800">
+                  {getIcon(metric.icon)}
+                </div>
+              </div>
+              <div>
+                <div className="text-xl font-bold text-primary mb-1">
+                  {metric.value}
+                </div>
+                <div className="text-sm text-secondary mb-3">
+                  {metric.label}
+                </div>
+                <div className="flex items-center">
+                  {metric.change.type === "increase" ? (
+                    <>
+                      <UpArrow className="w-4 h-4 text-green-500 mr-1" />
+                      <span className="text-sm text-green-600 dark:text-green-400">
+                        {metric.change.value}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <ArrowDownIcon className="w-4 h-4 text-red-500 mr-1" />
+                      <span className="text-sm text-red-600 dark:text-red-400">
+                        {metric.change.value}
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-            <div>
-              <div className="text-xl font-bold text-primary mb-1">
-                {metric.value}
-              </div>
-              <div className="text-sm text-secondary mb-3">{metric.label}</div>
-              <div className="flex items-center">
-                {metric.change.type === "increase" ? (
-                  <>
-                    <UpArrow className="w-4 h-4 text-green-500 mr-1" />
-                    <span className="text-sm text-green-600 dark:text-green-400">
-                      {metric.change.value}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <ArrowDownIcon className="w-4 h-4 text-red-500 mr-1" />
-                    <span className="text-sm text-red-600 dark:text-red-400">
-                      {metric.change.value}
-                    </span>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

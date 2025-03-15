@@ -1,17 +1,16 @@
-// import { TypographyProvider } from "./Typography/TypographyContext";
+"use client";
 import { ThemeProvider } from "next-themes";
+import DashBoardProviders from "./DashBoard/DashBoardProviders";
 
 export default function AllProviders({ children }) {
   return (
-    // <TypographyProvider>
     <ThemeProvider
       attribute="class"
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange
     >
-      {children}
+      <DashBoardProviders> {children}</DashBoardProviders>
     </ThemeProvider>
-    // </TypographyProvider>
   );
 }
