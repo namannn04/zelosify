@@ -1,6 +1,20 @@
+"use client";
 import { Maximize, Plus, Settings, Trash } from "lucide-react";
+import { useChat } from "@/contexts/Chat/ChatContext";
 
 export default function ChatHeader() {
+  const { createNewChat, isLoading } = useChat();
+
+  const handleNewChat = async () => {
+    if (!isLoading) {
+      try {
+        await createNewChat();
+      } catch (error) {
+        console.error("Error creating new chat:", error);
+      }
+    }
+  };
+
   return (
     <div className="flex items-center justify-between p-4 border-b border-border rounded-t-lg text-sm">
       <h2 className="text-2xl font-bold">Zelosify AI Chat</h2>
@@ -32,8 +46,16 @@ export default function ChatHeader() {
           </span>
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-full hover:bg-gray-800 dark:hover:bg-gray-200">
-          <Plus className="w-4 h-4" />
+        <button
+          onClick={handleNewChat}
+          disabled={isLoading}
+          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <Plus className="w-4 h-4" />
+          )}
           New Chat
         </button>
       </div>

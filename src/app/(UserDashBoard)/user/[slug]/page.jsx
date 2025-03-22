@@ -1,12 +1,23 @@
-import ChatPage from "@/pages/UserDashboardPage/Messages/ChatPage";
+"use client";
+
+import dynamic from "next/dynamic";
 import PaymentsPage from "@/pages/UserDashboardPage/Payments/PaymentsPage";
 import RequestPage from "@/pages/UserDashboardPage/Requests/RequestsPage";
 import SupportPage from "@/pages/UserDashboardPage/Support/SupportPage";
 import TrackingPage from "@/pages/UserDashboardPage/Tracking/TrackingPage";
 import { notFound } from "next/navigation";
+import { use } from "react";
 
-export default async function UserSubPage({ params }) {
-  const { slug } = await params;
+// Dynamically import the ChatPage with SSR disabled
+const ChatPage = dynamic(
+  () => import("@/pages/UserDashboardPage/Messages/ChatPage"),
+  { ssr: false }
+);
+
+export default function UserSubPage({ params }) {
+  // Unwrap params with React.use()
+  const unwrappedParams = use(params);
+  const slug = unwrappedParams.slug;
 
   // If it's not one of our known slugs, trigger a 404:
   if (
@@ -27,7 +38,6 @@ export default async function UserSubPage({ params }) {
       return <RequestPage />;
     case "support":
       return <SupportPage />;
-
     default:
       return null;
   }

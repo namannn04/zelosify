@@ -1,10 +1,12 @@
 "use client";
 import { ArrowRight } from "lucide-react";
 import { useRef, useState } from "react";
+import { useChat } from "@/contexts/Chat/ChatContext";
 
 export default function InputArea() {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
+  const { sendMessage, isLoading } = useChat();
 
   const resetTextareaHeight = () => {
     if (textareaRef.current) {
@@ -12,9 +14,9 @@ export default function InputArea() {
     }
   };
 
-  const sendMessage = () => {
-    if (message.trim()) {
-      console.log(message);
+  const handleSendMessage = () => {
+    if (message.trim() && !isLoading) {
+      sendMessage(message.trim());
       setMessage("");
       resetTextareaHeight();
     }
@@ -32,7 +34,7 @@ export default function InputArea() {
     // Handling Shift + Enter
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      handleSendMessage();
     }
   };
 
@@ -46,16 +48,22 @@ export default function InputArea() {
           onKeyDown={handleKeyDown}
           placeholder="Send a message"
           rows={1}
+          disabled={isLoading}
           className="border border-border w-full px-12 py-3 rounded-lg bg-tableHeader focus:outline-none focus:ring-1 focus:ring-gray-200 dark:focus:ring-gray-600 resize-none overflow-y-auto min-h-[50px] max-h-[200px]"
         />
 
         <div className="absolute right-3 flex items-center">
           <div className="group relative">
             <button
-              onClick={sendMessage}
-              className="p-1 hover:bg-gray-800 dark:hover:bg-gray-600 rounded-full bg-black dark:bg-gray-700 flex items-center justify-center"
+              onClick={handleSendMessage}
+              disabled={isLoading || !message.trim()}
+              className="p-1 hover:bg-gray-800 dark:hover:bg-gray-600 rounded-full bg-black dark:bg-gray-700 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <ArrowRight className="w-5 h-5 text-white" />
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <ArrowRight className="w-5 h-5 text-white" />
+              )}
             </button>
             <span className="w-[105px] absolute -top-9 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition-transform bg-gray-800 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded-md">
               Send Message

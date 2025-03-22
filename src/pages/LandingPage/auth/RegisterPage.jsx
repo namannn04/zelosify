@@ -53,23 +53,48 @@ export default function Register() {
 
       setIsLoading(true);
       try {
-        const res = await axiosInstance.post("/auth/register", formData);
+        console.log("Submitting registration for:", formData.username);
+        const requestData = {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phoneNumber: formData.phoneNumber,
+          companyName: formData.companyName,
+          department: formData.department,
+          role: formData.role,
+        };
+
+        const res = await axiosInstance.post("/auth/register", requestData);
+        console.log("Registration response:", res.data);
+
         localStorage.setItem(
           "totpSetup",
           JSON.stringify({
-            userId: res.data.userId,
             qrCode: res.data.qrCode,
           })
         );
+
         window.location.href = "/setup-totp";
       } catch (err) {
-        if (
-          err.response?.status === 400 &&
-          err.response.data.message === "User already exists."
-        ) {
-          setError("Username or email already in use. Please choose another.");
+        console.error("Registration error:", err);
+
+        if (err.response) {
+          const { status, data } = err.response;
+          console.error(`Registration error status: ${status}, message:`, data);
+
+          if (status === 400 && data.message === "User already exists.") {
+            setError(
+              "Username or email already in use. Please choose another."
+            );
+          } else {
+            setError(data?.message || "Registration failed. Please try again.");
+          }
         } else {
-          setError(err?.response?.data?.message || "Registration failed");
+          setError(
+            "Network error. Please check your connection and try again."
+          );
         }
       } finally {
         setIsLoading(false);

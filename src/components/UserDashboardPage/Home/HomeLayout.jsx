@@ -1,3 +1,5 @@
+"use client";
+
 import AreaChart1 from "./AreaChart1/AreaChart1";
 import AreaChart2 from "./AreaChart2/AreaChart2";
 import HeaderMetrics from "./HeaderMetrics/HeaderMetrics";
