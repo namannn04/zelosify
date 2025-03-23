@@ -52,7 +52,7 @@ export default function ChatHeader() {
           className="flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? (
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-4 h-4 border-2 border-border border-t-transparent rounded-full animate-spin"></div>
           ) : (
             <Plus className="w-4 h-4" />
           )}

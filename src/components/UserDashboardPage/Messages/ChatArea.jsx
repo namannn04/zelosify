@@ -85,14 +85,14 @@ export default function ChatArea() {
           {messages.some((m) => m.sender === "ai") && (
             <div className="flex justify-center">
               <button
-                className="flex items-center gap-2 px-4 py-2 rounded-full border border-border hover:bg-tableHeader text-sm disabled:opacity-50 disabled:hover:bg-transparent"
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-border hover:bg-tableHeader text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 onClick={handleRegenerate}
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <div className="w-4 h-4 border-2 border-gray-600 dark:border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                  <div className="w-4 h-4 border-2 border-foreground border-t-transparent rounded-full animate-spin"></div>
                 ) : (
-                  <RotateCcw className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  <RotateCcw className="h-4 w-4 text-foreground" />
                 )}
                 Regenerate response
               </button>

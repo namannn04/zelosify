@@ -84,7 +84,7 @@ export const ChatProvider = ({ children }) => {
           message
         );
         const response = await axiosInstance.post(
-          `/chat/${activeConversationId}`,
+          `/rag-chat/${activeConversationId}`,
           {
             query: message,
             conversationId: activeConversationId,
