@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import axiosInstance from "@/utils/axios/AxiosInstance";
+import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
 export default function SetupTOTP() {
   const [qrCode, setQrCode] = useState("");
@@ -102,7 +103,7 @@ export default function SetupTOTP() {
 
       {isLoading ? (
         <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white"></div>
+          <CircleLoader />
         </div>
       ) : error ? (
         <motion.div

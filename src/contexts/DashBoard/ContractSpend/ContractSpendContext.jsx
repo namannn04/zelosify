@@ -16,6 +16,7 @@ const ContractSpendContext = createContext({
   getVendorsToShow: () => [],
   createChartConfig: () => ({}),
   vendorColors: {},
+  setTopVendors: () => {},
 });
 
 export const ContractSpendProvider = ({ children }) => {
@@ -26,6 +27,7 @@ export const ContractSpendProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [vendorColors, setVendorColors] = useState({});
+  const [topVendors, setTopVendors] = useState("5");
 
   const pathname = usePathname();
 
@@ -90,7 +92,11 @@ export const ContractSpendProvider = ({ children }) => {
     const fetchContractSpendData = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosInstance.get("/dashboard/contract-spend");
+        const response = await axiosInstance.get("/dashboard/contract-spend", {
+          params: {
+            topVendors: topVendors,
+          },
+        });
         const responseData = response.data.data;
 
         if (!responseData) {
@@ -242,7 +248,7 @@ export const ContractSpendProvider = ({ children }) => {
     };
 
     if (pathname === "/user") fetchContractSpendData();
-  }, [pathname, formatDateToYYYYMM, generateFullYearMonths]);
+  }, [pathname, formatDateToYYYYMM, generateFullYearMonths, topVendors]);
 
   // Filter data based on filters (will be used by components)
   const getFilteredData = useCallback(
@@ -346,6 +352,7 @@ export const ContractSpendProvider = ({ children }) => {
         getVendorsToShow,
         createChartConfig,
         vendorColors,
+        setTopVendors,
       }}
     >
       {children}

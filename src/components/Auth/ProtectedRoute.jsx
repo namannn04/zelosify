@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/Auth/AuthContext";
+import CircleLoader from "../UI/loaders/CircleLoader";
 
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated, loading, refreshUser } = useAuth();
@@ -56,7 +57,7 @@ export default function ProtectedRoute({ children }) {
   if (loading || !mounted) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white"></div>
+        <CircleLoader />
       </div>
     );
   }

@@ -4,6 +4,7 @@ import MsgFromUser from "./MsgFromUser";
 import MsgFromAI from "./MsgFromAI";
 import { useChat } from "@/contexts/Chat/ChatContext";
 import { useEffect, useRef, useState } from "react";
+import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
 export default function ChatArea() {
   // Always call all hooks in the same order on every render
@@ -48,7 +49,7 @@ export default function ChatArea() {
   if (!mounted) {
     return (
       <div className="flex-1 overflow-y-auto p-4 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600 dark:border-gray-400"></div>
+        <CircleLoader />
       </div>
     );
   }

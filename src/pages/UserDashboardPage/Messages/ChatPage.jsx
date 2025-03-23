@@ -1,5 +1,6 @@
 "use client";
 
+import CircleLoader from "@/components/UI/loaders/CircleLoader";
 import ChatLayout from "@/components/UserDashboardPage/Messages/ChatLayout";
 import { useEffect, useState } from "react";
 
@@ -31,7 +32,7 @@ export default function ChatPage() {
   if (!isMounted) {
     return (
       <div className="w-full flex items-center justify-center min-h-[70vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white"></div>
+        <CircleLoader />
       </div>
     );
   }

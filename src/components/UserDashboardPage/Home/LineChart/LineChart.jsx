@@ -27,8 +27,9 @@ import ContractSpendContext from "@/contexts/DashBoard/ContractSpend/ContractSpe
 
 export default function LineChartComponent() {
   const [selectedVendor, setSelectedVendor] = useState("All Vendors");
-  const [selectedTimeRange, setSelectedTimeRange] = useState("365d");
+  const [selectedTimeRange, setSelectedTimeRange] = useState("");
   const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
+  const [topVendorsCount, setTopVendorsCount] = useState("5");
 
   const {
     allVendors,
@@ -39,12 +40,20 @@ export default function LineChartComponent() {
     getVendorsToShow,
     createChartConfig,
     vendorColors,
+    setTopVendors,
   } = useContext(ContractSpendContext);
 
   // Update localStorage when selectedVendor changes (for other components to detect)
   useEffect(() => {
     localStorage.setItem("selectedVendor", selectedVendor);
   }, [selectedVendor]);
+
+  // Update topVendors in context when topVendorsCount changes
+  useEffect(() => {
+    if (typeof setTopVendors === "function") {
+      setTopVendors(topVendorsCount);
+    }
+  }, [topVendorsCount, setTopVendors]);
 
   // Get filtered data based on selected filters
   const filteredData = useMemo(() => {
@@ -96,12 +105,37 @@ export default function LineChartComponent() {
         <CardHeader className="flex flex-col space-y-0 border-b border-border p-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <CardTitle>Contract Spend Trends</CardTitle>
-              <CardDescription>
-                Visualizing contract expenditures over time
+              <CardTitle className="text-xl">Contract Spend Trends</CardTitle>
+              <CardDescription className="mt-2">
+                Visualizing top {topVendorsCount} contract expenditures over
+                time
               </CardDescription>
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
+              {/* Select number of top vendors */}
+              <Select
+                value={topVendorsCount}
+                onValueChange={setTopVendorsCount}
+              >
+                <SelectTrigger
+                  className="w-[160px] rounded-lg"
+                  aria-label="Select top vendors count"
+                >
+                  <SelectValue placeholder="Top 5 Vendors" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl bg-background text-foreground">
+                  {[3, 4, 5, 6].map((count) => (
+                    <SelectItem
+                      key={count}
+                      value={count.toString()}
+                      className="rounded-lg hover:bg-tableHeader"
+                    >
+                      Top {count} Vendors
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <Select value={selectedVendor} onValueChange={setSelectedVendor}>
                 <SelectTrigger
                   className="w-[160px] rounded-lg"
