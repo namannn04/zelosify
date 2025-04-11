@@ -29,7 +29,7 @@ export const ChatProvider = ({ children }) => {
       setError(null);
 
       console.log("Creating new chat conversation");
-      const response = await axiosInstance.post("/new-chat");
+      const response = await axiosInstance.post("/chat/new");
 
       const conversationId = response.data.conversationId;
       console.log("New conversation created:", conversationId);
@@ -84,7 +84,7 @@ export const ChatProvider = ({ children }) => {
           message
         );
         const response = await axiosInstance.post(
-          `/rag-chat/${activeConversationId}`,
+          `/chat/${activeConversationId}`,
           {
             query: message,
             conversationId: activeConversationId,

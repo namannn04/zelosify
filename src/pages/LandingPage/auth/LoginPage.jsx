@@ -69,6 +69,8 @@ export default function LoginPage() {
           ) {
             // Move to TOTP verification stage
             setLoginStage("totp");
+          } else if (res.data.message === "Authentication successful") {
+            window.location.replace("/user");
           }
         } catch (err) {
           console.error("Login verification error:", err);
