@@ -21,15 +21,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/UI/shadcn/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/UI/shadcn/popover";
+import { Calendar } from "@/components/UI/shadcn/calendar";
+import { Button } from "@/components/UI/shadcn/button";
+import { CalendarIcon } from "@heroicons/react/24/outline";
+import { format } from "date-fns";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 import { useContext, useEffect, useMemo, useState } from "react";
 import ContractSpendContext from "@/contexts/DashBoard/ContractSpend/ContractSpendContext";
 
 export default function LineChartComponent() {
   const [selectedVendor, setSelectedVendor] = useState("All Vendors");
-  const [selectedTimeRange, setSelectedTimeRange] = useState("");
+  const [selectedTimeRange, setSelectedTimeRange] = useState("90d");
   const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
   const [topVendorsCount, setTopVendorsCount] = useState("5");
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [datePickerType, setDatePickerType] = useState("from"); // "from" or "to"
 
   const {
     allVendors,
@@ -41,6 +54,7 @@ export default function LineChartComponent() {
     createChartConfig,
     vendorColors,
     setTopVendors,
+    setCustomDateRange,
   } = useContext(ContractSpendContext);
 
   // Update localStorage when selectedVendor changes (for other components to detect)
@@ -55,6 +69,51 @@ export default function LineChartComponent() {
     }
   }, [topVendorsCount, setTopVendors]);
 
+  // Handle custom date range selection
+  const handleDateSelect = (date) => {
+    if (datePickerType === "from") {
+      setFromDate(date);
+      setDatePickerType("to");
+    } else {
+      setToDate(date);
+      setCalendarOpen(false);
+      // Set time range to custom when both dates are selected
+      if (fromDate) {
+        setSelectedTimeRange("custom");
+        // Update the context with the selected date range
+        if (typeof setCustomDateRange === "function") {
+          setCustomDateRange({ fromDate, toDate: date });
+        }
+      }
+    }
+  };
+
+  // Reset date picker when opening
+  const handleCalendarOpen = () => {
+    setDatePickerType("from");
+    setCalendarOpen(true);
+  };
+
+  // Format date range for display
+  const formatDateRange = () => {
+    if (fromDate && toDate) {
+      return `${format(fromDate, "MMM dd, yyyy")} - ${format(
+        toDate,
+        "MMM dd, yyyy"
+      )}`;
+    }
+    return "Select date range";
+  };
+
+  // Update the context whenever the time range changes
+  useEffect(() => {
+    if (selectedTimeRange === "custom") {
+      if (fromDate && toDate && typeof setCustomDateRange === "function") {
+        setCustomDateRange({ fromDate, toDate });
+      }
+    }
+  }, [selectedTimeRange, fromDate, toDate, setCustomDateRange]);
+
   // Get filtered data based on selected filters
   const filteredData = useMemo(() => {
     // Ensure getFilteredData is a function
@@ -62,8 +121,21 @@ export default function LineChartComponent() {
       console.error("getFilteredData is not a function:", getFilteredData);
       return [];
     }
-    return getFilteredData(selectedVendor, selectedTimeRange, selectedIndustry);
-  }, [selectedVendor, selectedTimeRange, selectedIndustry, getFilteredData]);
+    return getFilteredData(
+      selectedVendor,
+      selectedTimeRange,
+      selectedIndustry,
+      fromDate,
+      toDate
+    );
+  }, [
+    selectedVendor,
+    selectedTimeRange,
+    selectedIndustry,
+    getFilteredData,
+    fromDate,
+    toDate,
+  ]);
 
   // Get list of vendors to show based on filters
   const vendorsToShow = useMemo(() => {
@@ -161,35 +233,72 @@ export default function LineChartComponent() {
 
               <Select
                 value={selectedTimeRange}
-                onValueChange={setSelectedTimeRange}
+                onValueChange={(value) => {
+                  setSelectedTimeRange(value);
+                  if (value !== "custom") {
+                    setFromDate(null);
+                    setToDate(null);
+                    // Also update the context to stop using custom date range
+                    if (typeof setCustomDateRange === "function") {
+                      setCustomDateRange({ fromDate: null, toDate: null });
+                    }
+                  }
+                }}
               >
                 <SelectTrigger
                   className="w-[160px] rounded-lg"
                   aria-label="Select time range"
                 >
-                  <SelectValue placeholder="Full Year" />
+                  <SelectValue placeholder="Last 90 Days" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl bg-background text-foreground">
-                  <SelectItem value="all" className="rounded-lg">
-                    All Time
-                  </SelectItem>
-                  <SelectItem value="365d" className="rounded-lg">
-                    Full Year
-                  </SelectItem>
-                  <SelectItem value="180d" className="rounded-lg">
-                    Last 180 days
-                  </SelectItem>
                   <SelectItem value="90d" className="rounded-lg">
-                    Last 90 days
+                    Last 90 Days
                   </SelectItem>
-                  <SelectItem value="70d" className="rounded-lg">
-                    Last 70 days
+                  <SelectItem value="60d" className="rounded-lg">
+                    Last 60 Days
                   </SelectItem>
                   <SelectItem value="30d" className="rounded-lg">
-                    Last 30 days
+                    Last 30 Days
+                  </SelectItem>
+                  <SelectItem value="custom" className="rounded-lg">
+                    Custom Range
                   </SelectItem>
                 </SelectContent>
               </Select>
+
+              {/* Custom date range picker */}
+              {selectedTimeRange === "custom" && (
+                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-[220px] rounded-lg justify-start text-left font-normal"
+                      onClick={handleCalendarOpen}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {fromDate && toDate
+                        ? formatDateRange()
+                        : "Select date range"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0">
+                    <Calendar
+                      mode="single"
+                      selected={datePickerType === "from" ? fromDate : toDate}
+                      onSelect={handleDateSelect}
+                      initialFocus
+                    />
+                    <div className="p-2 border-t">
+                      <p className="text-sm text-center">
+                        {datePickerType === "from"
+                          ? "Select start date"
+                          : "Select end date"}
+                      </p>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              )}
 
               <Select
                 value={selectedIndustry}

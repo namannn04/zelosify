@@ -7,6 +7,7 @@ import SupportPage from "@/pages/UserDashboardPage/Support/SupportPage";
 import TrackingPage from "@/pages/UserDashboardPage/Tracking/TrackingPage";
 import { notFound } from "next/navigation";
 import { use } from "react";
+import FinancePage from "@/pages/UserDashboardPage/Finance/FinancePage";
 
 // Dynamically import the ChatPage with SSR disabled
 const ChatPage = dynamic(
@@ -21,7 +22,14 @@ export default function UserSubPage({ params }) {
 
   // If it's not one of our known slugs, trigger a 404:
   if (
-    !["messages", "payments", "tracking", "requests", "support"].includes(slug)
+    ![
+      "messages",
+      "payments",
+      "tracking",
+      "requests",
+      "support",
+      "finance",
+    ].includes(slug)
   ) {
     notFound();
   }
@@ -38,6 +46,8 @@ export default function UserSubPage({ params }) {
       return <RequestPage />;
     case "support":
       return <SupportPage />;
+    case "finance":
+      return <FinancePage />;
     default:
       return null;
   }

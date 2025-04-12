@@ -188,7 +188,9 @@ export default function HeaderMetrics() {
     <div className="p-4">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-foreground">Contracts Spent</h2>
+        <h2 className="text-2xl font-bold text-foreground">
+          Contracts Intelligence
+        </h2>
         <button
           onClick={() => setIsImportOpen(true)}
           className="flex items-center px-4 py-2 text-sm font-medium text-background bg-foreground rounded-md transition"

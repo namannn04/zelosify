@@ -17,6 +17,7 @@ const ContractSpendContext = createContext({
   createChartConfig: () => ({}),
   vendorColors: {},
   setTopVendors: () => {},
+  setCustomDateRange: () => {},
 });
 
 export const ContractSpendProvider = ({ children }) => {
@@ -28,6 +29,11 @@ export const ContractSpendProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [vendorColors, setVendorColors] = useState({});
   const [topVendors, setTopVendors] = useState("5");
+  const [customDateRange, setCustomDateRangeState] = useState({
+    fromDate: null,
+    toDate: null,
+  });
+  const [selectedTimeRange, setSelectedTimeRange] = useState("90d");
 
   const pathname = usePathname();
 
@@ -49,6 +55,22 @@ export const ContractSpendProvider = ({ children }) => {
         return dateString;
       }
       return null;
+    }
+  }, []);
+
+  // Format date as YYYY-MM-DD for API
+  const formatDateForApi = useCallback((date) => {
+    if (!date) return null;
+    return date instanceof Date
+      ? date.toISOString().split("T")[0]
+      : new Date(date).toISOString().split("T")[0];
+  }, []);
+
+  // Function to update custom date range and time range setting
+  const setCustomDateRange = useCallback(({ fromDate, toDate }) => {
+    setCustomDateRangeState({ fromDate, toDate });
+    if (fromDate && toDate) {
+      setSelectedTimeRange("custom");
     }
   }, []);
 
@@ -92,11 +114,52 @@ export const ContractSpendProvider = ({ children }) => {
     const fetchContractSpendData = async () => {
       try {
         setIsLoading(true);
+
+        // Default to 90 days if no specific range is set
+        const defaultParams = {
+          topVendors: topVendors,
+        };
+
+        // Create params based on selected time range
+        let params = { ...defaultParams };
+
+        if (
+          selectedTimeRange === "custom" &&
+          customDateRange.fromDate &&
+          customDateRange.toDate
+        ) {
+          // If custom date range is selected, use those dates
+          params.startDate = formatDateForApi(customDateRange.fromDate);
+          params.endDate = formatDateForApi(customDateRange.toDate);
+        } else {
+          // Otherwise use predefined ranges
+          const now = new Date();
+          let startDate;
+
+          switch (selectedTimeRange) {
+            case "30d":
+              startDate = new Date(now);
+              startDate.setDate(startDate.getDate() - 30);
+              break;
+            case "60d":
+              startDate = new Date(now);
+              startDate.setDate(startDate.getDate() - 60);
+              break;
+            case "90d":
+            default:
+              startDate = new Date(now);
+              startDate.setDate(startDate.getDate() - 90);
+              break;
+          }
+
+          params.startDate = formatDateForApi(startDate);
+          params.endDate = formatDateForApi(now);
+        }
+
         const response = await axiosInstance.get("/dashboard/contract-spend", {
-          params: {
-            topVendors: topVendors,
-          },
+          params: params,
         });
+
         const responseData = response.data.data;
 
         if (!responseData) {
@@ -248,11 +311,19 @@ export const ContractSpendProvider = ({ children }) => {
     };
 
     if (pathname === "/user") fetchContractSpendData();
-  }, [pathname, formatDateToYYYYMM, generateFullYearMonths, topVendors]);
+  }, [
+    pathname,
+    formatDateToYYYYMM,
+    generateFullYearMonths,
+    topVendors,
+    selectedTimeRange,
+    customDateRange,
+    formatDateForApi,
+  ]);
 
   // Filter data based on filters (will be used by components)
   const getFilteredData = useCallback(
-    (selectedVendor, selectedTimeRange, selectedIndustry) => {
+    (selectedVendor, selectedTimeRange, selectedIndustry, fromDate, toDate) => {
       if (isLoading || !chartData.length) return [];
 
       let data = [...chartData]; // Copy original data
@@ -262,32 +333,38 @@ export const ContractSpendProvider = ({ children }) => {
         const now = new Date();
         let cutoffDate;
 
-        switch (selectedTimeRange) {
-          case "30d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 30));
-            break;
-          case "70d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 70));
-            break;
-          case "90d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 90));
-            break;
-          case "180d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 180));
-            break;
-          case "365d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 365));
-            break;
-          default:
-            cutoffDate = new Date(now.setDate(now.getDate() - 365));
-            break;
+        if (selectedTimeRange === "custom" && fromDate && toDate) {
+          // Use custom date range if provided
+          const fromDateStr = fromDate.toISOString().substring(0, 7); // YYYY-MM
+          const toDateStr = toDate.toISOString().substring(0, 7); // YYYY-MM
+
+          // Filter the data based on date range
+          data = data.filter((item) => {
+            return item.date >= fromDateStr && item.date <= toDateStr;
+          });
+        } else {
+          // Use predefined time ranges
+          switch (selectedTimeRange) {
+            case "30d":
+              cutoffDate = new Date(now.setDate(now.getDate() - 30));
+              break;
+            case "60d":
+              cutoffDate = new Date(now.setDate(now.getDate() - 60));
+              break;
+            case "90d":
+              cutoffDate = new Date(now.setDate(now.getDate() - 90));
+              break;
+            default:
+              cutoffDate = new Date(now.setDate(now.getDate() - 90));
+              break;
+          }
+
+          // Convert cutoff date to string format for comparison (YYYY-MM)
+          const cutoffDateStr = cutoffDate.toISOString().substring(0, 7);
+
+          // Filter the data based on the date
+          data = data.filter((item) => item.date >= cutoffDateStr);
         }
-
-        // Convert cutoff date to string format for comparison (YYYY-MM)
-        const cutoffDateStr = cutoffDate.toISOString().substring(0, 7);
-
-        // Filter the data based on the date
-        data = data.filter((item) => item.date >= cutoffDateStr);
       }
 
       // Get vendors to display based on selected industry
@@ -353,6 +430,7 @@ export const ContractSpendProvider = ({ children }) => {
         createChartConfig,
         vendorColors,
         setTopVendors,
+        setCustomDateRange,
       }}
     >
       {children}

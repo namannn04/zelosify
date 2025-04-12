@@ -60,6 +60,16 @@ export default {
         chart11: "var(--chart-11)",
         chart12: "var(--chart-12)",
         radius: "var(--radius)",
+        sidebar: {
+          DEFAULT: "var(--sidebar-background)",
+          foreground: "var(--sidebar-foreground)",
+          primary: "var(--sidebar-primary)",
+          "primary-foreground": "var(--sidebar-primary-foreground)",
+          accent: "var(--sidebar-accent)",
+          "accent-foreground": "var(--sidebar-accent-foreground)",
+          border: "var(--sidebar-border)",
+          ring: "var(--sidebar-ring)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
