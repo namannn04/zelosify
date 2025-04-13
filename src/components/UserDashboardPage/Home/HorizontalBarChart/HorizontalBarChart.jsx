@@ -123,10 +123,10 @@ export default function HorizantalBarChartComponent() {
   );
 
   return (
-    <div className="basis-1/2">
+    <div className="p-4">
       <Card className="h-full">
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="text-xl">
             {selectedVendor === "All Vendors"
               ? "Contract Category Breakdown"
               : `${selectedVendor} Contract Details`}
@@ -167,14 +167,14 @@ export default function HorizantalBarChartComponent() {
               <BarChart
                 data={vendorData}
                 layout="vertical"
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                margin={{ top: 5, right: 30, left: 80, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} />
                 <XAxis type="number" hide />
                 <YAxis
                   dataKey="category"
                   type="category"
-                  width={130}
+                  width={150}
                   tickLine={false}
                   axisLine={false}
                 />
@@ -209,12 +209,12 @@ export default function HorizantalBarChartComponent() {
           </div>
         </CardContent>
         <CardFooter className="flex-col items-start gap-2">
-          <div className="text-sm font-semibold">
+          <div className="text-xl font-semibold">
             Budget Utilization by Category
           </div>
-          <div className="w-full h-[100px]">
+          <div className="w-full h-[100px] mt-1">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={vendorData}>
+              <LineChart className="p-0.5" data={vendorData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   dataKey="category"

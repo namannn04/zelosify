@@ -230,8 +230,38 @@ export const ContractSpendProvider = ({ children }) => {
           monthsMap[monthData.month] = monthData.amount;
         });
 
-        // Then ensure all 12 months are included - either current year or from data
-        const allMonths = generateFullYearMonths();
+        // Find the latest month in the API data to determine "current month"
+        let latestMonthFromAPI = "";
+        if (responseData.spendByMonth.length > 0) {
+          const sortedMonths = [...responseData.spendByMonth]
+            .map((item) => item.month)
+            .sort((a, b) => b.localeCompare(a)); // Sort in descending order
+          latestMonthFromAPI = sortedMonths[0];
+        }
+
+        // Determine the next month after the latest month
+        const getNextMonth = (monthStr) => {
+          if (!monthStr || monthStr.length < 7) return null;
+
+          try {
+            const [year, monthPart] = monthStr.split("-");
+            const month = parseInt(monthPart);
+
+            if (isNaN(month) || month < 1 || month > 12) return null;
+
+            const nextMonth = month === 12 ? 1 : month + 1;
+            const nextYear = month === 12 ? parseInt(year) + 1 : parseInt(year);
+            return `${nextYear}-${String(nextMonth).padStart(2, "0")}`;
+          } catch (error) {
+            console.error("Error calculating next month:", error);
+            return null;
+          }
+        };
+
+        // Get the next month after the latest API month
+        const nextMonthAfterLatest = getNextMonth(latestMonthFromAPI);
+
+        // Then ensure relevant months are included
         let dataYear = new Date().getFullYear();
 
         // Try to determine the year from the data if available
@@ -242,8 +272,35 @@ export const ContractSpendProvider = ({ children }) => {
           }
         }
 
-        // Fill in missing months with zero values
-        allMonths.forEach((month) => {
+        // Create months for the entire data year
+        const generateMonthsForYear = (year) => {
+          const months = [];
+          for (let month = 0; month < 12; month++) {
+            const monthStr = String(month + 1).padStart(2, "0");
+            months.push(`${year}-${monthStr}`);
+          }
+          return months;
+        };
+
+        const allMonths = generateMonthsForYear(dataYear);
+
+        // Only include months up to the next month after latest
+        const filteredMonths = allMonths.filter((month) => {
+          // If no API data or invalid next month, use a safer default (show only up to current month)
+          if (!latestMonthFromAPI || !nextMonthAfterLatest) {
+            const now = new Date();
+            const currentMonthStr = `${now.getFullYear()}-${String(
+              now.getMonth() + 1
+            ).padStart(2, "0")}`;
+            return month <= currentMonthStr;
+          }
+
+          // Keep all months up to and including the next month after latest
+          return month <= nextMonthAfterLatest;
+        });
+
+        // Fill in missing months with zero values, but only for the filtered months
+        filteredMonths.forEach((month) => {
           if (!monthsMap[month]) {
             monthsMap[month] = 0;
           }
@@ -264,6 +321,9 @@ export const ContractSpendProvider = ({ children }) => {
 
         // Initialize all months with all vendors set to 0
         Object.keys(monthsMap).forEach((month) => {
+          // Only include months that are in our filtered list
+          if (!filteredMonths.includes(month)) return;
+
           vendorSpendingByMonth[month] = {};
           vendors.forEach((vendor) => {
             vendorSpendingByMonth[month][vendor] = 0;
@@ -276,25 +336,33 @@ export const ContractSpendProvider = ({ children }) => {
           const vendorName = summary.vendor.name;
           const spend = parseInt(summary.totalSpend);
 
-          if (month && vendorSpendingByMonth[month] && !isNaN(spend)) {
+          // Only include months that are in our filtered list
+          if (
+            month &&
+            filteredMonths.includes(month) &&
+            vendorSpendingByMonth[month] &&
+            !isNaN(spend)
+          ) {
             vendorSpendingByMonth[month][vendorName] = spend;
           }
         });
 
-        // Transform into the final chart data format
-        const transformedData = Object.keys(monthsMap).map((month) => {
-          const dataPoint = {
-            date: month,
-            total: monthsMap[month],
-          };
+        // Transform into the final chart data format - only using the filtered months
+        const transformedData = Object.keys(monthsMap)
+          .filter((month) => filteredMonths.includes(month))
+          .map((month) => {
+            const dataPoint = {
+              date: month,
+              total: monthsMap[month],
+            };
 
-          // Add vendor-specific spending
-          vendors.forEach((vendor) => {
-            dataPoint[vendor] = vendorSpendingByMonth[month]?.[vendor] || 0;
+            // Add vendor-specific spending
+            vendors.forEach((vendor) => {
+              dataPoint[vendor] = vendorSpendingByMonth[month]?.[vendor] || 0;
+            });
+
+            return dataPoint;
           });
-
-          return dataPoint;
-        });
 
         // Sort by date
         transformedData.sort((a, b) => a.date.localeCompare(b.date));
@@ -328,42 +396,51 @@ export const ContractSpendProvider = ({ children }) => {
 
       let data = [...chartData]; // Copy original data
 
-      // Filter by time range
+      // Chart data is already filtered to only include months up to next month after latest
+      // Now apply additional time range filtering based on user selection
       if (selectedTimeRange && selectedTimeRange !== "all") {
         const now = new Date();
         let cutoffDate;
 
         if (selectedTimeRange === "custom" && fromDate && toDate) {
           // Use custom date range if provided
-          const fromDateStr = fromDate.toISOString().substring(0, 7); // YYYY-MM
-          const toDateStr = toDate.toISOString().substring(0, 7); // YYYY-MM
+          try {
+            const fromDateStr = fromDate.toISOString().substring(0, 7); // YYYY-MM
+            const toDateStr = toDate.toISOString().substring(0, 7); // YYYY-MM
 
-          // Filter the data based on date range
-          data = data.filter((item) => {
-            return item.date >= fromDateStr && item.date <= toDateStr;
-          });
+            // Filter the data based on date range
+            data = data.filter((item) => {
+              return item.date >= fromDateStr && item.date <= toDateStr;
+            });
+          } catch (error) {
+            console.error("Error filtering by custom date range:", error);
+          }
         } else {
           // Use predefined time ranges
-          switch (selectedTimeRange) {
-            case "30d":
-              cutoffDate = new Date(now.setDate(now.getDate() - 30));
-              break;
-            case "60d":
-              cutoffDate = new Date(now.setDate(now.getDate() - 60));
-              break;
-            case "90d":
-              cutoffDate = new Date(now.setDate(now.getDate() - 90));
-              break;
-            default:
-              cutoffDate = new Date(now.setDate(now.getDate() - 90));
-              break;
+          try {
+            switch (selectedTimeRange) {
+              case "30d":
+                cutoffDate = new Date(now.setDate(now.getDate() - 30));
+                break;
+              case "60d":
+                cutoffDate = new Date(now.setDate(now.getDate() - 60));
+                break;
+              case "90d":
+                cutoffDate = new Date(now.setDate(now.getDate() - 90));
+                break;
+              default:
+                cutoffDate = new Date(now.setDate(now.getDate() - 90));
+                break;
+            }
+
+            // Convert cutoff date to string format for comparison (YYYY-MM)
+            const cutoffDateStr = cutoffDate.toISOString().substring(0, 7);
+
+            // Filter the data based on the date
+            data = data.filter((item) => item.date >= cutoffDateStr);
+          } catch (error) {
+            console.error("Error filtering by predefined date range:", error);
           }
-
-          // Convert cutoff date to string format for comparison (YYYY-MM)
-          const cutoffDateStr = cutoffDate.toISOString().substring(0, 7);
-
-          // Filter the data based on the date
-          data = data.filter((item) => item.date >= cutoffDateStr);
         }
       }
 
