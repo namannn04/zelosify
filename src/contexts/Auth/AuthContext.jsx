@@ -14,6 +14,7 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showSignoutConfirmation, setShowSignoutConfirmation] = useState(false);
 
   // Check if user is authenticated based on cookies
   const checkAuthStatus = useCallback(() => {
@@ -48,6 +49,16 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Show signout confirmation popup
+  const handleSignoutClick = useCallback(() => {
+    setShowSignoutConfirmation(true);
+  }, []);
+
+  // Hide signout confirmation popup
+  const cancelSignout = useCallback(() => {
+    setShowSignoutConfirmation(false);
+  }, []);
+
   // Logout function - just handle the API call, middleware handles the redirect
   const logout = useCallback(async () => {
     try {
@@ -66,6 +77,7 @@ export const AuthProvider = ({ children }) => {
         "temp_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       localStorage.setItem("logout", Date.now().toString());
       setUser(null);
+      setShowSignoutConfirmation(false);
 
       // Let the browser handle the redirect via middleware
       window.location.href = "/login";
@@ -110,6 +122,9 @@ export const AuthProvider = ({ children }) => {
     loading,
     logout,
     refreshUser: checkAuthStatus,
+    showSignoutConfirmation,
+    handleSignoutClick,
+    cancelSignout,
   };
 
   return (

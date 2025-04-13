@@ -7,15 +7,7 @@ import { useAuth } from "@/contexts/Auth/AuthContext";
 const UserProfile = memo(
   ({ toggleNotifications, isProfileOpen, toggleProfile, profileRef }) => {
     const router = useRouter();
-    const { logout } = useAuth();
-
-    const handleLogout = async () => {
-      try {
-        await logout();
-      } catch (error) {
-        console.error("Logout error:", error);
-      }
-    };
+    const { handleSignoutClick } = useAuth();
 
     return (
       <div className="relative" ref={profileRef}>
@@ -77,7 +69,7 @@ const UserProfile = memo(
 
             {/* Logout */}
             <button
-              onClick={handleLogout}
+              onClick={handleSignoutClick}
               className="flex w-full items-center px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
               role="menuitem"
             >

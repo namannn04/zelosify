@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { FaDollarSign } from "react-icons/fa6";
 import SidebarHeader from "./SidebarHeader";
+import { useAuth } from "@/contexts/Auth/AuthContext";
 
 // Create sidebar context
 const SidebarContext = createContext(null);
@@ -248,11 +249,12 @@ const SidebarMenuSubItem = memo(({ item, isActive, isOpen, ...props }) => {
 });
 SidebarMenuSubItem.displayName = "SidebarMenuSubItem";
 
-const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
+const Sidebar = memo(({ isOpen, toggleSidebar }) => {
   const pathname = usePathname();
   const router = useRouter();
   const sidebarRef = useRef(null);
   const [expandedItem, setExpandedItem] = useState(null);
+  const { handleSignoutClick } = useAuth();
 
   // Find which menu item should be expanded based on current path
   useEffect(() => {
@@ -313,10 +315,6 @@ const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
   const handleSettingsClick = useCallback(() => {
     router.push(settingsItem.href);
   }, [router]);
-
-  const handleSignOutClick = useCallback(() => {
-    setSignOutPopUp((prev) => !prev);
-  }, [setSignOutPopUp]);
 
   // Memoize the menu item click handler
   const createMenuItemClickHandler = useCallback(
@@ -440,7 +438,7 @@ const Sidebar = memo(({ setSignOutPopUp, isOpen, toggleSidebar }) => {
               {isOpen && <span>{settingsItem.title}</span>}
             </button>
             <button
-              onClick={handleSignOutClick}
+              onClick={handleSignoutClick}
               className={`rounded-md flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
                 isOpen ? "justify-start" : "justify-center"
               }`}

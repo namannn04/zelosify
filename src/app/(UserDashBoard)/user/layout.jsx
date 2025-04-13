@@ -3,11 +3,12 @@ import SignOutConfirmation from "@/components/UI/SignOutConfirmation";
 import Header from "@/components/UserDashboardPage/Header/Header";
 import SideBarLayout from "@/components/UserDashboardPage/SideBar/SideBarLayout";
 import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "@/contexts/Auth/AuthContext";
 
 export default function UserDashboardlayout({ children }) {
-  const [signOutPopUp, setSignOutPopUp] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { showSignoutConfirmation } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -50,14 +51,10 @@ export default function UserDashboardlayout({ children }) {
 
       {/* main content */}
       <div className="flex flex-col min-h-screen bg-background">
-        <SignOutConfirmation
-          setSignOutPopUp={setSignOutPopUp}
-          isOpen={signOutPopUp}
-        />
+        <SignOutConfirmation isOpen={showSignoutConfirmation} />
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         <div className="flex flex-1 overflow-hidden">
           <SideBarLayout
-            setSignOutPopUp={setSignOutPopUp}
             isSidebarOpen={isSidebarOpen}
             toggleSidebar={toggleSidebar}
           />
