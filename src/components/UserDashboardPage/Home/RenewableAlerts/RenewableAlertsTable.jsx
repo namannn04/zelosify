@@ -176,15 +176,15 @@ export default function RenewableAlertsTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Vendor Name</TableHead>
-                <TableHead>Start Date</TableHead>
-                <TableHead>Contract Name</TableHead>
-                <TableHead>Category</TableHead>
+                <TableHead className="text-sm">Vendor Name</TableHead>
+                <TableHead className="text-sm">Start Date</TableHead>
+                <TableHead className="text-sm">Contract Name</TableHead>
+                <TableHead className="text-sm">Category</TableHead>
                 <TableHead
-                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 text-sm"
                   onClick={() => handleSort("endDate")}
                 >
-                  <div className="flex items-center font-bold">
+                  <div className="flex items-center text-sm">
                     End Date
                     <ChevronDown
                       className={`w-4 h-4 ml-1 transition-transform ${
@@ -196,10 +196,10 @@ export default function RenewableAlertsTable() {
                   </div>
                 </TableHead>
                 <TableHead
-                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                  className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 text-sm"
                   onClick={() => handleSort("contractValue")}
                 >
-                  <div className="flex items-center font-bold">
+                  <div className="flex items-center text-sm">
                     Contract Value (INR)
                     <ChevronDown
                       className={`w-4 h-4 ml-1 transition-transform ${
@@ -211,38 +211,52 @@ export default function RenewableAlertsTable() {
                     />
                   </div>
                 </TableHead>
-                <TableHead>Owner/Accountable Person</TableHead>
-                <TableHead>Action</TableHead>
+                <TableHead className="text-sm">
+                  Owner/Accountable Person
+                </TableHead>
+                <TableHead className="text-sm">Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedData.map((alert) => {
                 const { color, icon } = getUrgencyDetails(alert.urgency);
                 return (
-                  <TableRow key={alert.id}>
-                    <TableCell>{alert.vendorName}</TableCell>
-                    <TableCell>{formatDate(alert.startDate)}</TableCell>
-                    <TableCell>{alert.contractName}</TableCell>
-                    <TableCell>{alert.category}</TableCell>
-                    <TableCell>
+                  <TableRow key={alert.id} className="h-10">
+                    <TableCell className="py-1.5 text-xs">
+                      {alert.vendorName}
+                    </TableCell>
+                    <TableCell className="py-1.5 text-xs">
+                      {formatDate(alert.startDate)}
+                    </TableCell>
+                    <TableCell className="py-1.5 text-xs">
+                      {alert.contractName}
+                    </TableCell>
+                    <TableCell className="py-1.5 text-xs">
+                      {alert.category}
+                    </TableCell>
+                    <TableCell className="py-1.5 text-xs">
                       <div
-                        className={`inline-flex items-center px-2 py-1 rounded-full ${color}`}
+                        className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-xs ${color}`}
                       >
                         {icon}
                         {formatDate(alert.endDate)}
                       </div>
                     </TableCell>
-                    <TableCell>{formatCurrency(alert.contractValue)}</TableCell>
-                    <TableCell>{alert.owner}</TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <button className="flex items-center gap-1 px-3 py-1.5 bg-foreground text-background rounded-md text-xs">
+                    <TableCell className="py-1.5 text-xs">
+                      {formatCurrency(alert.contractValue)}
+                    </TableCell>
+                    <TableCell className="py-1.5 text-xs">
+                      {alert.owner}
+                    </TableCell>
+                    <TableCell className="py-1.5">
+                      <div className="flex space-x-1.5">
+                        <button className="flex items-center gap-1 px-2 py-1 bg-foreground text-background rounded-md text-xs">
                           View
                         </button>
-                        <button className="flex items-center gap-1 px-3 py-1.5 bg-foreground text-background rounded-md text-xs">
+                        <button className="flex items-center gap-1 px-2 py-1 bg-foreground text-background rounded-md text-xs">
                           Renew
                         </button>
-                        <button className="flex items-center gap-1 px-3 py-1.5 bg-foreground text-background rounded-md text-xs">
+                        <button className="flex items-center gap-1 px-2 py-1 bg-foreground text-background rounded-md text-xs">
                           Notify
                         </button>
                       </div>
