@@ -13,7 +13,7 @@ function ChatContent() {
   // Create a new conversation on initial page load if there isn't one
   useEffect(() => {
     if (!activeConversationId) {
-      createNewChat();
+      // createNewChat();
     }
   }, [activeConversationId, createNewChat]);
 

@@ -30,15 +30,15 @@ export const AuthProvider = ({ children }) => {
         item.trim().startsWith("refresh_token=")
       );
 
-      console.log("Auth check - Access token present:", hasAccessToken);
-      console.log("Auth check - Refresh token present:", hasRefreshToken);
+      // console.log("Auth check - Access token present:", hasAccessToken);
+      // console.log("Auth check - Refresh token present:", hasRefreshToken);
 
       if (hasAccessToken || hasRefreshToken) {
         // We have at least one auth token, so user is authenticated
         console.log("User is authenticated");
         setUser({ isLoggedIn: true });
       } else {
-        console.log("User is not authenticated - no auth tokens found");
+        // console.log("User is not authenticated - no auth tokens found");
         setUser(null);
       }
     } catch (error) {

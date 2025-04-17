@@ -1,164 +1,23 @@
 "use client";
-import { ArrowDownIcon, Upload } from "lucide-react";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  BookIcon,
+  DownloadIcon,
+  Layers,
+  Upload,
+  UserIcon,
+} from "lucide-react";
 import ImportPopUp from "../ImportDoc/ImportPopUp";
 import { useState, useContext } from "react";
 import HeaderMetricsContext from "@/contexts/DashBoard/HeaderMetrics/HeaderMetricsContext";
 import CardSkeleton from "@/components/UI/loaders/CardSkeleton";
 
-/* Icon Components */
-const UserIcon = (props) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M20 21C20 18.2386 16.4183 16 12 16C7.58172 16 4 18.2386 4 21"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const DownloadIcon = (props) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M7 10L12 15L17 10"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12 15V3"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const StackIcon = (props) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M2 17L12 22L22 17"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M2 12L12 17L22 12"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M12 2L2 7L12 12L22 7L12 2Z"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const BookIcon = (props) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M19 21V5C19 3.89543 18.1046 3 17 3H7C5.89543 3 5 3.89543 5 5V21"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M3 21H21"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M9 7H15"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M9 11H15"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M9 15H13"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-const UpArrow = (props) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M12 19V5M12 5L5 12M12 5L19 12"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 // Map icons to their respective components
 const iconMapping = {
   user: UserIcon,
   download: DownloadIcon,
-  stack: StackIcon,
+  stack: Layers,
   book: BookIcon,
 };
 
@@ -240,7 +99,7 @@ export default function HeaderMetrics() {
                 <div className="flex items-center">
                   {metric.change.type === "increase" ? (
                     <>
-                      <UpArrow className="w-4 h-4 text-green-500 mr-1" />
+                      <ArrowUpIcon className="w-4 h-4 text-green-500 mr-1" />
                       <span className="text-sm text-green-600 dark:text-green-400">
                         {metric.change.value}
                       </span>

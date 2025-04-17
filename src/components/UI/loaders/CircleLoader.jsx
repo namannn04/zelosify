@@ -1,7 +1,11 @@
-export default function CircleLoader() {
+export default function CircleLoader({ classNameOne, classNameTwo }) {
   return (
-    <div className="flex-center h-[350px] w-full">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary"></div>
+    <div className={`${classNameOne || "h-[350px]"} flex-center w-full`}>
+      <div
+        className={`${
+          classNameTwo || "h-12 w-12"
+        } animate-spin rounded-full border-b-2 border-secondary`}
+      ></div>
     </div>
   );
 }

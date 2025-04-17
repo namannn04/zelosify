@@ -164,7 +164,8 @@ export const ChatProvider = ({ children }) => {
       !activeConversationId &&
       conversations.length === 0
     ) {
-      createNewChat();
+      // createNewChat();
+      console.log("reloaded");
     }
   }, [activeConversationId, conversations.length, createNewChat, pathname]);
 
