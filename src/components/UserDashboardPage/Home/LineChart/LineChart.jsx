@@ -34,7 +34,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/UI/shadcn/popover";
-import { Calendar } from "@/components/UI/shadcn/calendar";
 import { Button } from "@/components/UI/shadcn/button";
 import { CalendarDaysIcon } from "lucide-react";
 import { format } from "date-fns";
@@ -128,7 +127,7 @@ const ChartDisplay = memo(
             stackId="1"
           />
         ))}
-        <Legend />
+        <Legend wrapperStyle={{ paddingTop: 16 }} />
       </AreaChart>
     </ChartContainer>
   )
@@ -146,7 +145,6 @@ const FilterControls = memo(
     calendarOpen,
     setCalendarOpen,
     handleCalendarOpen,
-    datePickerType,
     fromDate,
     toDate,
     handleDateSelect,
@@ -154,6 +152,7 @@ const FilterControls = memo(
     setSelectedIndustry,
     allVendors,
     industries,
+    onApply,
   }) => (
     <div className="flex flex-col sm:flex-row gap-2">
       <Select value={topVendorsCount} onValueChange={setTopVendorsCount}>
@@ -233,25 +232,62 @@ const FilterControls = memo(
               <CalendarDaysIcon className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-background border border-border shadow-md">
-            <Calendar
-              mode="single"
-              selected={datePickerType === "from" ? fromDate : toDate}
-              onSelect={handleDateSelect}
-              initialFocus
-              className="bg-background text-foreground rounded-t"
-              classNames={{
-                day: "h-8 w-8 p-0 font-normal aria-selected:opacity-100 hover:bg-border rounded transition-colors",
-                day_selected:
-                  "bg-primary text-primary-foreground hover:bg-primary",
-              }}
-            />
-            <div className="p-2 border-t border-border">
-              <p className="text-sm text-center text-foreground">
-                {datePickerType === "from"
-                  ? "Select start date"
-                  : "Select end date"}
-              </p>
+          <PopoverContent className="w-auto p-4 bg-background border border-border shadow-md rounded-lg">
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-foreground">
+                Select Date Range
+              </h3>
+              <div className="grid gap-3">
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="from-date"
+                    className="text-xs text-muted-foreground"
+                  >
+                    From Date
+                  </label>
+                  <input
+                    id="from-date"
+                    type="date"
+                    className="p-2 text-sm rounded-md border border-input bg-transparent"
+                    value={fromDate ? format(fromDate, "yyyy-MM-dd") : ""}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        handleDateSelect(new Date(e.target.value), "from");
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="to-date"
+                    className="text-xs text-muted-foreground"
+                  >
+                    To Date
+                  </label>
+                  <input
+                    id="to-date"
+                    type="date"
+                    className="p-2 text-sm rounded-md border border-input bg-transparent"
+                    value={toDate ? format(toDate, "yyyy-MM-dd") : ""}
+                    onChange={(e) => {
+                      if (e.target.value) {
+                        handleDateSelect(new Date(e.target.value), "to");
+                      }
+                    }}
+                    min={fromDate ? format(fromDate, "yyyy-MM-dd") : ""}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  className="disabled:hover:cursor-not-allowed rounded-lg text-xs text-background bg-foreground"
+                  size="sm"
+                  onClick={onApply}
+                  disabled={!fromDate || !toDate}
+                >
+                  Apply
+                </Button>
+              </div>
             </div>
           </PopoverContent>
         </Popover>
@@ -292,7 +328,9 @@ export default function LineChartComponent() {
   const [fromDate, setFromDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [datePickerType, setDatePickerType] = useState("from"); // "from" or "to"
+  // Temporary states for custom date selection
+  const [tempFromDate, setTempFromDate] = useState(null);
+  const [tempToDate, setTempToDate] = useState(null);
 
   const {
     allVendors,
@@ -319,33 +357,21 @@ export default function LineChartComponent() {
     }
   }, [topVendorsCount, setTopVendors]);
 
-  // Memoized callbacks
-  const handleDateSelect = useCallback(
-    (date) => {
-      if (datePickerType === "from") {
-        setFromDate(date);
-        setDatePickerType("to");
-      } else {
-        setToDate(date);
-        setCalendarOpen(false);
-        // Set time range to custom when both dates are selected
-        if (fromDate) {
-          setSelectedTimeRange("custom");
-          // Update the context with the selected date range
-          if (typeof setCustomDateRange === "function") {
-            setCustomDateRange({ fromDate, toDate: date });
-          }
-        }
-      }
-    },
-    [datePickerType, fromDate, setCustomDateRange]
-  );
-
-  // Reset date picker when opening
-  const handleCalendarOpen = useCallback(() => {
-    setDatePickerType("from");
-    setCalendarOpen(true);
+  // Handle date selection for temp states
+  const handleTempDateSelect = useCallback((date, type) => {
+    if (type === "from") {
+      setTempFromDate(date);
+    } else {
+      setTempToDate(date);
+    }
   }, []);
+
+  // Reset temp date picker when opening
+  const handleCalendarOpen = useCallback(() => {
+    setTempFromDate(fromDate);
+    setTempToDate(toDate);
+    setCalendarOpen(true);
+  }, [fromDate, toDate]);
 
   // Handle time range change
   const handleTimeRangeChange = useCallback(
@@ -354,13 +380,19 @@ export default function LineChartComponent() {
       if (value !== "custom") {
         setFromDate(null);
         setToDate(null);
+        setTempFromDate(null);
+        setTempToDate(null);
         // Also update the context to stop using custom date range
         if (typeof setCustomDateRange === "function") {
           setCustomDateRange({ fromDate: null, toDate: null });
         }
+      } else {
+        setTempFromDate(fromDate);
+        setTempToDate(toDate);
+        setCalendarOpen(true);
       }
     },
-    [setCustomDateRange]
+    [setCustomDateRange, fromDate, toDate]
   );
 
   // Format date range for display - memoized
@@ -448,14 +480,25 @@ export default function LineChartComponent() {
               calendarOpen={calendarOpen}
               setCalendarOpen={setCalendarOpen}
               handleCalendarOpen={handleCalendarOpen}
-              datePickerType={datePickerType}
-              fromDate={fromDate}
-              toDate={toDate}
-              handleDateSelect={handleDateSelect}
+              fromDate={tempFromDate}
+              toDate={tempToDate}
+              handleDateSelect={handleTempDateSelect}
               selectedIndustry={selectedIndustry}
               setSelectedIndustry={setSelectedIndustry}
               allVendors={allVendors}
               industries={industries}
+              onApply={() => {
+                setFromDate(tempFromDate);
+                setToDate(tempToDate);
+                setCalendarOpen(false);
+                setSelectedTimeRange("custom");
+                if (typeof setCustomDateRange === "function") {
+                  setCustomDateRange({
+                    fromDate: tempFromDate,
+                    toDate: tempToDate,
+                  });
+                }
+              }}
             />
           </div>
         </CardHeader>

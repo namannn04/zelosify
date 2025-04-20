@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
     setShowSignoutConfirmation(false);
   }, []);
 
-  // Logout function - just handle the API call, middleware handles the redirect
+  // Logout function - let the backend handle HTTP-only cookie removal
   const logout = useCallback(async () => {
     try {
       console.log("Logging out user...");
@@ -68,18 +68,12 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      // Even if the server-side logout fails, clear cookies and user state
-      document.cookie =
-        "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie =
-        "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie =
-        "temp_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      // Clear local user state
       localStorage.setItem("logout", Date.now().toString());
       setUser(null);
       setShowSignoutConfirmation(false);
 
-      // Let the browser handle the redirect via middleware
+      // Redirect to login page
       window.location.href = "/login";
     }
   }, []);

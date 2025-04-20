@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 const RequestContext = createContext({});
 
 export const RequestProvider = ({ children }) => {
-  const pathname = usePathname();
+  const path = usePathname();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -144,10 +144,10 @@ export const RequestProvider = ({ children }) => {
 
   // Fetch requests when pagination or filters change
   useEffect(() => {
-    if (pathname === "/user/requests") {
+    if (path.includes("/user/requests")) {
       fetchRequests();
     }
-  }, [pathname, pagination.page, pagination.limit, filters]);
+  }, [path, pagination.page, pagination.limit, filters]);
 
   return (
     <RequestContext.Provider

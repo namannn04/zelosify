@@ -144,17 +144,17 @@ export default function Table() {
                 >
                   <td className="px-4 py-4">
                     <div className="text-sm font-medium">
-                      {request.contract_number}
+                      {request.contractNumber}
                     </div>
                   </td>
                   <td className="px-4 py-4">
                     <div>
                       <div className="text-sm font-medium">
-                        {request.requested_by?.firstName}{" "}
-                        {request.requested_by?.lastName}
+                        {request.requestedBy?.firstName}{" "}
+                        {request.requestedBy?.lastName}
                       </div>
                       <div className="text-sm text-gray-400">
-                        {request.requested_by?.email}
+                        {request.requestedBy?.email}
                       </div>
                     </div>
                   </td>
@@ -165,7 +165,7 @@ export default function Table() {
                   </td>
                   <td className="px-4 py-4">
                     <span className="inline-flex items-center justify-center px-2 py-1 rounded text-xs">
-                      ${parseFloat(request.contract_amount).toFixed(2)}
+                      ${parseFloat(request.contractAmount).toFixed(2)}
                     </span>
                   </td>
                   <td className="px-4 py-4 text-sm">

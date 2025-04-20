@@ -208,7 +208,7 @@ export default function HorizantalBarChartComponent() {
             </ResponsiveContainer>
           </div>
         </CardContent>
-        <CardFooter className="flex-col items-start gap-2">
+        {/* <CardFooter className="flex-col items-start gap-2">
           <div className="text-xl font-semibold">
             Budget Utilization by Category
           </div>
@@ -249,7 +249,7 @@ export default function HorizantalBarChartComponent() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </div>
   );

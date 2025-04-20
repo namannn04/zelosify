@@ -4,6 +4,7 @@ import DashBoardProviders from "./DashBoard/DashBoardProviders";
 import AuthProviders from "./Auth/AuthProviders";
 import ChatProviders from "./Chat/ChatProviders";
 import RequestProviders from "./Requests/RequestProviders";
+import TrackingProviders from "./Tracking/TrackingProviders";
 
 export default function AllProviders({ children }) {
   return (
@@ -16,7 +17,9 @@ export default function AllProviders({ children }) {
       <AuthProviders>
         <ChatProviders>
           <DashBoardProviders>
-            <RequestProviders>{children}</RequestProviders>
+            <RequestProviders>
+              <TrackingProviders>{children}</TrackingProviders>
+            </RequestProviders>
           </DashBoardProviders>
         </ChatProviders>
       </AuthProviders>

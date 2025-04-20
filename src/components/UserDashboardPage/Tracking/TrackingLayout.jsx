@@ -1,97 +1,56 @@
 import Pagination from "@/components/UI/Pagination";
 import { Filter, Search } from "lucide-react";
-
-const leads = [
-  {
-    id: 1,
-    contract: "Intellias",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "intellias.com",
-    amount: "$150.0M",
-  },
-  {
-    id: 2,
-    contract: "Kia America",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "kia.com",
-    amount: "Not available",
-  },
-  {
-    id: 3,
-    contract: "Fisker",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "fiskerinc.com",
-    amount: "$200.1M",
-  },
-  {
-    id: 4,
-    contract: "Lucid Motors",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "lucidmotors.com",
-    amount: "$639.4M",
-  },
-  {
-    id: 5,
-    contract: "First Brands Group, LLC",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "firstbrandsgroup.com",
-    amount: "$2500.0M",
-  },
-  {
-    id: 6,
-    contract: "Karma Automotive",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "karmaautomotive.com",
-    amount: "$24.2M",
-  },
-  {
-    id: 7,
-    contract: "Oliver Wyman",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "oliverwyman.com",
-    amount: "$2500.0M",
-  },
-  {
-    id: 8,
-    contract: "Waymo",
-    vendorName: "AAA",
-    from: "Feb 1, 2025",
-    to: "March 1, 2025",
-    totalDays: "30",
-    domain: "waymo.com",
-    amount: "$1400.0M",
-  },
-];
+import { useTrackingContext } from "@/contexts/Tracking/TrackingContext";
+import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
 export default function TrackingLayout() {
+  const {
+    contracts,
+    loading,
+    error,
+    pagination,
+    handlePageChange,
+    handleFilterChange,
+  } = useTrackingContext();
+
+  // Helper function to calculate duration in days
+  const calculateDaysDuration = (startDate, endDate) => {
+    if (!startDate || !endDate) return "N/A";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays.toString();
+  };
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  // Format currency for display
+  const formatCurrency = (amount, currency) => {
+    if (!amount) return "Not available";
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency || "USD",
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
   return (
     <div className="flex bg-background px-2">
       {/* Main Content */}
       <div className="flex-1">
         <div className="p-4">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-foreground">Tracking</h1>
             <button className="px-3 py-1.5 bg-foreground text-background rounded-md text-sm">
               <span>+</span> Create
@@ -115,78 +74,131 @@ export default function TrackingLayout() {
             </div>
           </div>
 
-          {/* Table */}
-          <div className="border border-border rounded-lg overflow-hidden">
-            <table className="min-w-full divide-y divide-border">
-              <thead className="bg-tableHeader">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
-                    Contract No
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
-                    Vendor Name
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
-                    From
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
-                    To
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
-                    Total Days
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-primary">
-                    Owned By
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {leads.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-tableHeader">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="">
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {lead.contract}
+          {loading ? (
+            <CircleLoader classNameOne="h-64" />
+          ) : error ? (
+            <div className="flex justify-center items-center h-64 text-red-500">
+              <p>{error}</p>
+            </div>
+          ) : (
+            <>
+              {/* Table */}
+              <div className="border border-border rounded-lg overflow-x-auto">
+                <table className="w-full divide-y divide-border table-fixed">
+                  <thead className="bg-tableHeader">
+                    <tr>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[15%]">
+                        Contract No
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[15%]">
+                        Vendor Name
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[12%]">
+                        Contract Type
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[10%]">
+                        From
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[10%]">
+                        To
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[8%]">
+                        Days
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[10%]">
+                        Amount
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[10%]">
+                        Billing
+                      </th>
+                      <th className="px-2 py-3 text-left text-sm font-medium text-primary w-[10%]">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {contracts.map((contract) => (
+                      <tr key={contract.id} className="hover:bg-tableHeader">
+                        <td className="px-2 py-3 whitespace-nowrap">
+                          <div className="flex flex-col">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                              {contract.contractReference ||
+                                `Contract #${contract.id}`}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {formatDate(contract.agreementDate)}
+                            </div>
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {lead.domain}
+                        </td>
+
+                        <td
+                          title={contract.vendor?.name || "N/A"}
+                          className="px-2 py-3 text-sm text-foreground"
+                        >
+                          <div className="truncate">
+                            {contract.vendor?.name || "N/A"}
                           </div>
-                        </div>
-                      </div>
-                    </td>
+                        </td>
 
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <div className="flex gap-2">{lead.vendorName}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <div className="flex gap-2">{lead.from}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <div className="flex gap-2">{lead.to}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      <div className="flex gap-2">{lead.totalDays} </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                      {lead.amount}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      <button className="inline-flex items-center px-2.5 py-1.5 border border-gray-300 dark:border-gray-600 shadow-sm text-xs font-medium rounded text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        View {lead.contract}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                        <td
+                          title={contract.contractType}
+                          className="px-2 py-3 text-sm text-foreground truncate"
+                        >
+                          {contract.contractType}
+                        </td>
 
-          {/* Pagination */}
-          <Pagination />
+                        <td className="px-2 py-3 text-sm text-foreground">
+                          {formatDate(contract.contractStartDate)}
+                        </td>
+
+                        <td className="px-2 py-3 text-sm text-foreground">
+                          {formatDate(contract.contractEndDate)}
+                        </td>
+
+                        <td className="px-2 py-3 text-sm text-foreground">
+                          {calculateDaysDuration(
+                            contract.contractStartDate,
+                            contract.contractEndDate
+                          )}
+                        </td>
+
+                        <td className="px-2 py-3 text-sm text-foreground truncate">
+                          {formatCurrency(
+                            contract.totalContractValue,
+                            contract.currency
+                          )}
+                        </td>
+
+                        <td
+                          title={contract.billingMethod}
+                          className="px-2 py-3 text-sm text-foreground truncate"
+                        >
+                          {contract.billingMethod}
+                        </td>
+
+                        <td className="px-2 py-3 text-sm text-gray-500 dark:text-gray-400">
+                          <button className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination */}
+              <div className="mt-4">
+                <Pagination
+                  currentPage={pagination.page}
+                  totalPages={Math.ceil(pagination.total / pagination.limit)}
+                  totalItems={pagination.total}
+                  itemsPerPage={pagination.limit}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
