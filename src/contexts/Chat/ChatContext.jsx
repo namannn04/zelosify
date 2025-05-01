@@ -20,7 +20,7 @@ export const ChatProvider = ({ children }) => {
   const [conversations, setConversations] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const pathname = usePathname();
+  const path = usePathname();
 
   // Create a new chat conversation
   const createNewChat = useCallback(async () => {
@@ -160,14 +160,13 @@ export const ChatProvider = ({ children }) => {
   // Initialize by creating a new chat if there's no active conversation
   useEffect(() => {
     if (
-      pathname === "/user" &&
+      path.includes("/user/messages") &&
       !activeConversationId &&
       conversations.length === 0
     ) {
-      // createNewChat();
-      console.log("reloaded");
+      createNewChat();
     }
-  }, [activeConversationId, conversations.length, createNewChat, pathname]);
+  }, [activeConversationId, conversations.length, createNewChat, path]);
 
   // Context value
   const contextValue = {

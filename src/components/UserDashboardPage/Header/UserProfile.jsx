@@ -23,7 +23,7 @@ const UserProfile = memo(
           </div>
 
           <span className="font-medium text-sm text-gray-700 dark:text-gray-200 hidden sm:inline">
-            John Doe
+            Abdulla
           </span>
         </button>
 
@@ -32,10 +32,10 @@ const UserProfile = memo(
             {/* Profile Info */}
             <div className="px-4 py-2 text-sm">
               <p className="font-medium text-gray-700 dark:text-gray-200">
-                John Doe
+                Abdulla
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                @johndoe123
+                @abdulla123
               </p>
             </div>
             <div className="border-t border-gray-100 dark:border-gray-800"></div>

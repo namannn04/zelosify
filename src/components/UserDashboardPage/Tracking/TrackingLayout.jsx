@@ -117,86 +117,99 @@ export default function TrackingLayout() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {contracts.map((contract) => (
-                      <tr key={contract.id} className="hover:bg-tableHeader">
-                        <td className="px-2 py-3 whitespace-nowrap">
-                          <div className="flex flex-col">
-                            <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                              {contract.contractReference ||
-                                `Contract #${contract.id}`}
+                    {contracts && contracts.length > 0 ? (
+                      contracts.map((contract) => (
+                        <tr key={contract.id} className="hover:bg-tableHeader">
+                          <td className="px-2 py-3 whitespace-nowrap">
+                            <div className="flex flex-col">
+                              <div className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                {contract.contractReference ||
+                                  `Contract #${contract.id}`}
+                              </div>
+                              <div className="text-sm text-gray-500 dark:text-gray-400">
+                                {formatDate(contract.agreementDate)}
+                              </div>
                             </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                              {formatDate(contract.agreementDate)}
+                          </td>
+
+                          <td
+                            title={contract.vendor?.name || "N/A"}
+                            className="px-2 py-3 text-sm text-foreground"
+                          >
+                            <div className="truncate">
+                              {contract.vendor?.name || "N/A"}
                             </div>
-                          </div>
-                        </td>
+                          </td>
 
+                          <td
+                            title={contract.contractType}
+                            className="px-2 py-3 text-sm text-foreground truncate"
+                          >
+                            {contract.contractType}
+                          </td>
+
+                          <td className="px-2 py-3 text-sm text-foreground">
+                            {formatDate(contract.contractStartDate)}
+                          </td>
+
+                          <td className="px-2 py-3 text-sm text-foreground">
+                            {formatDate(contract.contractEndDate)}
+                          </td>
+
+                          <td className="px-2 py-3 text-sm text-foreground">
+                            {calculateDaysDuration(
+                              contract.contractStartDate,
+                              contract.contractEndDate
+                            )}
+                          </td>
+
+                          <td className="px-2 py-3 text-sm text-foreground truncate">
+                            {formatCurrency(
+                              contract.totalContractValue,
+                              contract.currency
+                            )}
+                          </td>
+
+                          <td
+                            title={contract.billingMethod}
+                            className="px-2 py-3 text-sm text-foreground truncate"
+                          >
+                            {contract.billingMethod}
+                          </td>
+
+                          <td className="px-2 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            <button className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
                         <td
-                          title={contract.vendor?.name || "N/A"}
-                          className="px-2 py-3 text-sm text-foreground"
+                          colSpan="9"
+                          className="px-4 py-8 text-center text-gray-500"
                         >
-                          <div className="truncate">
-                            {contract.vendor?.name || "N/A"}
-                          </div>
-                        </td>
-
-                        <td
-                          title={contract.contractType}
-                          className="px-2 py-3 text-sm text-foreground truncate"
-                        >
-                          {contract.contractType}
-                        </td>
-
-                        <td className="px-2 py-3 text-sm text-foreground">
-                          {formatDate(contract.contractStartDate)}
-                        </td>
-
-                        <td className="px-2 py-3 text-sm text-foreground">
-                          {formatDate(contract.contractEndDate)}
-                        </td>
-
-                        <td className="px-2 py-3 text-sm text-foreground">
-                          {calculateDaysDuration(
-                            contract.contractStartDate,
-                            contract.contractEndDate
-                          )}
-                        </td>
-
-                        <td className="px-2 py-3 text-sm text-foreground truncate">
-                          {formatCurrency(
-                            contract.totalContractValue,
-                            contract.currency
-                          )}
-                        </td>
-
-                        <td
-                          title={contract.billingMethod}
-                          className="px-2 py-3 text-sm text-foreground truncate"
-                        >
-                          {contract.billingMethod}
-                        </td>
-
-                        <td className="px-2 py-3 text-sm text-gray-500 dark:text-gray-400">
-                          <button className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded text-gray-700 dark:text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            View
-                          </button>
+                          No contracts found
                         </td>
                       </tr>
-                    ))}
+                    )}
                   </tbody>
                 </table>
               </div>
 
               {/* Pagination */}
-              <div className="mt-4">
-                <Pagination
-                  currentPage={pagination.page}
-                  totalPages={Math.ceil(pagination.total / pagination.limit)}
-                  totalItems={pagination.total}
-                  itemsPerPage={pagination.limit}
-                  onPageChange={handlePageChange}
-                />
-              </div>
+              {contracts && contracts.length > 0 && (
+                <div className="mt-4">
+                  <Pagination
+                    currentPage={pagination.page}
+                    totalPages={Math.ceil(pagination.total / pagination.limit)}
+                    totalItems={pagination.total}
+                    itemsPerPage={pagination.limit}
+                    onPageChange={handlePageChange}
+                  />
+                </div>
+              )}
             </>
           )}
         </div>

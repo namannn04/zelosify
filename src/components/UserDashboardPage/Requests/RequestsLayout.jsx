@@ -10,7 +10,7 @@ export default function RequestsLayout() {
       <div className="px-6 py-4">
         <h1 className="text-2xl font-bold mb-6">Requests</h1>
 
-        {error && !requests.length ? (
+        {error && (!requests || !requests.length) ? (
           <div className="text-center py-8 text-red-500">Error: {error}</div>
         ) : (
           <>

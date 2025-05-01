@@ -72,15 +72,15 @@ export default function Table() {
     }
   };
 
-  if (loading && !requests.length) {
+  if (loading && (!requests || !requests.length)) {
     return <CircleLoader />;
   }
 
-  if (error && !requests.length) {
+  if (error && (!requests || !requests.length)) {
     return <div className="text-center py-8 text-red-500">Error: {error}</div>;
   }
 
-  if (!requests.length) {
+  if (!requests || !requests.length) {
     return <div className="text-center py-8">No contract requests found.</div>;
   }
 

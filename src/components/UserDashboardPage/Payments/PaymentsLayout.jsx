@@ -103,7 +103,7 @@ export default function PaymentsLayout() {
   const [selectedOrders, setSelectedOrders] = useState([]);
   const [showOrderDetails, setShowOrderDetails] = useState(false);
   const [activeOrder, setActiveOrder] = useState(null);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const handleOrderClick = (order) => {
     setActiveOrder(order);

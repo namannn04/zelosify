@@ -30,7 +30,7 @@ export default function DetailedProfile() {
         </h3>
         <input
           type="text"
-          defaultValue="John Doe"
+          defaultValue="Abdulla"
           className="cursor-not-allowed w-full p-3 rounded-md border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
           disabled
         />
@@ -47,7 +47,7 @@ export default function DetailedProfile() {
           </div>
           <input
             type="text"
-            defaultValue="johndoe1234"
+            defaultValue="abdulla123"
             className="cursor-not-allowed w-full pl-8 p-3 rounded-md border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-600"
             disabled
           />

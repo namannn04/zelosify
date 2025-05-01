@@ -8,7 +8,7 @@ export default function ChatHeader() {
   const handleNewChat = async () => {
     if (!isLoading) {
       try {
-        // await createNewChat();
+        await createNewChat();
       } catch (error) {
         console.error("Error creating new chat:", error);
       }
