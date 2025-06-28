@@ -112,7 +112,7 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+  /* font-family: var(--font-poppins), Arial, Helvetica, sans-serif; */
   font-weight: 500; /* Optional default weight */
   font-size: medium;
   font-style: normal; /* Optional default style */

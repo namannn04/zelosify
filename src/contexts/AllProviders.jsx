@@ -1,20 +1,21 @@
 "use client";
 import { ThemeProvider } from "next-themes";
+import { Provider } from "react-redux";
 import DashBoardProviders from "./DashBoard/DashBoardProviders";
-import AuthProviders from "./Auth/AuthProviders";
 import ChatProviders from "./Chat/ChatProviders";
 import RequestProviders from "./Requests/RequestProviders";
 import TrackingProviders from "./Tracking/TrackingProviders";
+import store from "@/store/store";
 
 export default function AllProviders({ children }) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <AuthProviders>
+    <Provider store={store}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
         <ChatProviders>
           <DashBoardProviders>
             <RequestProviders>
@@ -22,7 +23,7 @@ export default function AllProviders({ children }) {
             </RequestProviders>
           </DashBoardProviders>
         </ChatProviders>
-      </AuthProviders>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }

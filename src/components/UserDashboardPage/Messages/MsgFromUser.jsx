@@ -1,6 +1,6 @@
 import React from "react";
 import ProfileImage from "../../UI/ProfileImage";
-import { useAuth } from "@/contexts/Auth/AuthContext";
+import { useAuth } from "@/store/authSlice";
 import { formatDistanceToNow } from "date-fns";
 
 export default function MsgFromUser({ message, timestamp }) {

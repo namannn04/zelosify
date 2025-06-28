@@ -24,7 +24,8 @@ import {
 } from "lucide-react";
 import { FaDollarSign } from "react-icons/fa6";
 import SidebarHeader from "./SidebarHeader";
-import { useAuth } from "@/contexts/Auth/AuthContext";
+import { useAuth } from "@/store/authSlice";
+import SignOutConfirmation from "@/components/UI/SignOutConfirmation";
 
 // Create sidebar context
 const SidebarContext = createContext(null);
@@ -254,7 +255,18 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
   const router = useRouter();
   const sidebarRef = useRef(null);
   const [expandedItem, setExpandedItem] = useState(null);
-  const { handleSignoutClick } = useAuth();
+  const [showSignoutConfirmation, setShowSignoutConfirmation] = useState(false);
+
+  const { handleLogout, handleOpenSignoutConfirmation } = useAuth();
+
+  const handleCancelSignout = () => {
+    setShowSignoutConfirmation(false);
+  };
+
+  const handleConfirmSignout = async () => {
+    await handleLogout();
+    setShowSignoutConfirmation(false);
+  };
 
   // Find which menu item should be expanded based on current path
   useEffect(() => {
@@ -438,7 +450,7 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
               {isOpen && <span>{settingsItem.title}</span>}
             </button>
             <button
-              onClick={handleSignoutClick}
+              onClick={handleOpenSignoutConfirmation}
               className={`rounded-md flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
                 isOpen ? "justify-start" : "justify-center"
               }`}
@@ -448,6 +460,12 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
             </button>
           </div>
         </aside>
+
+        {/* Signout Confirmation Popup */}
+        <SignOutConfirmation
+          isOpen={showSignoutConfirmation}
+          onCancel={handleCancelSignout}
+        />
       </>
     </SidebarContext.Provider>
   );

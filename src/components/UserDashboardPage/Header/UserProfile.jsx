@@ -2,12 +2,12 @@ import ProfileImage from "@/components/UI/ProfileImage";
 import { User, Bell, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
-import { useAuth } from "@/contexts/Auth/AuthContext";
+import { useAuth } from "@/store/authSlice";
 
 const UserProfile = memo(
   ({ toggleNotifications, isProfileOpen, toggleProfile, profileRef }) => {
     const router = useRouter();
-    const { handleSignoutClick } = useAuth();
+    const { handleOpenSignoutConfirmation } = useAuth();
 
     return (
       <div className="relative" ref={profileRef}>
@@ -28,7 +28,7 @@ const UserProfile = memo(
         </button>
 
         {isProfileOpen && (
-          <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-md shadow-lg dark:shadow-gray-900/20 py-1 border border-gray-100 dark:border-gray-800">
+          <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-md shadow-lg dark:shadow-gray-900/20 py-1 border border-border">
             {/* Profile Info */}
             <div className="px-4 py-2 text-sm">
               <p className="font-medium text-gray-700 dark:text-gray-200">
@@ -69,7 +69,7 @@ const UserProfile = memo(
 
             {/* Logout */}
             <button
-              onClick={handleSignoutClick}
+              onClick={handleOpenSignoutConfirmation}
               className="flex w-full items-center px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
               role="menuitem"
             >
