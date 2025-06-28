@@ -1,48 +1,39 @@
 import Pagination from "@/components/UI/Pagination";
 import { Filter, Search } from "lucide-react";
-import { useTrackingContext } from "@/contexts/Tracking/TrackingContext";
+import useTracking from "@/hooks/Dashboard/Tracking/useTracking";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import {
+  calculateDaysDuration,
+  formatDate,
+  formatCurrency,
+} from "@/utils/trackingUtils";
 
+/**
+ * TrackingLayout component for displaying tracking data.
+ * Handles data fetching, pagination, and filters.
+ */
 export default function TrackingLayout() {
+  const pathname = usePathname();
   const {
     contracts,
     loading,
     error,
     pagination,
-    handlePageChange,
-    handleFilterChange,
-  } = useTrackingContext();
+    handleFetchTrackingData,
+    handlePageChangeDispatch,
+  } = useTracking();
 
-  // Helper function to calculate duration in days
-  const calculateDaysDuration = (startDate, endDate) => {
-    if (!startDate || !endDate) return "N/A";
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diffTime = Math.abs(end - start);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays.toString();
-  };
+  const hasFetchedData = useRef(false);
 
-  // Format date for display
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  // Format currency for display
-  const formatCurrency = (amount, currency) => {
-    if (!amount) return "Not available";
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currency || "USD",
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
+  // Fetch tracking data
+  useEffect(() => {
+    if (pathname === "/user/tracking" && !hasFetchedData.current) {
+      handleFetchTrackingData();
+      hasFetchedData.current = true;
+    }
+  }, [pathname]);
 
   return (
     <div className="flex bg-background px-2">
@@ -52,28 +43,12 @@ export default function TrackingLayout() {
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-bold text-foreground">Tracking</h1>
-            <button className="px-3 py-1.5 bg-foreground text-background rounded-md text-sm">
-              <span>+</span> Create
-            </button>
+            {!loading && !error && (
+              <button className="px-3 py-1.5 bg-foreground text-background rounded-md text-sm">
+                <span>+</span> Create
+              </button>
+            )}
           </div>
-
-          {/* Filter and Search */}
-          <div className="flex items-center justify-between gap-2 mb-6">
-            <button className="px-3 py-1.5 bg-foreground text-background text-sm rounded-md flex items-center gap-2">
-              Filter
-              <Filter className="w-4 h-4" />
-            </button>
-
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-secondary" />
-              <input
-                type="text"
-                placeholder="Search"
-                className="pl-9 pr-4 py-2 text-sm border border-border rounded-md bg-background focus:outline-none focus:ring-1 focus:ring-ring w-64"
-              />
-            </div>
-          </div>
-
           {loading ? (
             <CircleLoader classNameOne="h-64" />
           ) : error ? (
@@ -82,6 +57,23 @@ export default function TrackingLayout() {
             </div>
           ) : (
             <>
+              {/* Filter and Search */}
+              <div className="flex items-center justify-between gap-2 mb-6">
+                <button className="px-3 py-1.5 bg-foreground text-background text-sm rounded-md flex items-center gap-2">
+                  Filter
+                  <Filter className="w-4 h-4" />
+                </button>
+
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-secondary" />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="pl-9 pr-4 py-2 text-sm border border-border rounded-md bg-background focus:outline-none focus:ring-1 focus:ring-ring w-64"
+                  />
+                </div>
+              </div>
+
               {/* Table */}
               <div className="border border-border rounded-lg overflow-x-auto">
                 <table className="w-full divide-y divide-border table-fixed">
@@ -206,7 +198,7 @@ export default function TrackingLayout() {
                     totalPages={Math.ceil(pagination.total / pagination.limit)}
                     totalItems={pagination.total}
                     itemsPerPage={pagination.limit}
-                    onPageChange={handlePageChange}
+                    onPageChange={handlePageChangeDispatch}
                   />
                 </div>
               )}

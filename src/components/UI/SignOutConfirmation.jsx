@@ -1,4 +1,4 @@
-import useAuth from "@/hooks/auth/useAuth";
+import useAuth from "@/hooks/Auth/useAuth";
 
 export default function SignOutConfirmation({ isOpen, onCancel }) {
   const { handleLogout, handleCloseSignoutConfirmation } = useAuth();

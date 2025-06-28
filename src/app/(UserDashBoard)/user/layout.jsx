@@ -3,7 +3,7 @@ import SignOutConfirmation from "@/components/UI/SignOutConfirmation";
 import Header from "@/components/UserDashboardPage/Header/Header";
 import SideBarLayout from "@/components/UserDashboardPage/SideBar/SideBarLayout";
 import { useState, useEffect, useCallback } from "react";
-import useAuth from "@/hooks/auth/useAuth";
+import useAuth from "@/hooks/Auth/useAuth";
 
 export default function UserDashboardlayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
