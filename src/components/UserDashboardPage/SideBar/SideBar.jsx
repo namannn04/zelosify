@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { FaDollarSign } from "react-icons/fa6";
 import SidebarHeader from "./SidebarHeader";
-import { useAuth } from "@/store/authSlice";
+import useAuth from "@/hooks/auth/useAuth";
 import SignOutConfirmation from "@/components/UI/SignOutConfirmation";
 
 // Create sidebar context

@@ -2,7 +2,7 @@ import ProfileImage from "@/components/UI/ProfileImage";
 import { User, Bell, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
-import { useAuth } from "@/store/authSlice";
+import useAuth from "@/hooks/auth/useAuth";
 
 const UserProfile = memo(
   ({ toggleNotifications, isProfileOpen, toggleProfile, profileRef }) => {

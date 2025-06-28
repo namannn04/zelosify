@@ -1,4 +1,4 @@
-import { useAuth } from "@/store/authSlice";
+import useAuth from "@/hooks/auth/useAuth";
 
 export default function SignOutConfirmation({ isOpen, onCancel }) {
   const { handleLogout, handleCloseSignoutConfirmation } = useAuth();

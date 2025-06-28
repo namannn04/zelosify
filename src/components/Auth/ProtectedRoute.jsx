@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/store/authSlice";
+import useAuth from "@/hooks/auth/useAuth";
 import CircleLoader from "../UI/loaders/CircleLoader";
 
 export default function ProtectedRoute({ children }) {

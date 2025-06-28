@@ -5,7 +5,7 @@ import DashBoardProviders from "./DashBoard/DashBoardProviders";
 import ChatProviders from "./Chat/ChatProviders";
 import RequestProviders from "./Requests/RequestProviders";
 import TrackingProviders from "./Tracking/TrackingProviders";
-import store from "@/store/store";
+import store from "@/redux/store";
 
 export default function AllProviders({ children }) {
   return (
