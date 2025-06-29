@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Check, Sparkles, X } from "lucide-react";
-import { useState } from "react";
-import { useRequests } from "../../../../contexts/Requests/RequestContext";
-import Pagination from "../../../UI/Pagination";
+import useRequests from "@/hooks/Dashboard/Requests/useRequests";
+import Pagination from "@/components/UI/Pagination";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
-export default function Table() {
+export default function Table({
+  requests,
+  loading,
+  error,
+  pagination,
+  onPageChange,
+}) {
   const {
-    requests,
-    loading,
-    error,
-    pagination,
-    approveRequest,
-    rejectRequest,
-    getAIRecommendation,
-    changePage,
+    handleApproveRequest,
+    handleRejectRequest,
+    handleGetAIRecommendation,
   } = useRequests();
 
   const [aiRecommendations, setAiRecommendations] = useState({});
@@ -25,7 +25,7 @@ export default function Table() {
 
     setActionLoading((prev) => ({ ...prev, [id]: "approve" }));
     try {
-      await approveRequest(id);
+      await handleApproveRequest(id);
     } catch (err) {
       console.error("Error approving request:", err);
     } finally {
@@ -38,7 +38,7 @@ export default function Table() {
 
     setActionLoading((prev) => ({ ...prev, [id]: "reject" }));
     try {
-      await rejectRequest(id);
+      await handleRejectRequest(id);
     } catch (err) {
       console.error("Error rejecting request:", err);
     } finally {
@@ -60,16 +60,23 @@ export default function Table() {
 
     setActionLoading((prev) => ({ ...prev, [id]: "ai" }));
     try {
-      const response = await getAIRecommendation(id);
+      const recommendation = await handleGetAIRecommendation(id);
       setAiRecommendations((prev) => ({
         ...prev,
-        [id]: response.aiRecommendation,
+        [id]: recommendation,
       }));
     } catch (err) {
       console.error("Error getting AI recommendation:", err);
     } finally {
       setActionLoading((prev) => ({ ...prev, [id]: null }));
     }
+  };
+
+  const renderRecommendation = (recommendation) => {
+    if (recommendation === null || recommendation === undefined) {
+      return "No recommendation available";
+    }
+    return recommendation;
   };
 
   if (loading && (!requests || !requests.length)) {
@@ -83,27 +90,6 @@ export default function Table() {
   if (!requests || !requests.length) {
     return <div className="text-center py-8">No contract requests found.</div>;
   }
-
-  // Create a flat array that includes both requests and their recommendations
-  const tableRows = [];
-  requests.forEach((request) => {
-    // Add the request row
-    tableRows.push({
-      type: "request",
-      data: request,
-    });
-
-    // If there's an AI recommendation for this request, add it as a separate row
-    if (aiRecommendations[request.id]) {
-      tableRows.push({
-        type: "recommendation",
-        requestId: request.id,
-        recommendation: aiRecommendations[request.id],
-      });
-    }
-  });
-
-  console.log(requests);
 
   return (
     <div className="space-y-4">
@@ -274,24 +260,26 @@ export default function Table() {
                 {aiRecommendations[request.id] && (
                   <tr
                     key={`recommendation-${request.id}`}
-                    className="border-b border-border bg-purple-50 dark:bg-purple-900/20"
+                    className="transition-all duration-500 ease-in-out border-b border-border bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100/60 dark:hover:bg-purple-800/30"
                   >
                     <td colSpan={7} className="px-4 py-4">
-                      <div className="text-sm flex items-start gap-2 relative">
-                        <div className="bg-purple-100 dark:bg-purple-800 p-1 rounded">
-                          <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-300" />
+                      <div className="text-sm flex items-start gap-3 relative animate-fade-in">
+                        <div className="bg-purple-100 dark:bg-purple-800 p-1 rounded shadow-sm">
+                          <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-300 animate-pulse" />
                         </div>
                         <div className="flex-1">
                           <span className="font-medium text-purple-700 dark:text-purple-300">
                             AI Recommendation:
                           </span>
-                          <div className="mt-1 p-3 bg-white dark:bg-gray-800 rounded border border-purple-200 dark:border-purple-700 text-gray-800 dark:text-gray-200">
-                            {aiRecommendations[request.id]}
+                          <div className="mt-2 p-4 rounded border border-purple-200 dark:border-purple-700 bg-white/70 dark:bg-gray-800/80 text-gray-800 dark:text-gray-200 shadow-inner transition-all duration-300">
+                            {renderRecommendation(
+                              aiRecommendations[request.id]
+                            )}
                           </div>
                         </div>
                         <button
                           onClick={() => handleAskAI(request.id)}
-                          className="absolute top-0 right-0 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                          className="absolute top-1 right-1 p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                           aria-label="Close recommendation"
                         >
                           <X className="h-4 w-4" />
@@ -312,7 +300,7 @@ export default function Table() {
         totalPages={pagination.pages}
         totalItems={pagination.total}
         itemsPerPage={pagination.limit}
-        onPageChange={changePage}
+        onPageChange={onPageChange}
       />
     </div>
   );

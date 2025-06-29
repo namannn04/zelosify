@@ -1,10 +1,28 @@
 import MetricCards from "./MetricCards/MetricCards";
 import FilterNSearch from "./FilterNSearch/FilterNSearch";
 import Table from "./Table/Table";
-import { useRequests } from "@/contexts/Requests/RequestContext";
+import useRequests from "@/hooks/Dashboard/Requests/useRequests";
+import { useRef, useEffect } from "react";
 
 export default function RequestsLayout() {
-  const { requests, error } = useRequests();
+  const {
+    requests,
+    loading,
+    error,
+    pagination,
+    handleFetchRequests,
+    handleChangePage,
+  } = useRequests();
+
+  const hasFetchedData = useRef(false);
+
+  useEffect(() => {
+    if (!hasFetchedData.current) {
+      handleFetchRequests();
+      hasFetchedData.current = true;
+    }
+  }, []);
+
   return (
     <div className="min-h-screen text-foreground bg-background">
       <div className="px-6 py-4">
@@ -21,7 +39,13 @@ export default function RequestsLayout() {
             <FilterNSearch />
 
             {/* Table */}
-            <Table />
+            <Table
+              requests={requests}
+              loading={loading}
+              error={error}
+              pagination={pagination}
+              onPageChange={handleChangePage}
+            />
           </>
         )}
       </div>

@@ -3,7 +3,6 @@ import { ThemeProvider } from "next-themes";
 import { Provider } from "react-redux";
 import DashBoardProviders from "./DashBoard/DashBoardProviders";
 import ChatProviders from "./Chat/ChatProviders";
-import RequestProviders from "./Requests/RequestProviders";
 import store from "@/redux/store";
 
 export default function AllProviders({ children }) {
@@ -16,9 +15,7 @@ export default function AllProviders({ children }) {
         disableTransitionOnChange
       >
         <ChatProviders>
-          <DashBoardProviders>
-            <RequestProviders>{children}</RequestProviders>
-          </DashBoardProviders>
+          <DashBoardProviders>{children}</DashBoardProviders>
         </ChatProviders>
       </ThemeProvider>
     </Provider>
