@@ -57,9 +57,10 @@ export default function UserDashboardlayout({ children }) {
           <SideBarLayout
             isSidebarOpen={isSidebarOpen}
             toggleSidebar={toggleSidebar}
+            className="transition-all duration-300"
           />
           <main
-            className={`relative flex-1 justify-between items-center w-full ${
+            className={`relative flex-1 justify-between items-center w-full transition-all duration-300 ${
               isSidebarOpen ? "ml-48" : "ml-20"
             }`}
           >

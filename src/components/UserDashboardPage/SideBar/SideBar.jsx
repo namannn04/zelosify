@@ -196,14 +196,14 @@ SidebarMenuButton.displayName = "SidebarMenuButton";
 // SidebarMenuSub component - memoized
 const SidebarMenuSub = memo(
   ({ children, isOpen, isExpanded, className, ...props }) => {
-    if (!isOpen || !isExpanded) return null;
-
     return (
       <ul
         data-sidebar="menu-sub"
-        className={`ml-3 pl-1 border-l border-border mt-1 space-y-1 ${
-          className || ""
-        }`}
+        className={`ml-3 pl-1 border-l border-border mt-1 space-y-1 transition-all duration-300 transform ${
+          isOpen && isExpanded
+            ? "max-h-screen opacity-100 scale-100"
+            : "max-h-0 opacity-0 scale-95"
+        } ${className || ""}`}
         {...props}
       >
         {children}
