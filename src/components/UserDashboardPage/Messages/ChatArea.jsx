@@ -2,50 +2,47 @@
 import { RotateCcw } from "lucide-react";
 import MsgFromUser from "./MsgFromUser";
 import MsgFromAI from "./MsgFromAI";
-import { useChat } from "@/contexts/Chat/ChatContext";
+import useChat from "@/hooks/Dashboard/Chat/useChat";
 import { useEffect, useRef, useState } from "react";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
 export default function ChatArea() {
-  // Always call all hooks in the same order on every render
   const [mounted, setMounted] = useState(false);
   const chatEndRef = useRef(null);
 
-  // Get chat context (will return default/fallback values until mounted)
   const {
     messages = [],
-    sendMessage = () => {},
+    handleSendMessage = () => {},
     isLoading = false,
   } = useChat();
 
-  // Setup effects
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
     if (chatEndRef.current && mounted) {
+      console.log("Scrolling to the end of chat...");
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      console.log("Chat end ref or mounted state is not ready.");
     }
   }, [messages, mounted]);
 
-  // Handle regenerate response
   const handleRegenerate = () => {
     if (!mounted) return;
 
     if (messages.length >= 2) {
-      // Get the last user message
       const lastUserMessage = [...messages]
         .reverse()
         .find((msg) => msg.sender === "user");
 
       if (lastUserMessage && !isLoading) {
-        sendMessage(lastUserMessage.content);
+        handleSendMessage(lastUserMessage.content);
       }
     }
   };
 
-  // Show loading indicator until mounted
   if (!mounted) {
     return (
       <div className="flex-1 overflow-y-auto p-4 flex items-center justify-center">
@@ -54,7 +51,6 @@ export default function ChatArea() {
     );
   }
 
-  // Render actual chat content once mounted
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-6 text-sm">
       {messages.length === 0 ? (

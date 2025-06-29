@@ -1,12 +1,12 @@
 "use client";
+import useChat from "@/hooks/Dashboard/Chat/useChat";
 import { ArrowRight } from "lucide-react";
 import { useRef, useState } from "react";
-import { useChat } from "@/contexts/Chat/ChatContext";
 
 export default function InputArea() {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
-  const { sendMessage, isLoading } = useChat();
+  const { handleSendMessage, isLoading } = useChat();
 
   const resetTextareaHeight = () => {
     if (textareaRef.current) {
@@ -14,9 +14,9 @@ export default function InputArea() {
     }
   };
 
-  const handleSendMessage = () => {
+  const sendMessageWrapper = () => {
     if (message.trim() && !isLoading) {
-      sendMessage(message.trim());
+      handleSendMessage(message.trim());
       setMessage("");
       resetTextareaHeight();
     }
@@ -34,7 +34,7 @@ export default function InputArea() {
     // Handling Shift + Enter
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      sendMessageWrapper();
     }
   };
 
@@ -55,7 +55,7 @@ export default function InputArea() {
         <div className="absolute right-3 flex items-center">
           <div className="group relative">
             <button
-              onClick={handleSendMessage}
+              onClick={sendMessageWrapper}
               disabled={isLoading || !message.trim()}
               className="p-1 hover:bg-gray-800 dark:hover:bg-gray-600 rounded-full bg-black dark:bg-gray-700 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >

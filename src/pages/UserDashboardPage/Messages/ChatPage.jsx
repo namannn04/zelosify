@@ -3,19 +3,18 @@
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 import ChatLayout from "@/components/UserDashboardPage/Messages/ChatLayout";
 import { useEffect, useState } from "react";
+import useChat from "@/hooks/Dashboard/Chat/useChat";
 
 // Separate component to handle the chat content after mounting
 function ChatContent() {
-  // Import useChat hook here to avoid conditional hook usage
-  const { useChat } = require("@/contexts/Chat/ChatContext");
-  const { createNewChat, activeConversationId } = useChat();
+  const { handleCreateNewChat, activeConversationId } = useChat();
 
   // Create a new conversation on initial page load if there isn't one
   useEffect(() => {
     if (!activeConversationId) {
-      // createNewChat();
+      handleCreateNewChat();
     }
-  }, [activeConversationId, createNewChat]);
+  }, [activeConversationId, handleCreateNewChat]);
 
   return <ChatLayout />;
 }

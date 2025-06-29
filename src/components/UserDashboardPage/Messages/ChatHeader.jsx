@@ -1,17 +1,28 @@
 "use client";
+import useChat from "@/hooks/Dashboard/Chat/useChat";
 import { Maximize, Plus, Settings, Trash } from "lucide-react";
-import { useChat } from "@/contexts/Chat/ChatContext";
+import { useRef } from "react";
 
 export default function ChatHeader() {
-  const { createNewChat, isLoading } = useChat();
+  const { handleCreateNewChat, isLoading } = useChat();
+  const createChatRef = useRef(null);
 
   const handleNewChat = async () => {
-    if (!isLoading) {
+    if (!isLoading && !createChatRef.current) {
+      console.log("Starting new chat request...");
+      createChatRef.current = true;
       try {
-        await createNewChat();
+        await handleCreateNewChat();
       } catch (error) {
         console.error("Error creating new chat:", error);
+      } finally {
+        createChatRef.current = null;
+        console.log("New chat request completed.");
       }
+    } else {
+      console.log(
+        "New chat request ignored: ongoing request or loading state."
+      );
     }
   };
 
