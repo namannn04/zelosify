@@ -11,6 +11,10 @@ const store = configureStore({
     requests: requestReducer,
     chat: chatReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // Disable SerializableStateInvariantMiddleware
+    }),
 });
 
 export default store;

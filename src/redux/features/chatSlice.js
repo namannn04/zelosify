@@ -1,13 +1,12 @@
 import axiosInstance from "@/utils/axios/AxiosInstance";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 
 // Async thunk to create a new chat
 export const createNewChat = createAsyncThunk(
   "chat/createNewChat",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/chat/new");
-      const conversationId = response.data.conversationId;
+      const conversationId = "newChat";
 
       return {
         conversationId,
@@ -19,7 +18,7 @@ export const createNewChat = createAsyncThunk(
         },
       };
     } catch (error) {
-      return rejectWithValue("Failed to create new chat. Please try again.");
+      return rejectWithValue("Failed to create new chat locally.");
     }
   }
 );
@@ -27,58 +26,79 @@ export const createNewChat = createAsyncThunk(
 // Async thunk to send a message
 export const sendMessage = createAsyncThunk(
   "chat/sendMessage",
-  async ({ conversationId, message }, { rejectWithValue }) => {
+  async ({ conversationId, message }, { rejectWithValue, dispatch }) => {
     try {
       const userMessage = {
         id: Date.now().toString(),
         sender: "user",
         content: message,
-        timestamp: new Date().toISOString(), // Serialize timestamp
+        timestamp: new Date().toISOString(),
       };
 
-      const response = await axiosInstance.post(`/chat/${conversationId}`, {
-        query: message,
-        conversationId,
-      });
+      let response;
+
+      if (conversationId === "newChat") {
+        // Send request to create a new chat
+        response = await axiosInstance.post(`/chat/${conversationId}`, {
+          query: message,
+          conversationId,
+        });
+
+        // Update conversationId with the backend response
+        const newConversationId = response.data.conversationId;
+        const newTitle = response.data.title;
+
+        dispatch(
+          updateConversationId({
+            oldConversationId: conversationId,
+            newConversationId,
+            title: newTitle,
+          })
+        );
+
+        conversationId = newConversationId; // Update for subsequent messages
+      } else {
+        // Send message to existing conversation
+        response = await axiosInstance.post(`/chat/${conversationId}`, {
+          query: message,
+          conversationId,
+        });
+      }
 
       const aiMessage = {
         id: response.data.messageId || Date.now().toString() + "-ai",
         sender: "ai",
-        content: response.data.results,
-        timestamp: new Date().toISOString(), // Serialize timestamp
+        content: response.data.answer,
+        timestamp: new Date().toISOString(),
       };
 
-      return { conversationId, userMessage, aiMessage };
+      return { userMessage, aiMessage };
     } catch (error) {
       return rejectWithValue("Failed to send message. Please try again.");
     }
   }
 );
 
-// Async thunk to switch conversations
-export const switchConversation = createAsyncThunk(
-  "chat/switchConversation",
-  async (conversationId, { getState, rejectWithValue }) => {
-    try {
-      const { conversations } = getState().chat;
-      const conversation = conversations.find((c) => c.id === conversationId);
+export const updateConversationId = createAction(
+  "chat/updateConversationId",
+  ({ oldConversationId, newConversationId, title }) => ({
+    payload: { oldConversationId, newConversationId, title },
+  })
+);
 
-      return {
-        conversationId,
-        messages: conversation?.messages || [],
-      };
-    } catch (error) {
-      return rejectWithValue("Failed to switch conversation.");
-    }
-  }
+export const switchConversation = createAction(
+  "chat/switchConversation",
+  (conversationId) => ({
+    payload: conversationId,
+  })
 );
 
 const chatSlice = createSlice({
   name: "chat",
   initialState: {
-    activeConversationId: null,
+    activeConversationId: "newChat",
+    conversations: [], // Changed from object to array
     messages: [],
-    conversations: [],
     isLoading: false,
     error: null,
   },
@@ -91,22 +111,32 @@ const chatSlice = createSlice({
     builder
       .addCase(createNewChat.fulfilled, (state, action) => {
         const { conversationId, newConversation } = action.payload;
-        state.conversations.unshift(newConversation);
+        state.conversations.push(newConversation); // Changed from unshift to push
         state.activeConversationId = conversationId;
         state.messages = [];
       })
       .addCase(sendMessage.fulfilled, (state, action) => {
-        const { conversationId, userMessage, aiMessage } = action.payload;
-        const conversation = state.conversations.find(
-          (c) => c.id === conversationId
-        );
-        if (conversation) {
-          conversation.messages.push(userMessage, aiMessage);
-        }
+        const { userMessage, aiMessage } = action.payload;
+        state.messages.push(userMessage);
+        state.messages.push(aiMessage);
       })
-      .addCase(switchConversation.fulfilled, (state, action) => {
-        state.activeConversationId = action.payload.conversationId;
-        state.messages = action.payload.messages;
+      .addCase(updateConversationId, (state, action) => {
+        const { oldConversationId, newConversationId, title } = action.payload;
+        const conversationIndex = state.conversations.findIndex(
+          (conversation) => conversation.id === oldConversationId
+        );
+        if (conversationIndex !== -1) {
+          state.conversations[conversationIndex].id = newConversationId;
+          state.conversations[conversationIndex].title = title;
+        }
+        state.activeConversationId = newConversationId;
+      })
+      .addCase(switchConversation, (state, action) => {
+        state.activeConversationId = action.payload;
+        const conversation = state.conversations.find(
+          (conv) => conv.id === action.payload
+        );
+        state.messages = conversation ? conversation.messages : [];
       });
   },
 });

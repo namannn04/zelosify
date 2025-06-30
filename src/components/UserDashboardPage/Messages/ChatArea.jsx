@@ -9,6 +9,7 @@ import CircleLoader from "@/components/UI/loaders/CircleLoader";
 export default function ChatArea() {
   const [mounted, setMounted] = useState(false);
   const chatEndRef = useRef(null);
+  const initialScrollDone = useRef(false); // Flag to track initial scroll
 
   const {
     messages = [],
@@ -21,29 +22,28 @@ export default function ChatArea() {
   }, []);
 
   useEffect(() => {
-    if (chatEndRef.current && mounted) {
+    if (!mounted || initialScrollDone.current) return; // Ensure mounted state and prevent redundant initial scroll
+
+    if (chatEndRef.current) {
       console.log("Scrolling to the end of chat...");
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+      initialScrollDone.current = true; // Mark initial scroll as done
     } else {
-      console.log("Chat end ref or mounted state is not ready.");
+      console.log("Chat end ref is not ready.");
     }
-  }, [messages, mounted]);
+  }, [messages]); // Removed mounted from dependencies to avoid redundant triggers
 
   const handleRegenerate = () => {
     if (!mounted) return;
 
-    if (messages.length >= 2) {
-      const lastUserMessage = [...messages]
-        .reverse()
-        .find((msg) => msg.sender === "user");
+    const lastUserMessage = messages.findLast((msg) => msg.sender === "user");
 
-      if (lastUserMessage && !isLoading) {
-        handleSendMessage(lastUserMessage.content);
-      }
+    if (lastUserMessage && !isLoading) {
+      handleSendMessage(lastUserMessage.content);
     }
   };
 
-  if (!mounted) {
+  if (isLoading) {
     return (
       <div className="flex-1 overflow-y-auto p-4 flex items-center justify-center">
         <CircleLoader />
@@ -55,8 +55,8 @@ export default function ChatArea() {
     <div className="flex-1 overflow-y-auto p-4 space-y-6 text-sm">
       {messages.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400">
-          <p className="mb-2">No messages yet</p>
-          <p>Type something to start a conversation</p>
+          <p className="mb-2">New chat, start a conversation</p>
+          <p>Type something to begin</p>
         </div>
       ) : (
         <>
