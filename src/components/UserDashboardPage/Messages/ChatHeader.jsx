@@ -8,7 +8,7 @@ export default function ChatHeader({ isLoading, handleCreateNewChat }) {
   // Prevent duplicate new chat requests
   const handleNewChat = async () => {
     if (isLoading || createChatRef.current) return;
-    
+
     createChatRef.current = true;
     try {
       await handleCreateNewChat();
@@ -53,7 +53,7 @@ export default function ChatHeader({ isLoading, handleCreateNewChat }) {
         <button
           onClick={handleNewChat}
           disabled={isLoading}
-          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-4 py-2 bg-foreground text-background hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {!isLoading && <Plus className="w-4 h-4" />}
           New Chat

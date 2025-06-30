@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import DashBoardProviders from "./DashBoard/DashBoardProviders";
 import store from "@/redux/store";
 
-export default function AllProviders({ children }) {
+export default function AllProvider({ children }) {
   return (
     <Provider store={store}>
       <ThemeProvider

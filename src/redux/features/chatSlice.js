@@ -87,7 +87,16 @@ export const sendMessage = createAsyncThunk(
 
       return { userMessage, aiMessage };
     } catch (error) {
-      return rejectWithValue("Failed to send message. Please try again.");
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to send message. Please try again.";
+
+      // Return error info for display in chat
+      return rejectWithValue({
+        message: errorMessage,
+        timestamp: new Date().toISOString(),
+      });
     }
   }
 );
@@ -152,12 +161,28 @@ const chatSlice = createSlice({
     conversations: [], // Changed from object to array
     messages: [],
     isLoading: false,
+    isSendingMessage: false, // Separate loading state for sending messages
     error: null,
     hasFetchedConversations: false,
   },
   reducers: {
     clearError(state) {
       state.error = null;
+    },
+    addTypingIndicator(state) {
+      // Add typing indicator when user sends message
+      const typingMessage = {
+        id: `typing-${Date.now()}`,
+        sender: "ai",
+        content: "Zelosify AI is thinking...",
+        timestamp: new Date().toISOString(),
+        isTyping: true,
+      };
+      state.messages.push(typingMessage);
+    },
+    removeTypingIndicator(state) {
+      // Remove typing indicator
+      state.messages = state.messages.filter((msg) => !msg.isTyping);
     },
   },
   extraReducers: (builder) => {
@@ -191,18 +216,58 @@ const chatSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
-      .addCase(sendMessage.pending, (state) => {
-        state.isLoading = true;
+      .addCase(sendMessage.pending, (state, action) => {
+        state.isSendingMessage = true;
         state.error = null;
+
+        // Add user message immediately
+        const userMessage = {
+          id: Date.now().toString(),
+          sender: "user",
+          content: action.meta.arg.message,
+          timestamp: new Date().toISOString(),
+        };
+        state.messages.push(userMessage);
+
+        // Add typing indicator
+        const typingMessage = {
+          id: `typing-${Date.now()}`,
+          sender: "ai",
+          content: "Zelosify AI is thinking...",
+          timestamp: new Date().toISOString(),
+          isTyping: true,
+        };
+        state.messages.push(typingMessage);
       })
       .addCase(sendMessage.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const { userMessage, aiMessage } = action.payload;
-        state.messages.push(userMessage);
+        state.isSendingMessage = false;
+
+        // Remove typing indicator
+        state.messages = state.messages.filter((msg) => !msg.isTyping);
+
+        // Add AI response
+        const { aiMessage } = action.payload;
         state.messages.push(aiMessage);
       })
       .addCase(sendMessage.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isSendingMessage = false;
+
+        // Remove typing indicator
+        state.messages = state.messages.filter((msg) => !msg.isTyping);
+
+        // Add error message as AI response
+        const errorMessage = {
+          id: `error-${Date.now()}`,
+          sender: "ai",
+          content: `Error: ${
+            action.payload?.message ||
+            action.payload ||
+            "Failed to send message. Please try again."
+          }`,
+          timestamp: action.payload?.timestamp || new Date().toISOString(),
+          isError: true,
+        };
+        state.messages.push(errorMessage);
         state.error = action.payload;
       })
       .addCase(fetchConversationMessages.pending, (state) => {
@@ -239,5 +304,6 @@ const chatSlice = createSlice({
   },
 });
 
-export const { clearError } = chatSlice.actions;
+export const { clearError, addTypingIndicator, removeTypingIndicator } =
+  chatSlice.actions;
 export default chatSlice.reducer;

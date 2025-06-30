@@ -7,12 +7,12 @@ import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
 export default function ChatArea({
   isLoading = false,
+  isSendingMessage = false,
   messages = [],
   handleSendMessage = () => {},
 }) {
   const [mounted, setMounted] = useState(false);
   const chatEndRef = useRef(null);
-  const initialScrollDone = useRef(false);
 
   // Ensure component is mounted before scrolling
   useEffect(() => {
@@ -21,11 +21,10 @@ export default function ChatArea({
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
-    if (!mounted || initialScrollDone.current) return;
+    if (!mounted) return;
 
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-      initialScrollDone.current = true;
     }
   }, [messages, mounted]);
 
@@ -34,12 +33,13 @@ export default function ChatArea({
     if (!mounted) return;
 
     const lastUserMessage = messages.findLast((msg) => msg.sender === "user");
-    if (lastUserMessage && !isLoading) {
+    if (lastUserMessage && !isSendingMessage) {
       handleSendMessage(lastUserMessage.content);
     }
   };
 
-  if (isLoading) {
+  // Only show full loading when initially loading conversations, not when sending messages
+  if (isLoading && messages.length === 0) {
     return (
       <div className="flex-1 overflow-y-auto p-4 flex items-center justify-center">
         <CircleLoader />
@@ -69,19 +69,20 @@ export default function ChatArea({
                 message={message.content}
                 timestamp={message.timestamp}
                 isError={message.isError}
+                isTyping={message.isTyping}
               />
             )
           )}
 
           {/* Show regenerate button after at least one AI response */}
-          {messages.some((m) => m.sender === "ai") && (
+          {messages.some((m) => m.sender === "ai" && !m.isTyping) && (
             <div className="flex justify-center">
               <button
                 className="flex items-center gap-2 px-4 py-2 rounded-full border border-border hover:bg-tableHeader text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 onClick={handleRegenerate}
-                disabled={isLoading}
+                disabled={isSendingMessage}
               >
-                {isLoading ? (
+                {isSendingMessage ? (
                   <div className="w-4 h-4 border-2 border-foreground border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   <RotateCcw className="h-4 w-4 text-foreground" />

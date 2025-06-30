@@ -18,6 +18,7 @@ const useChat = () => {
     messages,
     conversations,
     isLoading,
+    isSendingMessage,
     error,
     hasFetchedConversations,
   } = useSelector((state) => state.chat);
@@ -71,6 +72,7 @@ const useChat = () => {
     messages,
     conversations,
     isLoading,
+    isSendingMessage,
     error,
     handleCreateNewChat,
     handleSendMessage,

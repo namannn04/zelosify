@@ -10,6 +10,8 @@ const ChatHistory = memo(
     onSelectConversation,
     isLoading = false,
   }) => {
+    const conversationsToShowLength = 8; // Number of conversations to show initially
+
     const [isOpen, setIsOpen] = useState(true);
     const [showAllHistory, setShowAllHistory] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
@@ -34,7 +36,7 @@ const ChatHistory = memo(
       () =>
         showAllHistory
           ? filteredConversations
-          : filteredConversations.slice(0, 5),
+          : filteredConversations.slice(0, conversationsToShowLength),
       [showAllHistory, filteredConversations]
     );
 
@@ -125,14 +127,14 @@ const ChatHistory = memo(
     }
 
     return (
-      <div className="space-y-4 px-3 py-4 h-full flex flex-col">
-        <div className="flex items-center gap-2 font-medium text-gray-600 dark:text-gray-300">
+      <div className="h-full flex flex-col space-y-4 p-3 max-h-[calc(100vh-4rem)] overflow-hidden">
+        <div className="flex items-center gap-2 font-medium text-gray-600 dark:text-gray-300 flex-shrink-0">
           <Clock className="h-5 w-5" />
           {isOpen && <span>Recent Chats</span>}
         </div>
 
         {isOpen && (
-          <div className="relative">
+          <div className="relative flex-shrink-0">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <input
               type="text"
@@ -146,7 +148,7 @@ const ChatHistory = memo(
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto space-y-1">
+        <div className="flex-1 min-h-0 overflow-y-auto space-y-1">
           {displayedConversations.length === 0 ? (
             <div className="text-center py-8">
               {isOpen && (
@@ -158,30 +160,41 @@ const ChatHistory = memo(
               )}
             </div>
           ) : (
-            displayedConversations.map((conversation, index) => (
-              <div key={conversation.conversationId || `conversation-${index}`}>
-                {renderConversationItem(conversation)}
-              </div>
-            ))
+            <>
+              {displayedConversations.map((conversation, index) => (
+                <div
+                  key={conversation.conversationId || `conversation-${index}`}
+                >
+                  {renderConversationItem(conversation)}
+                </div>
+              ))}
+
+              {/* Show more/less button inside scrollable area */}
+              {filteredConversations.length > conversationsToShowLength &&
+                isOpen && (
+                  <div className="pt-2">
+                    <button
+                      onClick={toggleShowAllHistory}
+                      className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors 
+                           dark:text-blue-400 dark:hover:text-blue-500 py-2"
+                    >
+                      {showAllHistory
+                        ? "Show less"
+                        : `Show ${
+                            filteredConversations.length -
+                            conversationsToShowLength
+                          } more`}
+                      <ChevronRight
+                        className={`h-3 w-3 transition-transform ${
+                          showAllHistory ? "rotate-90" : ""
+                        }`}
+                      />
+                    </button>
+                  </div>
+                )}
+            </>
           )}
         </div>
-
-        {filteredConversations.length > 5 && isOpen && (
-          <button
-            onClick={toggleShowAllHistory}
-            className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors 
-                   dark:text-blue-400 dark:hover:text-blue-500 py-2"
-          >
-            {showAllHistory
-              ? "Show less"
-              : `Show ${filteredConversations.length - 5} more`}
-            <ChevronRight
-              className={`h-3 w-3 transition-transform ${
-                showAllHistory ? "rotate-90" : ""
-              }`}
-            />
-          </button>
-        )}
       </div>
     );
   }

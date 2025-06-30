@@ -112,7 +112,6 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* font-family: var(--font-poppins), Arial, Helvetica, sans-serif; */
   font-weight: 500; /* Optional default weight */
   font-size: medium;
   font-style: normal; /* Optional default style */
@@ -187,5 +186,16 @@ html {
 @layer components {
   .flex-center {
     @apply flex justify-center items-center;
+  }
+}
+
+/* Animation delays for typing indicator */
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 0.4s;
   }
 }

@@ -1,14 +1,5 @@
 import "@/styles/globals.css";
-import AllProviders from "@/contexts/AllProviders";
-// import { Poppins } from "next/font/google";
-
-// // Font config
-// const poppins = Poppins({
-//   subsets: ["latin"],
-//   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-//   style: ["normal", "italic"], // include italics if needed
-//   variable: "--font-poppins",
-// });
+import AllProvider from "@/contexts/AllProvider";
 
 // Metadata (App Router style)
 export const metadata = {
@@ -22,9 +13,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* <body className={`antialiased ${poppins.variable}`}> */}
       <body className={`antialiased`}>
-        <AllProviders>{children}</AllProviders>
+        <AllProvider>{children}</AllProvider>
       </body>
     </html>
   );

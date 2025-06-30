@@ -61,14 +61,16 @@ export default function InputArea({ isLoading, handleSendMessage }) {
               className="p-1 rounded-full bg-foreground text-background hover:bg-gray-800 dark:hover:bg-gray-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-white dark:border-black border-t-transparent dark:border-t-transparent rounded-full animate-spin"></div>
               ) : (
                 <ArrowRight className="w-5 h-5" />
               )}
             </button>
-            <span className="w-[105px] absolute -top-9 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition-transform bg-gray-800 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded-md">
-              Send Message
-            </span>
+            {!isLoading && (
+              <span className="w-[105px] absolute -top-9 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition-transform bg-gray-800 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded-md">
+                Send Message
+              </span>
+            )}
           </div>
         </div>
       </div>

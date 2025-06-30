@@ -9,6 +9,7 @@ export default function ChatLayout() {
   const {
     handleCreateNewChat,
     isLoading,
+    isSendingMessage,
     handleSendMessage,
     messages,
     conversations,
@@ -22,8 +23,8 @@ export default function ChatLayout() {
   }, [handleCreateNewChat]);
 
   return (
-    <div className="px-2 flex flex-row">
-      <div className="bg-background flex flex-col basis-full h-[calc(100vh-4rem)]">
+    <div className="px-2 flex flex-row h-[calc(100vh-4rem)] overflow-hidden">
+      <div className="bg-background flex flex-col basis-full min-h-0">
         {/* Header */}
         <ChatHeader
           isLoading={isLoading}
@@ -33,17 +34,18 @@ export default function ChatLayout() {
         {/* Chat Area */}
         <ChatArea
           isLoading={isLoading}
+          isSendingMessage={isSendingMessage}
           messages={messages}
           handleSendMessage={handleSendMessage}
         />
 
         {/* Input Area */}
         <InputArea
-          isLoading={isLoading}
+          isLoading={isSendingMessage}
           handleSendMessage={handleSendMessage}
         />
       </div>
-      <div className="basis-1/6 border-l border-border">
+      <div className="basis-1/5 border-l border-border min-h-0 overflow-hidden">
         {/* Chat History */}
         <ChatHistory
           conversations={conversations}
