@@ -16,8 +16,8 @@ export default function ChatLayout() {
     handleSwitchConversation,
   } = useChat();
 
+  // Initialize new chat on component mount
   useEffect(() => {
-    // Initialize a new chat locally when the page loads
     handleCreateNewChat();
   }, [handleCreateNewChat]);
 

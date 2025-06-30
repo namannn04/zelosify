@@ -6,12 +6,14 @@ export default function InputArea({ isLoading, handleSendMessage }) {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
 
+  // Reset textarea height to auto
   const resetTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
   };
 
+  // Send message and reset form
   const sendMessageWrapper = () => {
     if (message.trim() && !isLoading) {
       handleSendMessage(message.trim());
@@ -20,6 +22,7 @@ export default function InputArea({ isLoading, handleSendMessage }) {
     }
   };
 
+  // Auto-resize textarea on input
   const handleChange = (e) => {
     setMessage(e.target.value);
     if (textareaRef.current) {
@@ -28,8 +31,8 @@ export default function InputArea({ isLoading, handleSendMessage }) {
     }
   };
 
+  // Handle Enter key (without Shift) to send message
   const handleKeyDown = (e) => {
-    // Handling Shift + Enter
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessageWrapper();
@@ -69,11 +72,6 @@ export default function InputArea({ isLoading, handleSendMessage }) {
           </div>
         </div>
       </div>
-
-      {/* <div className="mt-2 mb-1 text-xs text-gray-400 dark:text-gray-500 text-center">
-        Model may generate inaccurate information about people, places, or
-        facts.
-      </div> */}
     </div>
   );
 }

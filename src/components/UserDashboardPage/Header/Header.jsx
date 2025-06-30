@@ -56,8 +56,8 @@ const Header = memo(({ isSidebarOpen }) => {
         isSidebarOpen ? "pl-[12rem]" : "pl-[5rem]"
       } h-16 flex items-center justify-between sticky top-0 z-40 bg-white dark:bg-gray-900 border-b dark:border-gray-700`}
     >
-      <div className="flex items-center justify-between px-6 w-full">
-        <div className="flex items-center gap-4 flex-1">
+      <div className="flex items-center justify-end px-6 w-full">
+        {/* <div className="flex items-center gap-4 flex-1">
           <div className="hidden md:flex items-center max-w-md flex-1">
             <div className="relative w-full">
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -68,7 +68,7 @@ const Header = memo(({ isSidebarOpen }) => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex items-center gap-2">
           {/* Toggle Theme Button */}

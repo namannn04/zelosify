@@ -5,20 +5,17 @@ import { useRef } from "react";
 export default function ChatHeader({ isLoading, handleCreateNewChat }) {
   const createChatRef = useRef(null);
 
+  // Prevent duplicate new chat requests
   const handleNewChat = async () => {
-    if (!isLoading && !createChatRef.current) {
-      createChatRef.current = true;
-      try {
-        await handleCreateNewChat();
-      } catch (error) {
-        console.error("Error creating new chat:", error);
-      } finally {
-        createChatRef.current = null;
-      }
-    } else {
-      console.log(
-        "New chat request ignored: ongoing request or loading state."
-      );
+    if (isLoading || createChatRef.current) return;
+    
+    createChatRef.current = true;
+    try {
+      await handleCreateNewChat();
+    } catch (error) {
+      console.error("Error creating new chat:", error);
+    } finally {
+      createChatRef.current = null;
     }
   };
 

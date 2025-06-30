@@ -14,6 +14,7 @@ const ChatHistory = memo(
     const [showAllHistory, setShowAllHistory] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
 
+    // Filter conversations based on search term
     const filteredConversations = useMemo(() => {
       if (!searchTerm.trim()) return conversations;
 
@@ -28,6 +29,7 @@ const ChatHistory = memo(
       );
     }, [searchTerm, conversations]);
 
+    // Limit displayed conversations (5 or all)
     const displayedConversations = useMemo(
       () =>
         showAllHistory
@@ -63,7 +65,7 @@ const ChatHistory = memo(
             onClick={() =>
               handleConversationSelect(conversation.conversationId)
             }
-            className={`w-full flex items-start gap-2 py-3 px-2 text-sm transition-colors rounded-md group
+            className={`w-full flex items-start gap-2 p-2 text-sm transition-colors rounded-md group
             ${
               isActive
                 ? "bg-blue-50 border-l-2 border-blue-500 text-blue-900 dark:bg-blue-900/20 dark:text-blue-100"
@@ -77,7 +79,7 @@ const ChatHistory = memo(
             />
             {isOpen && (
               <div className="flex flex-col w-full overflow-hidden text-left">
-                <span className="text-xs font-medium truncate mb-1">
+                <span className="text-sm font-medium truncate mb-1">
                   {conversation.title || "Untitled Conversation"}
                 </span>
                 {/* {conversation.lastMessage && (

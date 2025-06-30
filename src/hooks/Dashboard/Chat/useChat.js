@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   createNewChat,
@@ -7,9 +7,8 @@ import {
   fetchConversations,
   fetchConversationMessages,
 } from "@/redux/features/chatSlice";
-import { useCallback } from "react";
 
-// Global ref to prevent multiple fetch requests across all hook instances
+// Prevent multiple fetch requests across hook instances
 let globalFetchRef = { current: false };
 
 const useChat = () => {
@@ -23,8 +22,8 @@ const useChat = () => {
     hasFetchedConversations,
   } = useSelector((state) => state.chat);
 
+  // Fetch conversations on mount (once per session)
   useEffect(() => {
-    // Only fetch conversations if we haven't fetched them yet globally
     if (!hasFetchedConversations && !globalFetchRef.current && !isLoading) {
       globalFetchRef.current = true;
       dispatch(fetchConversations());
@@ -50,19 +49,17 @@ const useChat = () => {
   const handleSwitchConversation = useCallback(
     (conversationId) => {
       dispatch(switchConversation(conversationId));
-      // Fetch messages for the selected conversation
       dispatch(fetchConversationMessages(conversationId));
     },
     [dispatch]
   );
 
   const handleFetchConversations = useCallback(() => {
-    // Reset the global ref and force a new fetch
-    globalFetchRef.current = false;
+    globalFetchRef.current = false; // Reset to allow fresh fetch
     dispatch(fetchConversations());
   }, [dispatch]);
 
-  // Reset global ref if conversations are cleared (e.g., on logout)
+  // Reset fetch ref when conversations are cleared (logout)
   useEffect(() => {
     if (conversations.length === 0 && hasFetchedConversations) {
       globalFetchRef.current = false;

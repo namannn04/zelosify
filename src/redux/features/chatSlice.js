@@ -80,7 +80,7 @@ export const sendMessage = createAsyncThunk(
         timestamp: new Date().toISOString(),
       };
 
-      // If this was a new chat, refetch conversations to update the sidebar
+      // Refetch conversations for new chats to update sidebar
       if (isNewChat) {
         dispatch(fetchConversations());
       }
@@ -100,7 +100,7 @@ export const fetchConversationMessages = createAsyncThunk(
       const response = await axiosInstance.get(`/chat/list/${conversationId}`);
       const backendMessages = response.data.conversation?.messages || [];
 
-      // Transform backend message format to frontend format
+      // Transform backend format (query/answer) to frontend format (user/ai messages)
       const transformedMessages = [];
 
       backendMessages.forEach((msg, index) => {
@@ -183,7 +183,7 @@ const chatSlice = createSlice({
       .addCase(createNewChat.fulfilled, (state, action) => {
         state.isLoading = false;
         const { conversationId } = action.payload;
-        // Don't add to conversations array until first message is sent and response received
+        // Don't show in sidebar until first AI response
         state.activeConversationId = conversationId;
         state.messages = [];
       })

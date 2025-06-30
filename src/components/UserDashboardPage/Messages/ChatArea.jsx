@@ -5,32 +5,35 @@ import MsgFromAI from "./MsgFromAI";
 import { useEffect, useRef, useState } from "react";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
-export default function ChatArea({ isLoading = false, messages = [], handleSendMessage = () => {} }) {
+export default function ChatArea({
+  isLoading = false,
+  messages = [],
+  handleSendMessage = () => {},
+}) {
   const [mounted, setMounted] = useState(false);
   const chatEndRef = useRef(null);
-  const initialScrollDone = useRef(false); // Flag to track initial scroll
+  const initialScrollDone = useRef(false);
 
+  // Ensure component is mounted before scrolling
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
-    if (!mounted || initialScrollDone.current) return; // Ensure mounted state and prevent redundant initial scroll
+    if (!mounted || initialScrollDone.current) return;
 
     if (chatEndRef.current) {
-      console.log("Scrolling to the end of chat...");
       chatEndRef.current.scrollIntoView({ behavior: "smooth" });
-      initialScrollDone.current = true; // Mark initial scroll as done
-    } else {
-      console.log("Chat end ref is not ready.");
+      initialScrollDone.current = true;
     }
-  }, [messages]); // Removed mounted from dependencies to avoid redundant triggers
+  }, [messages, mounted]);
 
+  // Regenerate last user message
   const handleRegenerate = () => {
     if (!mounted) return;
 
     const lastUserMessage = messages.findLast((msg) => msg.sender === "user");
-
     if (lastUserMessage && !isLoading) {
       handleSendMessage(lastUserMessage.content);
     }
