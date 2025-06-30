@@ -8,7 +8,7 @@ import {
   calculateDaysDuration,
   formatDate,
   formatCurrency,
-} from "@/utils/trackingUtils";
+} from "@/utils/Dashboard/Tracking/trackingUtils";
 
 /**
  * TrackingLayout component for displaying tracking data.
