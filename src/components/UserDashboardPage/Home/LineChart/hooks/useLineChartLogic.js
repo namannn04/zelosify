@@ -1,5 +1,5 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import ContractSpendContext from "@/contexts/DashBoard/ContractSpend/ContractSpendContext";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import useContractSpend from "@/hooks/Dashboard/Home/ContractSpend/useContractSpend";
 
 const useLineChartLogic = () => {
   const [selectedVendor, setSelectedVendor] = useState("All Vendors");
@@ -23,7 +23,7 @@ const useLineChartLogic = () => {
     vendorColors,
     setTopVendors,
     setCustomDateRange,
-  } = useContext(ContractSpendContext);
+  } = useContractSpend();
 
   // Update localStorage when selectedVendor changes
   useEffect(() => {

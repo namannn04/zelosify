@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import AllProvider from "@/contexts/AllProvider";
+import AllProvider from "@/redux/core/AllProvider";
 
 // Metadata (App Router style)
 export const metadata = {

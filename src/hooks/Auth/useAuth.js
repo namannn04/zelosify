@@ -5,7 +5,7 @@ import {
   signOut,
   openSignoutConfirmation,
   closeSignoutConfirmation,
-} from "@/redux/features/authSlice";
+} from "@/redux/features/Auth/authSlice";
 
 /**
  * Custom hook for managing authentication state and actions.

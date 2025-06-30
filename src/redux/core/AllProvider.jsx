@@ -1,8 +1,7 @@
 "use client";
 import { ThemeProvider } from "next-themes";
 import { Provider } from "react-redux";
-import DashBoardProviders from "./DashBoard/DashBoardProviders";
-import store from "@/redux/store";
+import store from "./store";
 
 export default function AllProvider({ children }) {
   return (
@@ -13,7 +12,7 @@ export default function AllProvider({ children }) {
         enableSystem
         disableTransitionOnChange
       >
-        <DashBoardProviders>{children}</DashBoardProviders>
+        {children}
       </ThemeProvider>
     </Provider>
   );
