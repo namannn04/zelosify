@@ -1,12 +1,10 @@
 "use client";
-import useChat from "@/hooks/Dashboard/Chat/useChat";
 import { ArrowRight } from "lucide-react";
 import { useRef, useState } from "react";
 
-export default function InputArea() {
+export default function InputArea({ isLoading, handleSendMessage }) {
   const [message, setMessage] = useState("");
   const textareaRef = useRef(null);
-  const { handleSendMessage, isLoading } = useChat();
 
   const resetTextareaHeight = () => {
     if (textareaRef.current) {
@@ -57,12 +55,12 @@ export default function InputArea() {
             <button
               onClick={sendMessageWrapper}
               disabled={isLoading || !message.trim()}
-              className="p-1 hover:bg-gray-800 dark:hover:bg-gray-600 rounded-full bg-black dark:bg-gray-700 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-1 rounded-full bg-foreground text-background hover:bg-gray-800 dark:hover:bg-gray-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                <ArrowRight className="w-5 h-5 text-white" />
+                <ArrowRight className="w-5 h-5" />
               )}
             </button>
             <span className="w-[105px] absolute -top-9 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition-transform bg-gray-800 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded-md">

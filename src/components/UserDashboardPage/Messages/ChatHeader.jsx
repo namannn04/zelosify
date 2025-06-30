@@ -1,15 +1,12 @@
 "use client";
-import useChat from "@/hooks/Dashboard/Chat/useChat";
 import { Maximize, Plus, Settings, Trash } from "lucide-react";
 import { useRef } from "react";
 
-export default function ChatHeader() {
-  const { handleCreateNewChat, isLoading } = useChat();
+export default function ChatHeader({ isLoading, handleCreateNewChat }) {
   const createChatRef = useRef(null);
 
   const handleNewChat = async () => {
     if (!isLoading && !createChatRef.current) {
-      console.log("Starting new chat request...");
       createChatRef.current = true;
       try {
         await handleCreateNewChat();
@@ -17,7 +14,6 @@ export default function ChatHeader() {
         console.error("Error creating new chat:", error);
       } finally {
         createChatRef.current = null;
-        console.log("New chat request completed.");
       }
     } else {
       console.log(
@@ -62,11 +58,7 @@ export default function ChatHeader() {
           disabled={isLoading}
           className="flex items-center gap-2 px-4 py-2 bg-foreground text-background rounded-full hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? (
-            <div className="w-4 h-4 border-2 border-border border-t-transparent rounded-full animate-spin"></div>
-          ) : (
-            <Plus className="w-4 h-4" />
-          )}
+          {!isLoading && <Plus className="w-4 h-4" />}
           New Chat
         </button>
       </div>

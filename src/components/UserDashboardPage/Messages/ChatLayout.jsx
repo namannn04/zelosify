@@ -6,7 +6,15 @@ import ChatHeader from "./ChatHeader";
 import ChatHistory from "./ChatHistory";
 
 export default function ChatLayout() {
-  const { handleCreateNewChat } = useChat();
+  const {
+    handleCreateNewChat,
+    isLoading,
+    handleSendMessage,
+    messages,
+    conversations,
+    activeConversationId,
+    handleSwitchConversation,
+  } = useChat();
 
   useEffect(() => {
     // Initialize a new chat locally when the page loads
@@ -17,16 +25,32 @@ export default function ChatLayout() {
     <div className="px-2 flex flex-row">
       <div className="bg-background flex flex-col basis-full h-[calc(100vh-4rem)]">
         {/* Header */}
-        <ChatHeader />
+        <ChatHeader
+          isLoading={isLoading}
+          handleCreateNewChat={handleCreateNewChat}
+        />
 
         {/* Chat Area */}
-        <ChatArea />
+        <ChatArea
+          isLoading={isLoading}
+          messages={messages}
+          handleSendMessage={handleSendMessage}
+        />
 
         {/* Input Area */}
-        <InputArea />
+        <InputArea
+          isLoading={isLoading}
+          handleSendMessage={handleSendMessage}
+        />
       </div>
       <div className="basis-1/6 border-l border-border">
-        <ChatHistory />
+        {/* Chat History */}
+        <ChatHistory
+          conversations={conversations}
+          activeConversationId={activeConversationId}
+          onSelectConversation={handleSwitchConversation}
+          isLoading={isLoading}
+        />
       </div>
     </div>
   );

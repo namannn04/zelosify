@@ -2,20 +2,13 @@
 import { RotateCcw } from "lucide-react";
 import MsgFromUser from "./MsgFromUser";
 import MsgFromAI from "./MsgFromAI";
-import useChat from "@/hooks/Dashboard/Chat/useChat";
 import { useEffect, useRef, useState } from "react";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
-export default function ChatArea() {
+export default function ChatArea({ isLoading = false, messages = [], handleSendMessage = () => {} }) {
   const [mounted, setMounted] = useState(false);
   const chatEndRef = useRef(null);
   const initialScrollDone = useRef(false); // Flag to track initial scroll
-
-  const {
-    messages = [],
-    handleSendMessage = () => {},
-    isLoading = false,
-  } = useChat();
 
   useEffect(() => {
     setMounted(true);
