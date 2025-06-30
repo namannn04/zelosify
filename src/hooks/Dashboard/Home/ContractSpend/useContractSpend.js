@@ -34,7 +34,8 @@ import {
 const useContractSpend = () => {
   const dispatch = useDispatch();
   const pathname = usePathname();
-  const hasFetchedRef = useRef(false);
+  const hasFetchedData = useRef(false);
+  const fetchKey = useRef("");
 
   // Select state from Redux store
   const chartData = useSelector(selectContractSpendData);
@@ -49,12 +50,11 @@ const useContractSpend = () => {
   const selectedTimeRange = useSelector(selectSelectedTimeRange);
 
   /**
-   * Handler for fetching contract spend data
-   * Fetches data only when on the correct route and prevents duplicate requests
+   * Handler for manually fetching contract spend data
+   * Can be used for manual refresh or retry operations
    */
   const handleFetchContractSpendData = useCallback(() => {
-    if (pathname === "/user" && !hasFetchedRef.current) {
-      hasFetchedRef.current = true;
+    if (pathname === "/user") {
       dispatch(
         fetchContractSpendData({
           topVendors,
@@ -79,7 +79,7 @@ const useContractSpend = () => {
    */
   const handleResetContractSpend = useCallback(() => {
     dispatch(resetContractSpend());
-    hasFetchedRef.current = false;
+    hasFetchedData.current = false;
   }, [dispatch]);
 
   /**
@@ -197,20 +197,35 @@ const useContractSpend = () => {
   // Effect to fetch data when dependencies change
   useEffect(() => {
     if (pathname === "/user") {
-      hasFetchedRef.current = false; // Reset flag when dependencies change
-      handleFetchContractSpendData();
+      // Create a unique key based on current parameters
+      const currentKey = `${topVendors}-${selectedTimeRange}-${customDateRange.fromDate}-${customDateRange.toDate}`;
+
+      // Only fetch if the key has changed (parameters have changed)
+      if (fetchKey.current !== currentKey) {
+        fetchKey.current = currentKey;
+        dispatch(
+          fetchContractSpendData({
+            topVendors,
+            selectedTimeRange,
+            customDateRange,
+          })
+        );
+      }
     }
   }, [
-    handleFetchContractSpendData,
+    dispatch,
+    pathname,
     topVendors,
     selectedTimeRange,
-    customDateRange,
+    customDateRange.fromDate,
+    customDateRange.toDate,
   ]);
 
-  // Effect to reset fetch flag when leaving the page
+  // Effect to reset fetch key when leaving the page
   useEffect(() => {
     if (pathname !== "/user") {
-      hasFetchedRef.current = false;
+      fetchKey.current = "";
+      hasFetchedData.current = false;
     }
   }, [pathname]);
 
