@@ -1,4 +1,4 @@
-import axiosInstance from "@/utils/axios/AxiosInstance";
+import axiosInstance from "@/utils/Axios/AxiosInstance";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Async thunk for fetching tracking data

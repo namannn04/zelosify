@@ -1,4 +1,4 @@
-import axiosInstance from "@/utils/axios/AxiosInstance";
+import axiosInstance from "@/utils/Axios/AxiosInstance";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 

@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import { BsMicrosoft } from "react-icons/bs";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import SocialButton from "@/components/UI/SocialButton";
-import axiosInstance from "@/utils/axios/AxiosInstance";
+import axiosInstance from "@/utils/Axios/AxiosInstance";
 import Link from "next/link";
 
 export default function Register() {

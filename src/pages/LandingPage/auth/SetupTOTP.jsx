@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import axiosInstance from "@/utils/axios/AxiosInstance";
+import axiosInstance from "@/utils/Axios/AxiosInstance";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 
 export default function SetupTOTP() {

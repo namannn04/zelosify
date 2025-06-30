@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axiosInstance from "@/utils/axios/AxiosInstance";
+import axiosInstance from "@/utils/Axios/AxiosInstance";
 
 /**
  * Async thunk to fetch header metrics data from the API

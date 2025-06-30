@@ -1,6 +1,6 @@
 "use client";
 
-import axiosInstance from "@/utils/axios/AxiosInstance";
+import axiosInstance from "@/utils/Axios/AxiosInstance";
 import { usePathname } from "next/navigation";
 import { createContext, useEffect, useState, useCallback } from "react";
 

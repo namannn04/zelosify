@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { BsMicrosoft } from "react-icons/bs";
 import SocialButton from "@/components/UI/SocialButton";
 import Link from "next/link";
-import axiosInstance from "@/utils/axios/AxiosInstance";
+import axiosInstance from "@/utils/Axios/AxiosInstance";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
