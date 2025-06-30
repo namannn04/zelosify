@@ -9,8 +9,9 @@ import {
   UserIcon,
 } from "lucide-react";
 import ImportPopUp from "../ImportDoc/ImportPopUp";
-import { useState, useContext } from "react";
-import HeaderMetricsContext from "@/contexts/DashBoard/HeaderMetrics/HeaderMetricsContext";
+import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import useHeaderMetrics from "@/hooks/Dashboard/Home/HeaderMetrics/useHeaderMetrics";
 import CardSkeleton from "@/components/UI/loaders/CardSkeleton";
 
 // Map icons to their respective components
@@ -23,8 +24,19 @@ const iconMapping = {
 
 export default function HeaderMetrics() {
   const [isImportOpen, setIsImportOpen] = useState(false);
-  const { isLoading, error, getFormattedMetrics } =
-    useContext(HeaderMetricsContext);
+  const pathname = usePathname();
+  const { isLoading, error, getFormattedMetrics, handleFetchHeaderMetrics } =
+    useHeaderMetrics();
+
+  const hasFetchedData = useRef(false);
+
+  // Fetch metrics when component mounts and we're on the correct route
+  useEffect(() => {
+    if (pathname === "/user" && !hasFetchedData.current) {
+      handleFetchHeaderMetrics();
+      hasFetchedData.current = true;
+    }
+  }, [pathname, handleFetchHeaderMetrics]);
 
   // Function to get the correct icon component
   const getIcon = (iconName) => {

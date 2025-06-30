@@ -6,7 +6,7 @@ import {
   getAIRecommendation,
   changePage,
   changeFilters,
-} from "@/redux/features/requestSlice";
+} from "@/redux/features/Dashboard/requestSlice";
 
 /**
  * Custom hook for managing requests state and actions.

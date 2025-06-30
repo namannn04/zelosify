@@ -6,7 +6,7 @@ import {
   switchConversation,
   fetchConversations,
   fetchConversationMessages,
-} from "@/redux/features/chatSlice";
+} from "@/redux/features/Dashboard/chatSlice";
 
 // Prevent multiple fetch requests across hook instances
 let globalFetchRef = { current: false };

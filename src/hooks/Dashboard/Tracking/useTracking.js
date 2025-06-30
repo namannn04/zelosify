@@ -8,7 +8,7 @@ import {
   setError,
   setPagination,
   setFilters,
-} from "@/redux/features/trackingSlice";
+} from "@/redux/features/Dashboard/trackingSlice";
 
 /**
  * Custom hook for managing tracking state and actions.
