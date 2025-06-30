@@ -1,3 +1,4 @@
+"use client";
 import TrackingLayout from "@/components/UserDashboardPage/Tracking/TrackingLayout";
 
 export default function TrackingPage() {
@@ -6,4 +7,11 @@ export default function TrackingPage() {
       <TrackingLayout />
     </div>
   );
+}
+
+// Force server-side rendering to prevent static generation issues with Redux
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
 }
