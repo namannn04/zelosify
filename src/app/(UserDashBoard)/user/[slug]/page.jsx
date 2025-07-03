@@ -1,13 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
+import { use } from "react";
 import PaymentsPage from "@/pages/UserDashboardPage/Payments/PaymentsPage";
 import RequestPage from "@/pages/UserDashboardPage/Requests/RequestsPage";
 import SupportPage from "@/pages/UserDashboardPage/Support/SupportPage";
 import TrackingPage from "@/pages/UserDashboardPage/Tracking/TrackingPage";
-import { notFound } from "next/navigation";
-import { use } from "react";
 import FinancePage from "@/pages/UserDashboardPage/Finance/FinancePage";
+import VendorResourcePage from "@/pages/UserDashboardPage/Vendor/VendorResourcePage";
 
 // Dynamically import the ChatPage with SSR disabled
 const ChatPage = dynamic(
@@ -29,6 +30,7 @@ export default function UserSubPage({ params }) {
       "requests",
       "support",
       "finance",
+      "resource",
     ].includes(slug)
   ) {
     notFound();
@@ -48,6 +50,8 @@ export default function UserSubPage({ params }) {
       return <SupportPage />;
     case "finance":
       return <FinancePage />;
+    case "resource":
+      return <VendorResourcePage />;
     default:
       return null;
   }
