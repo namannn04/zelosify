@@ -16,21 +16,6 @@ export const calculateDaysDuration = (startDate, endDate) => {
 };
 
 /**
- * Formats a date string into a human-readable format.
- * @param {string|Date} dateString - The date to format.
- * @returns {string} Formatted date string, or "N/A" if invalid input.
- */
-export const formatDate = (dateString) => {
-  if (!dateString) return "N/A";
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-};
-
-/**
  * Formats a number as a currency string.
  * @param {number} amount - The amount to format.
  * @param {string} [currency="USD"] - The currency code.

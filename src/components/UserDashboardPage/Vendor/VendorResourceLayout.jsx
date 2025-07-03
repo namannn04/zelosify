@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import ReusableTable from "@/components/UI/ReusableTable";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/UI/shadcn/dialog";
 import useVendorResource from "@/hooks/Dashboard/Vendor/useVendorResource";
-import { Paperclip } from "lucide-react";
+import { BarChart3, Paperclip } from "lucide-react";
+import { getRequestTypeColor } from "@/utils/Dashboard/Vendor/vendorResourceUtils";
+import CircleLoader from "@/components/UI/loaders/CircleLoader";
+import AttachmentManagement from "./AttachmentManagement";
+import { formatDate } from "@/utils/Common/date";
 
 /**
  * VendorResourceLayout component for managing vendor resource requests
@@ -127,14 +125,22 @@ export default function VendorResourceLayout() {
   const tableData = Array.isArray(requests)
     ? requests.map((request) => ({
         id: request.id,
-        requestType: request.requestType,
+        requestType: (
+          <span
+            className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium border ${getRequestTypeColor(
+              request.requestType
+            )}`}
+          >
+            {request.requestType || "N/A"}
+          </span>
+        ),
         role: request.role,
         experience: `${request.experience?.min || "N/A"} - ${
           request.experience?.max || "N/A"
         } yrs`,
         requesterName: request.requester?.name || "N/A",
-        requestReceivedDate: request.requestReceivedDate,
-        firstProfileProposedDate: request.firstProfileProposedDate || "N/A",
+        requestReceivedDate: formatDate(request.requestReceivedDate),
+        firstProfileProposedDate: formatDate(request.firstProfileProposedDate),
         agingSinceRequest: request.agingSinceRequest,
         agingSinceLastAction: request.agingSinceLastAction,
         pendingWith: (
@@ -165,9 +171,9 @@ export default function VendorResourceLayout() {
         ),
         attachments: (
           <div className="flex flex-col items-center justify-center gap-2">
-            <div className="flex items-center">
-              <Paperclip className="w-4 h-4 mr-2 text-gray-500" />
-              <span className="text-sm text-gray-600">
+            <div className="flex items-center text-foreground">
+              <Paperclip className="w-4 h-4 mr-2" />
+              <span className="text-sm">
                 {request.attachments?.length || 0}
               </span>
             </div>
@@ -210,20 +216,20 @@ export default function VendorResourceLayout() {
       {/* Loading State */}
       {isLoading && (
         <div className="text-center py-8">
-          <div className="text-foreground">Loading vendor requests...</div>
+          <CircleLoader className="w-12 h-12 text-primary mx-auto mb-4" />
         </div>
       )}
 
       {/* Error State */}
       {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+        <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
           <div className="flex items-center justify-between">
-            <div className="text-red-700" role="alert">
+            <div className="text-red-700 dark:text-red-300" role="alert">
               Error loading requests: {error}
             </div>
             <button
               onClick={handleClearError}
-              className="text-red-500 hover:text-red-700 text-sm underline"
+              className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm underline"
               type="button"
             >
               Dismiss
@@ -232,8 +238,25 @@ export default function VendorResourceLayout() {
         </div>
       )}
 
+      {/* Empty State */}
+      {!isLoading && !error && tableData.length === 0 && (
+        <div className="flex-center h-[80vh] w-full">
+          <div className="text-center py-12">
+            <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <BarChart3 className="w-12 h-12 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-medium text-foreground mb-2">
+              No requests found
+            </h3>
+            <p className="text-secondary mb-4">
+              There are currently no vendor resource requests to display.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Main Table */}
-      {!isLoading && !error && (
+      {!isLoading && !error && tableData.length > 0 && (
         <ReusableTable
           data={tableData}
           columns={tableColumns}
@@ -246,98 +269,13 @@ export default function VendorResourceLayout() {
 
       {/* Attachment Management Dialog */}
       {isDialogOpen && (
-        <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-          <DialogContent className="backdrop-blur-md max-w-md">
-            <DialogHeader>
-              <DialogTitle>
-                Manage Attachments for Request {selectedRequestId}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              {/* File Drop Zone */}
-              <div
-                className="border-dashed border-2 border-gray-300 rounded-md p-6 text-center cursor-pointer hover:bg-gray-50 transition-colors"
-                onDrop={(e) => {
-                  e.preventDefault();
-                  handleManageAttachments(
-                    selectedRequestId,
-                    e.dataTransfer.files
-                  );
-                }}
-                onDragOver={(e) => e.preventDefault()}
-                onDragEnter={(e) => e.preventDefault()}
-                role="button"
-                tabIndex={0}
-                aria-label="Drag and drop files here or use file input below"
-              >
-                <div className="text-gray-600">
-                  Drag and drop files here or use the button below
-                </div>
-              </div>
-
-              {/* File Input */}
-              <div>
-                <label
-                  htmlFor="file-upload"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Select Files
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  multiple
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-primary/80"
-                  onChange={(e) =>
-                    handleManageAttachments(selectedRequestId, e.target.files)
-                  }
-                  aria-describedby="file-upload-help"
-                />
-                <p id="file-upload-help" className="mt-1 text-xs text-gray-500">
-                  Select multiple files to upload
-                </p>
-              </div>
-
-              {/* Current Attachments */}
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-2">
-                  Current Attachments
-                </h4>
-                <ul className="space-y-1 max-h-32 overflow-y-auto">
-                  {(Array.isArray(requests) &&
-                    requests
-                      .find((request) => request.id === selectedRequestId)
-                      ?.attachments?.map((attachment, index) => (
-                        <li
-                          key={index}
-                          className="text-blue-600 hover:text-blue-800 cursor-pointer text-sm underline"
-                          role="button"
-                          tabIndex={0}
-                          aria-label={`Download ${attachment.split("/").pop()}`}
-                        >
-                          {attachment.split("/").pop()}
-                        </li>
-                      ))) || (
-                    <li className="text-gray-500 text-sm italic">
-                      No attachments
-                    </li>
-                  )}
-                </ul>
-              </div>
-
-              {/* Dialog Actions */}
-              <div className="flex justify-end pt-4">
-                <button
-                  onClick={handleCloseDialog}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-background bg-foreground rounded-md hover:bg-foreground/80 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  type="button"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <AttachmentManagement
+          isDialogOpen={isDialogOpen}
+          handleCloseDialog={handleCloseDialog}
+          selectedRequestId={selectedRequestId}
+          handleManageAttachments={handleManageAttachments}
+          requests={requests}
+        />
       )}
     </div>
   );

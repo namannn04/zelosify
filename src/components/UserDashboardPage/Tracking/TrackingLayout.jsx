@@ -6,9 +6,9 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import {
   calculateDaysDuration,
-  formatDate,
   formatCurrency,
 } from "@/utils/Dashboard/Tracking/trackingUtils";
+import { formatDate } from "@/utils/Common/date";
 
 /**
  * TrackingLayout component for displaying tracking data.

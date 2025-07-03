@@ -3,6 +3,7 @@ import { Check, Sparkles, X } from "lucide-react";
 import useRequests from "@/hooks/Dashboard/Requests/useRequests";
 import Pagination from "@/components/UI/Pagination";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
+import { formatDate } from "@/utils/Common/date";
 
 export default function Table({
   requests,
@@ -155,7 +156,7 @@ export default function Table({
                     </span>
                   </td>
                   <td className="px-4 py-4 text-sm">
-                    {new Date(request.createdAt).toLocaleDateString()}
+                    {formatDate(request.createdAt)}
                   </td>
                   <td className="px-4 py-4">
                     <span
