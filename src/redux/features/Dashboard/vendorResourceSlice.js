@@ -102,7 +102,9 @@ export const uploadAttachments = createAsyncThunk(
 const initialState = {
   requests: [],
   isLoading: false,
+  isUpdating: false,
   error: null,
+  updateSuccess: false,
   pagination: {
     currentPage: 1,
     totalPages: 0,
@@ -124,6 +126,13 @@ const vendorResourceSlice = createSlice({
      */
     clearError(state) {
       state.error = null;
+    },
+    /**
+     * Clear update success state
+     * @param {Object} state - Current state
+     */
+    clearUpdateSuccess(state) {
+      state.updateSuccess = false;
     },
     /**
      * Reset vendor resource state to initial values
@@ -156,9 +165,13 @@ const vendorResourceSlice = createSlice({
       })
       // Update vendor request cases
       .addCase(updateVendorRequest.pending, (state) => {
+        state.isUpdating = true;
         state.error = null;
+        state.updateSuccess = false;
       })
       .addCase(updateVendorRequest.fulfilled, (state, action) => {
+        state.isUpdating = false;
+        state.updateSuccess = true;
         const index = state.requests.findIndex(
           (request) => request.id === action.payload.id
         );
@@ -167,6 +180,8 @@ const vendorResourceSlice = createSlice({
         }
       })
       .addCase(updateVendorRequest.rejected, (state, action) => {
+        state.isUpdating = false;
+        state.updateSuccess = false;
         state.error = action.payload || action.error.message;
       })
       // Upload attachments cases
@@ -188,11 +203,15 @@ const vendorResourceSlice = createSlice({
 });
 
 // Export actions
-export const { clearError, resetVendorResource } = vendorResourceSlice.actions;
+export const { clearError, clearUpdateSuccess, resetVendorResource } =
+  vendorResourceSlice.actions;
 
 // Selectors
 export const selectVendorRequests = (state) => state.vendorResource.requests;
 export const selectVendorLoading = (state) => state.vendorResource.isLoading;
+export const selectVendorUpdating = (state) => state.vendorResource.isUpdating;
+export const selectVendorUpdateSuccess = (state) =>
+  state.vendorResource.updateSuccess;
 export const selectVendorError = (state) => state.vendorResource.error;
 export const selectVendorPagination = (state) =>
   state.vendorResource.pagination;

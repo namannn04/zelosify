@@ -5,9 +5,12 @@ import {
   updateVendorRequest,
   uploadAttachments,
   clearError,
+  clearUpdateSuccess,
   resetVendorResource,
   selectVendorRequests,
   selectVendorLoading,
+  selectVendorUpdating,
+  selectVendorUpdateSuccess,
   selectVendorError,
   selectVendorPagination,
 } from "@/redux/features/Dashboard/vendorResourceSlice";
@@ -28,6 +31,8 @@ const useVendorResource = () => {
   // State selectors
   const requests = useSelector(selectVendorRequests);
   const isLoading = useSelector(selectVendorLoading);
+  const isUpdating = useSelector(selectVendorUpdating);
+  const updateSuccess = useSelector(selectVendorUpdateSuccess);
   const error = useSelector(selectVendorError);
   const pagination = useSelector(selectVendorPagination);
 
@@ -76,6 +81,13 @@ const useVendorResource = () => {
   }, [dispatch]);
 
   /**
+   * Clear update success state
+   */
+  const handleClearUpdateSuccess = useCallback(() => {
+    dispatch(clearUpdateSuccess());
+  }, [dispatch]);
+
+  /**
    * Reset vendor resource state to initial values
    */
   const handleResetState = useCallback(() => {
@@ -86,6 +98,8 @@ const useVendorResource = () => {
     // State
     requests,
     isLoading,
+    isUpdating,
+    updateSuccess,
     error,
     pagination,
     // Actions
@@ -93,6 +107,7 @@ const useVendorResource = () => {
     updateRequest,
     manageAttachments,
     handleClearError,
+    handleClearUpdateSuccess,
     handleResetState,
   };
 };

@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 import ReusableTable from "@/components/UI/ReusableTable";
 import useVendorResource from "@/hooks/Dashboard/Vendor/useVendorResource";
-import { BarChart3, Paperclip } from "lucide-react";
+import { BarChart3, Paperclip, Edit3 } from "lucide-react";
 import { getRequestTypeColor } from "@/utils/Dashboard/Vendor/vendorResourceUtils";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 import AttachmentManagement from "./AttachmentManagement";
@@ -22,12 +23,15 @@ export default function VendorResourceLayout() {
   const {
     requests,
     isLoading,
+    isUpdating,
+    updateSuccess,
     error,
     pagination,
     fetchRequests,
     updateRequest,
     manageAttachments,
     handleClearError,
+    handleClearUpdateSuccess,
   } = useVendorResource();
 
   // Local state for dialog management
@@ -46,6 +50,26 @@ export default function VendorResourceLayout() {
       hasFetchedData.current = true;
     }
   }, [pathname, fetchRequests]);
+
+  /**
+   * Handle update success and error notifications
+   */
+  useEffect(() => {
+    if (updateSuccess) {
+      toast.success("Request updated successfully", {
+        description: "Pending with and comments have been saved.",
+      });
+      handleClearUpdateSuccess();
+    }
+  }, [updateSuccess, handleClearUpdateSuccess]);
+
+  useEffect(() => {
+    if (error && !isLoading) {
+      toast.error("Action Failed", {
+        description: error,
+      });
+    }
+  }, [error, isLoading]);
 
   /**
    * Handle updating vendor request fields
@@ -144,30 +168,52 @@ export default function VendorResourceLayout() {
         agingSinceRequest: request.agingSinceRequest,
         agingSinceLastAction: request.agingSinceLastAction,
         pendingWith: (
-          <input
-            type="text"
-            className="border border-border rounded px-2 py-1 w-full text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            defaultValue={request.pendingWith || ""}
-            aria-label={`Pending With for request ${request.id}`}
-            onBlur={(e) =>
-              handleUpdateRequest(request.id, e.target.value, request.comments)
-            }
-          />
+          <div className="relative group">
+            <input
+              type="text"
+              className={`border border-dashed border-gray-300 dark:border-gray-600 rounded px-2 py-1 pr-8 w-full text-sm bg-transparent hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-solid focus:border-primary transition-all duration-200 ${
+                isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-text"
+              }`}
+              defaultValue={request.pendingWith || ""}
+              placeholder="Click to edit pending with..."
+              disabled={isUpdating}
+              aria-label={`Pending With for request ${request.id}`}
+              onBlur={(e) => {
+                const newValue = e.target.value.trim();
+                const currentValue = (request.pendingWith || "").trim();
+                if (newValue !== currentValue) {
+                  handleUpdateRequest(request.id, newValue, request.comments);
+                }
+              }}
+            />
+            <Edit3 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400 group-hover:text-primary transition-colors pointer-events-none" />
+          </div>
         ),
         comments: (
-          <input
-            type="text"
-            className="border border-border rounded px-2 py-1 w-full text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            defaultValue={request.comments || ""}
-            aria-label={`Comments for request ${request.id}`}
-            onBlur={(e) =>
-              handleUpdateRequest(
-                request.id,
-                request.pendingWith,
-                e.target.value
-              )
-            }
-          />
+          <div className="relative group">
+            <input
+              type="text"
+              className={`border border-dashed border-gray-300 dark:border-gray-600 rounded px-2 py-1 pr-8 w-full text-sm bg-transparent hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-solid focus:border-primary transition-all duration-200 ${
+                isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-text"
+              }`}
+              defaultValue={request.comments || ""}
+              placeholder="Click to edit comments..."
+              disabled={isUpdating}
+              aria-label={`Comments for request ${request.id}`}
+              onBlur={(e) => {
+                const newValue = e.target.value.trim();
+                const currentValue = (request.comments || "").trim();
+                if (newValue !== currentValue) {
+                  handleUpdateRequest(
+                    request.id,
+                    request.pendingWith,
+                    newValue
+                  );
+                }
+              }}
+            />
+            <Edit3 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400 group-hover:text-primary transition-colors pointer-events-none" />
+          </div>
         ),
         attachments: (
           <div className="flex flex-col items-center justify-center gap-2">
