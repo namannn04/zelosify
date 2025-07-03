@@ -101,14 +101,14 @@ export default function AttachmentManagement({
 
               return { ...prev, [file.name]: newProgress };
             });
-          }, 200);
+          }, 4000);
         });
 
         // Call the parent handler which uses Redux
         await handleManageAttachments(selectedRequestId, validFiles);
 
         // Complete progress
-        setUploadProgress((prev) => {
+        setUploadProgress((_) => {
           const completed = {};
           validFiles.forEach((file) => {
             completed[file.name] = 100;
@@ -119,7 +119,7 @@ export default function AttachmentManagement({
         // Clear progress after showing completion
         setTimeout(() => {
           setUploadProgress({});
-        }, 2000);
+        }, 4000);
       } catch (error) {
         console.error("Upload error:", error);
         setUploadProgress({});
