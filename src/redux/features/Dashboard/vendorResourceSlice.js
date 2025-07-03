@@ -66,16 +66,23 @@ export const uploadAttachments = createAsyncThunk(
         { filenames: files.map((file) => file.name) }
       );
 
-      // Upload files to presigned URLs
-      const uploadPromises = presignResponse.data.map(({ url, key }, index) => {
-        return axiosInstance
-          .put(url, files[index], {
-            headers: {
-              "Content-Type": files[index].type,
-            },
-          })
-          .then(() => key);
-      });
+      // Upload files using backend endpoints with tokens
+      const uploadPromises = presignResponse.data.data.uploads.map(
+        async ({ uploadToken, uploadEndpoint, filename }, index) => {
+          // Create FormData for file upload
+          const formData = new FormData();
+          formData.append("file", files[index]);
+          formData.append("uploadToken", uploadToken);
+
+          return axiosInstance
+            .post(uploadEndpoint, formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+            .then((response) => response.data.key || filename); // Return S3 key from response
+        }
+      );
 
       const uploadedKeys = await Promise.all(uploadPromises);
 
@@ -89,6 +96,8 @@ export const uploadAttachments = createAsyncThunk(
 
       return updateResponse.data;
     } catch (error) {
+      console.error(error);
+
       return rejectWithValue(
         error.response?.data?.message || "Failed to upload attachments"
       );
@@ -103,8 +112,10 @@ const initialState = {
   requests: [],
   isLoading: false,
   isUpdating: false,
+  isUploading: false,
   error: null,
   updateSuccess: false,
+  uploadSuccess: false,
   pagination: {
     currentPage: 1,
     totalPages: 0,
@@ -133,6 +144,13 @@ const vendorResourceSlice = createSlice({
      */
     clearUpdateSuccess(state) {
       state.updateSuccess = false;
+    },
+    /**
+     * Clear upload success state
+     * @param {Object} state - Current state
+     */
+    clearUploadSuccess(state) {
+      state.uploadSuccess = false;
     },
     /**
      * Reset vendor resource state to initial values
@@ -186,9 +204,13 @@ const vendorResourceSlice = createSlice({
       })
       // Upload attachments cases
       .addCase(uploadAttachments.pending, (state) => {
+        state.isUploading = true;
         state.error = null;
+        state.uploadSuccess = false;
       })
       .addCase(uploadAttachments.fulfilled, (state, action) => {
+        state.isUploading = false;
+        state.uploadSuccess = true;
         const index = state.requests.findIndex(
           (request) => request.id === action.payload.id
         );
@@ -197,21 +219,31 @@ const vendorResourceSlice = createSlice({
         }
       })
       .addCase(uploadAttachments.rejected, (state, action) => {
+        state.isUploading = false;
+        state.uploadSuccess = false;
         state.error = action.payload || action.error.message;
       });
   },
 });
 
 // Export actions
-export const { clearError, clearUpdateSuccess, resetVendorResource } =
-  vendorResourceSlice.actions;
+export const {
+  clearError,
+  clearUpdateSuccess,
+  clearUploadSuccess,
+  resetVendorResource,
+} = vendorResourceSlice.actions;
 
 // Selectors
 export const selectVendorRequests = (state) => state.vendorResource.requests;
 export const selectVendorLoading = (state) => state.vendorResource.isLoading;
 export const selectVendorUpdating = (state) => state.vendorResource.isUpdating;
+export const selectVendorUploading = (state) =>
+  state.vendorResource.isUploading;
 export const selectVendorUpdateSuccess = (state) =>
   state.vendorResource.updateSuccess;
+export const selectVendorUploadSuccess = (state) =>
+  state.vendorResource.uploadSuccess;
 export const selectVendorError = (state) => state.vendorResource.error;
 export const selectVendorPagination = (state) =>
   state.vendorResource.pagination;

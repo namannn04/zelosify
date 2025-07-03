@@ -24,7 +24,9 @@ export default function VendorResourceLayout() {
     requests,
     isLoading,
     isUpdating,
+    isUploading,
     updateSuccess,
+    uploadSuccess,
     error,
     pagination,
     fetchRequests,
@@ -32,6 +34,7 @@ export default function VendorResourceLayout() {
     manageAttachments,
     handleClearError,
     handleClearUpdateSuccess,
+    handleClearUploadSuccess,
   } = useVendorResource();
 
   // Local state for dialog management
@@ -62,6 +65,15 @@ export default function VendorResourceLayout() {
       handleClearUpdateSuccess();
     }
   }, [updateSuccess, handleClearUpdateSuccess]);
+
+  useEffect(() => {
+    if (uploadSuccess) {
+      toast.success("Files uploaded successfully", {
+        description: "Attachments have been added to the request.",
+      });
+      handleClearUploadSuccess();
+    }
+  }, [uploadSuccess, handleClearUploadSuccess]);
 
   useEffect(() => {
     if (error && !isLoading) {
@@ -321,6 +333,7 @@ export default function VendorResourceLayout() {
           selectedRequestId={selectedRequestId}
           handleManageAttachments={handleManageAttachments}
           requests={requests}
+          isUploading={isUploading}
         />
       )}
     </div>

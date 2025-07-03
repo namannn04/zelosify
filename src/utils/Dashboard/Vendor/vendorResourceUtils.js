@@ -4,8 +4,6 @@
  * @returns {string} Tailwind background color class
  */
 export const getRequestTypeColor = (requestType) => {
-  console.log(requestType);
-
   switch (requestType?.toUpperCase()) {
     case "NEW":
       return "bg-green-100 text-green-800 border-green-200";
