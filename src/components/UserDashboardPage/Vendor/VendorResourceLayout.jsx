@@ -95,8 +95,13 @@ export default function VendorResourceLayout() {
    * @param {string} comments - Updated comments value
    */
   const handleUpdateRequest = useCallback(
-    (id, pendingWith, comments) => {
-      updateRequest(id, pendingWith, comments);
+    (id, type, newValue) => {
+      const payload = {};
+      if (type === "comments") payload.comments = newValue;
+
+      if (type === "pendingWith") payload.pendingWith = newValue;
+
+      updateRequest(id, payload);
     },
     [updateRequest]
   );
@@ -206,8 +211,8 @@ export default function VendorResourceLayout() {
                       if (newValue !== currentValue) {
                         handleUpdateRequest(
                           request.id,
-                          newValue,
-                          request.comments
+                          "pendingWith",
+                          newValue
                         );
                       }
                     }}
@@ -238,11 +243,7 @@ export default function VendorResourceLayout() {
                     const newValue = e.target.value.trim();
                     const currentValue = (request.comments || "").trim();
                     if (newValue !== currentValue) {
-                      handleUpdateRequest(
-                        request.id,
-                        request.pendingWith,
-                        newValue
-                      );
+                      handleUpdateRequest(request.id, "comments", newValue);
                     }
                   }}
                 />

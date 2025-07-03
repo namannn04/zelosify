@@ -60,8 +60,8 @@ const useVendorResource = () => {
    * @param {string} comments - Updated comments value
    */
   const updateRequest = useCallback(
-    (id, pendingWith, comments) => {
-      dispatch(updateVendorRequest({ id, pendingWith, comments }));
+    (id, payload) => {
+      dispatch(updateVendorRequest({ id, payload }));
     },
     [dispatch]
   );

@@ -34,12 +34,12 @@ export const fetchVendorRequests = createAsyncThunk(
  */
 export const updateVendorRequest = createAsyncThunk(
   "vendorResource/updateVendorRequest",
-  async ({ id, pendingWith, comments }, { rejectWithValue }) => {
+  async ({ id, payload }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.patch(`/vendor/requests/${id}`, {
-        pendingWith,
-        comments,
-      });
+      const response = await axiosInstance.patch(
+        `/vendor/requests/${id}`,
+        payload
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(
