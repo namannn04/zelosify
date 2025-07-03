@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import { Provider } from "react-redux";
 import { Toaster } from "@/components/UI/shadcn/sonner";
 import store from "./store";
+import { TooltipProvider } from "@/components/UI/shadcn/tooltip";
 
 export default function AllProvider({ children }) {
   return (
@@ -13,7 +14,7 @@ export default function AllProvider({ children }) {
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <Toaster />
       </ThemeProvider>
     </Provider>

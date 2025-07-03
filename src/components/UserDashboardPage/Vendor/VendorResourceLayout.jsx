@@ -8,6 +8,11 @@ import { getRequestTypeColor } from "@/utils/Dashboard/Vendor/vendorResourceUtil
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 import AttachmentManagement from "./AttachmentManagement";
 import { formatDate } from "@/utils/Common/date";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/UI/shadcn/tooltip";
 
 /**
  * VendorResourceLayout component for managing vendor resource requests
@@ -180,52 +185,74 @@ export default function VendorResourceLayout() {
         agingSinceRequest: request.agingSinceRequest,
         agingSinceLastAction: request.agingSinceLastAction,
         pendingWith: (
-          <div className="relative group">
-            <input
-              type="text"
-              className={`border border-dashed border-gray-300 dark:border-gray-600 rounded px-2 py-1 pr-8 w-full text-sm bg-transparent hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-solid focus:border-primary transition-all duration-200 ${
-                isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-text"
-              }`}
-              defaultValue={request.pendingWith || ""}
-              placeholder="Click to edit pending with..."
-              disabled={isUpdating}
-              aria-label={`Pending With for request ${request.id}`}
-              onBlur={(e) => {
-                const newValue = e.target.value.trim();
-                const currentValue = (request.pendingWith || "").trim();
-                if (newValue !== currentValue) {
-                  handleUpdateRequest(request.id, newValue, request.comments);
-                }
-              }}
-            />
-            <Edit3 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400 group-hover:text-primary transition-colors pointer-events-none" />
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative group">
+                <div>
+                  <input
+                    type="text"
+                    className={`border border-dashed border-gray-300 dark:border-gray-600 rounded px-2 py-1 pr-8 w-full text-sm bg-transparent hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-solid focus:border-primary transition-all duration-200 ${
+                      isUpdating
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-text"
+                    }`}
+                    defaultValue={request.pendingWith || ""}
+                    placeholder="Click to edit pending with..."
+                    disabled={isUpdating}
+                    aria-label={`Pending With for request ${request.id}`}
+                    onBlur={(e) => {
+                      const newValue = e.target.value.trim();
+                      const currentValue = (request.pendingWith || "").trim();
+                      if (newValue !== currentValue) {
+                        handleUpdateRequest(
+                          request.id,
+                          newValue,
+                          request.comments
+                        );
+                      }
+                    }}
+                  />
+                  <Edit3 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400 group-hover:text-primary transition-colors pointer-events-none" />
+                </div>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="text-[10px] p-1 ">
+              Click to edit
+            </TooltipContent>
+          </Tooltip>
         ),
         comments: (
-          <div className="relative group">
-            <input
-              type="text"
-              className={`border border-dashed border-gray-300 dark:border-gray-600 rounded px-2 py-1 pr-8 w-full text-sm bg-transparent hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-solid focus:border-primary transition-all duration-200 ${
-                isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-text"
-              }`}
-              defaultValue={request.comments || ""}
-              placeholder="Click to edit comments..."
-              disabled={isUpdating}
-              aria-label={`Comments for request ${request.id}`}
-              onBlur={(e) => {
-                const newValue = e.target.value.trim();
-                const currentValue = (request.comments || "").trim();
-                if (newValue !== currentValue) {
-                  handleUpdateRequest(
-                    request.id,
-                    request.pendingWith,
-                    newValue
-                  );
-                }
-              }}
-            />
-            <Edit3 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400 group-hover:text-primary transition-colors pointer-events-none" />
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative group">
+                <input
+                  type="text"
+                  className={`border border-dashed border-gray-300 dark:border-gray-600 rounded px-2 py-1 pr-8 w-full text-sm bg-transparent hover:border-primary/50 hover:bg-gray-50 dark:hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-solid focus:border-primary transition-all duration-200 ${
+                    isUpdating ? "opacity-50 cursor-not-allowed" : "cursor-text"
+                  }`}
+                  defaultValue={request.comments || ""}
+                  placeholder="Click to edit comments..."
+                  disabled={isUpdating}
+                  aria-label={`Comments for request ${request.id}`}
+                  onBlur={(e) => {
+                    const newValue = e.target.value.trim();
+                    const currentValue = (request.comments || "").trim();
+                    if (newValue !== currentValue) {
+                      handleUpdateRequest(
+                        request.id,
+                        request.pendingWith,
+                        newValue
+                      );
+                    }
+                  }}
+                />
+                <Edit3 className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400 group-hover:text-primary transition-colors pointer-events-none" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="text-[10px] p-1 ">
+              Click to edit
+            </TooltipContent>
+          </Tooltip>
         ),
         attachments: (
           <div className="flex flex-col items-center justify-center gap-2">
