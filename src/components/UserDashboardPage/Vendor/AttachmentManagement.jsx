@@ -162,7 +162,21 @@ export default function AttachmentManagement({
    * Formats filename from S3 key
    */
   const formatAttachmentName = useCallback((attachmentKey) => {
-    return attachmentKey.split("/").pop() || attachmentKey;
+    if (typeof attachmentKey === "object" && attachmentKey?.key) {
+      attachmentKey = attachmentKey.key;
+    }
+
+    if (typeof attachmentKey !== "string") {
+      console.error("Invalid attachmentKey: Expected a string", attachmentKey);
+      return "Unknown Attachment";
+    }
+
+    try {
+      return attachmentKey.split("/").pop() || attachmentKey;
+    } catch (error) {
+      console.error("Error formatting attachmentKey", { attachmentKey, error });
+      return "Unknown Attachment";
+    }
   }, []);
 
   return (

@@ -58,7 +58,7 @@ export const updateVendorRequest = createAsyncThunk(
  */
 export const uploadAttachments = createAsyncThunk(
   "vendorResource/uploadAttachments",
-  async ({ id, files }, { rejectWithValue }) => {
+  async ({ id, files }, { dispatch, rejectWithValue }) => {
     try {
       // Get presigned URLs for file upload
       const presignResponse = await axiosInstance.post(
@@ -69,35 +69,40 @@ export const uploadAttachments = createAsyncThunk(
       // Upload files using backend endpoints with tokens
       const uploadPromises = presignResponse.data.data.uploads.map(
         async ({ uploadToken, uploadEndpoint, filename }, index) => {
-          // Create FormData for file upload
           const formData = new FormData();
           formData.append("file", files[index]);
           formData.append("uploadToken", uploadToken);
 
-          return axiosInstance
-            .post(uploadEndpoint, formData, {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
+          const response = await axiosInstance.post(uploadEndpoint, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          // Extract attachment details from response
+          const {
+            key,
+            filename: uploadedFilename,
+            uploadedAt,
+          } = response.data.data.attachment;
+          const totalAttachments = response.data.data.totalAttachments;
+
+          // Dispatch action to update Redux state
+          dispatch(
+            vendorResourceSlice.actions.updateAttachments({
+              id,
+              attachment: { key, filename: uploadedFilename, uploadedAt },
+              totalAttachments,
             })
-            .then((response) => response.data.key || filename); // Return S3 key from response
+          );
+
+          return key;
         }
       );
 
-      const uploadedKeys = await Promise.all(uploadPromises);
-
-      // Update request with new attachment keys
-      const updateResponse = await axiosInstance.patch(
-        `/vendor/requests/${id}`,
-        {
-          attachments: uploadedKeys,
-        }
-      );
-
-      return updateResponse.data;
+      await Promise.all(uploadPromises);
     } catch (error) {
       console.error(error);
-
       return rejectWithValue(
         error.response?.data?.message || "Failed to upload attachments"
       );
@@ -159,6 +164,27 @@ const vendorResourceSlice = createSlice({
     resetVendorResource() {
       return initialState;
     },
+    /**
+     * Update attachments in the vendor request
+     * @param {Object} state - Current state
+     * @param {Object} action - Action object
+     * @param {Object} action.payload - Payload data
+     * @param {string|number} action.payload.id - Request ID
+     * @param {Object} action.payload.attachment - Attachment data
+     * @param {string} action.payload.attachment.key - Attachment key
+     * @param {string} action.payload.attachment.filename - Attachment filename
+     * @param {string} action.payload.attachment.uploadedAt - Upload timestamp
+     * @param {number} action.payload.totalAttachments - Total attachments count
+     */
+    updateAttachments(state, { payload }) {
+      const { id, attachment, totalAttachments } = payload;
+      const request = state.requests.find((req) => req.id === id);
+
+      if (request) {
+        request.attachments.push(attachment);
+        request.totalAttachments = totalAttachments;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -211,11 +237,19 @@ const vendorResourceSlice = createSlice({
       .addCase(uploadAttachments.fulfilled, (state, action) => {
         state.isUploading = false;
         state.uploadSuccess = true;
-        const index = state.requests.findIndex(
-          (request) => request.id === action.payload.id
-        );
-        if (index !== -1) {
-          state.requests[index] = action.payload;
+
+        const { id, attachment, totalAttachments } = action.payload || {};
+
+        if (!id) {
+          // console.error("Missing request ID in payload", action.payload);
+          return;
+        }
+
+        const request = state.requests.find((req) => req.id === id);
+
+        if (request) {
+          request.attachments.push(attachment);
+          request.totalAttachments = totalAttachments;
         }
       })
       .addCase(uploadAttachments.rejected, (state, action) => {
