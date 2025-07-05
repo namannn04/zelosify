@@ -33,14 +33,35 @@ export default function LoginPage() {
       item.trim().startsWith("refresh_token=")
     );
 
+    // Get role from cookie for role-based redirection
+    const roleCookie = cookies.find((cookie) =>
+      cookie.trim().startsWith("role=")
+    );
+    const userRole = roleCookie ? roleCookie.split("=")[1].trim() : null;
+
     console.log("Login page - Auth token check:");
     console.log("- Access token:", hasAccessToken);
     console.log("- Refresh token:", hasRefreshToken);
+    console.log("- User role:", userRole);
 
-    // If already authenticated, redirect to user dashboard
+    // If already authenticated, redirect based on role
     if (hasAccessToken || hasRefreshToken) {
-      console.log("Already authenticated! Redirecting to dashboard...");
-      window.location.href = "/user";
+      console.log("Already authenticated! Redirecting based on role...");
+
+      // Role-based redirection
+      if (userRole === "VENDOR_MANAGER") {
+        console.log("Redirecting VENDOR_MANAGER to /user");
+        window.location.href = "/user";
+      } else if (userRole === "BUSINESS_STAKEHOLDER") {
+        console.log(
+          "Redirecting BUSINESS_STAKEHOLDER to /user/digital-initiative"
+        );
+        window.location.href = "/user/digital-initiative";
+      } else {
+        // Fallback for unknown roles - let middleware handle it
+        console.log("Unknown role, letting middleware handle redirection");
+        window.location.href = "/login"; // This will trigger middleware redirect
+      }
     }
   }, []);
 
@@ -70,7 +91,8 @@ export default function LoginPage() {
             // Move to TOTP verification stage
             setLoginStage("totp");
           } else if (res.data.message === "Authentication successful") {
-            window.location.replace("/user");
+            // Let middleware handle the role-based redirect
+            window.location.replace("/login"); // This will trigger middleware redirect
           }
         } catch (err) {
           console.error("Login verification error:", err);
@@ -105,17 +127,17 @@ export default function LoginPage() {
           // Ensure we redirect properly regardless of the exact message
           if (res.status === 200) {
             console.log(
-              "Authentication successful, redirecting to dashboard..."
+              "Authentication successful, letting middleware handle redirect..."
             );
 
             // Force a small delay to ensure cookies are set
             setTimeout(() => {
-              // Try multiple approaches to ensure redirection works
+              // Let middleware handle the role-based redirect
               try {
-                window.location.replace("/user");
+                window.location.replace("/login"); // This will trigger middleware redirect
               } catch (e) {
                 console.error("Redirect failed with replace, trying href:", e);
-                window.location.href = "/user";
+                window.location.href = "/login"; // This will trigger middleware redirect
               }
             }, 500);
           }

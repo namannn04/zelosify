@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { extractRoleFromToken } from "@/utils/Auth/middlewareUtils";
 
 export function middleware(request) {
   // Get the pathname of the request
@@ -21,9 +22,30 @@ export function middleware(request) {
   // A user is in registration process if they have the special token
   const isRegistering = !!registrationToken;
 
-  console.log(
-    `Middleware: Path=${path}, Public=${isPublicPath}, Auth=${isAuthenticated}, Registering=${isRegistering}`
-  );
+  // Extract role from access token and set it in a readable cookie
+  const response = NextResponse.next();
+  let userRole = null;
+
+  if (isAuthenticated && accessToken) {
+    userRole = extractRoleFromToken(accessToken);
+
+    if (userRole) {
+      // Set role cookie that JavaScript can read (non-HTTP-only)
+      response.cookies.set("role", userRole, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24, // 24 hours
+      });
+    } else {
+      // Clear role cookie if no valid role found
+      response.cookies.delete("role");
+    }
+  } else if (!isAuthenticated) {
+    // Clear role cookie when not authenticated
+    response.cookies.delete("role");
+  }
 
   // Special case: Registration flow
   if (isRegistering) {
@@ -31,12 +53,27 @@ export function middleware(request) {
     if (path !== "/setup-totp") {
       return NextResponse.redirect(new URL("/setup-totp", request.url));
     }
-    return NextResponse.next();
+    return response;
   }
 
   // Redirect logged in users away from public pages except during registration
   if (isPublicPath && isAuthenticated) {
-    return NextResponse.redirect(new URL("/user", request.url));
+    // Role-based redirection
+    if (userRole === "VENDOR_MANAGER") {
+      console.log(`Redirecting VENDOR_MANAGER to /user`);
+      return NextResponse.redirect(new URL("/user", request.url));
+    } else if (userRole === "BUSINESS_STAKEHOLDER") {
+      console.log(
+        `Redirecting BUSINESS_STAKEHOLDER to /user/digital-initiative`
+      );
+      return NextResponse.redirect(
+        new URL("/user/digital-initiative", request.url)
+      );
+    } else {
+      // Fallback for unknown roles or missing role - redirect to base user page
+      console.log(`Unknown role (${userRole}) - redirecting to /`);
+      return NextResponse.redirect(new URL("/", request.url));
+    }
   }
 
   // Redirect unauthenticated users to login page
@@ -44,7 +81,7 @@ export function middleware(request) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 // Configure middleware to run only on specific paths

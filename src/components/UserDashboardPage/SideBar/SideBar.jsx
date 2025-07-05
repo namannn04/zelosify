@@ -9,264 +9,60 @@ import {
   useMemo,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  LogOut,
-  Settings,
-  CreditCard,
-  FileSignature,
-  Headset,
-  Sparkles,
-  BarChart3,
-  Users,
-  FileText,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
-import { FaDollarSign } from "react-icons/fa6";
 import SidebarHeader from "./SidebarHeader";
 import useAuth from "@/hooks/Auth/useAuth";
 import SignOutConfirmation from "@/components/UI/SignOutConfirmation";
+import { getRoleFromCookie } from "@/utils/Auth/roleUtils";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "./components/SideBarMenu";
+import {
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+} from "./components/SideBarMenuSub";
+import {
+  getSidebarSectionsByRole,
+  settingsItem,
+  supportItem,
+  signOutItem,
+} from "./Routes/ItemRoutes";
 
 // Create sidebar context
 const SidebarContext = createContext(null);
-
-const overviewItems = [
-  {
-    title: "Vendor",
-    href: "#",
-    icon: Users,
-    hasSubmenu: true,
-    submenu: [
-      {
-        title: "Contracts",
-        href: "/user",
-        icon: FileText,
-      },
-      { title: "Payments", href: "/user/payments", icon: CreditCard },
-      { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
-      { title: "Requests", href: "/user/requests", icon: FileSignature },
-      { title: "AI Chat", href: "/user/messages", icon: Sparkles },
-    ],
-  },
-  { title: "Finance", href: "/user/finance", icon: FaDollarSign },
-  { title: "Resource", href: "/user/resource", icon: BarChart3 },
-];
-
-// const contractItems = [
-//   {
-//     title: "Dummy",
-//     href: "#",
-//     icon: Users,
-//     hasSubmenu: true,
-//     submenu: [
-//       {
-//         title: "Contracts",
-//         href: "/user/contract-intelligence",
-//         icon: FileText,
-//       },
-//       { title: "Payment", href: "/user/payments", icon: CreditCard },
-//       { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
-//       { title: "Requests", href: "/user/requests", icon: FileSignature },
-//       { title: "AI-Chat", href: "/user/messages", icon: Sparkles },
-//     ],
-//   },
-//   { title: "AI-Chat", href: "/user/messages", icon: Sparkles },
-//   { title: "Payments", href: "/user/payments", icon: CreditCard },
-//   { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
-//   { title: "Requests", href: "/user/requests", icon: FileSignature },
-// ];
-
-// Sidebar sections configuration
-// To add a new section, just add a new object to this array
-const sidebarSections = [
-  {
-    title: "Overview",
-    items: overviewItems,
-  },
-  // {
-  //   title: "Payment",
-  //   items: contractItems,
-  // },
-  // Example of how to add another section:
-  // {
-  //   title: "Contracts",
-  //   items: contractItems.filter(item =>
-  //     item.title === "Contracts" || item.title === "Requests"
-  //   )
-  // }
-];
-
-const supportItem = {
-  title: "Support",
-  href: "/user/support",
-  icon: Headset,
-};
-
-const settingsItem = {
-  title: "Settings",
-  href: "/user/settings",
-  icon: Settings,
-};
-const signOutItem = { title: "Sign Out", href: "#", icon: LogOut };
-
-// SidebarMenu component - memoized
-const SidebarMenu = memo(({ children, className, ...props }) => {
-  return (
-    <ul
-      data-sidebar="menu"
-      className={`flex w-full min-w-0 flex-col gap-1 ${className || ""}`}
-      {...props}
-    >
-      {children}
-    </ul>
-  );
-});
-SidebarMenu.displayName = "SidebarMenu";
-
-// SidebarMenuItem component - memoized
-const SidebarMenuItem = memo(({ children, className, ...props }) => {
-  return (
-    <li
-      data-sidebar="menu-item"
-      className={`group/menu-item relative ${className || ""}`}
-      {...props}
-    >
-      {children}
-    </li>
-  );
-});
-SidebarMenuItem.displayName = "SidebarMenuItem";
-
-// SidebarMenuButton component - memoized
-const SidebarMenuButton = memo(
-  ({
-    icon: Icon,
-    title,
-    isActive,
-    onClick,
-    isOpen,
-    hasSubmenu,
-    isExpanded,
-    className,
-    ...props
-  }) => {
-    return (
-      <button
-        data-sidebar="menu-button"
-        data-active={isActive}
-        onClick={onClick}
-        className={`
-        flex w-full items-center ${
-          isOpen ? "justify-between" : "justify-center"
-        } px-3 py-2 text-sm rounded-md
-        ${
-          isActive
-            ? "bg-blue-50 text-blue-600 font-medium dark:bg-blue-900/20 dark:text-blue-400"
-            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-        }
-        ${className || ""}
-      `}
-        {...props}
-      >
-        <div className="flex items-center gap-2">
-          {Icon && (
-            <Icon
-              className={`h-5 w-5 ${
-                isActive
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-gray-500 dark:text-gray-400"
-              }`}
-            />
-          )}
-          {isOpen && <span>{title}</span>}
-        </div>
-        {isOpen &&
-          hasSubmenu &&
-          (isExpanded ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
-          ))}
-      </button>
-    );
-  }
-);
-SidebarMenuButton.displayName = "SidebarMenuButton";
-
-// SidebarMenuSub component - memoized
-const SidebarMenuSub = memo(
-  ({ children, isOpen, isExpanded, className, ...props }) => {
-    return (
-      <ul
-        data-sidebar="menu-sub"
-        className={`ml-3 pl-1 border-l border-border mt-1 space-y-1 transition-all duration-300 transform ${
-          isOpen && isExpanded
-            ? "max-h-screen opacity-100 scale-100"
-            : "max-h-0 opacity-0 scale-95"
-        } ${className || ""}`}
-        {...props}
-      >
-        {children}
-      </ul>
-    );
-  }
-);
-SidebarMenuSub.displayName = "SidebarMenuSub";
-
-// SidebarMenuSubItem component - memoized
-const SidebarMenuSubItem = memo(({ item, isActive, isOpen, ...props }) => {
-  const router = useRouter();
-
-  const handleClick = useCallback(() => {
-    router.push(item.href);
-  }, [router, item.href]);
-
-  return (
-    <li {...props}>
-      <button
-        onClick={handleClick}
-        className={`
-          w-full rounded-md flex items-center gap-2 px-3 py-2 text-sm
-          ${
-            isActive
-              ? "bg-blue-50 text-blue-600 font-medium dark:bg-blue-900/20 dark:text-blue-400"
-              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
-          }
-        `}
-      >
-        {item.icon && (
-          <item.icon
-            className={`h-5 w-5 ${
-              isActive
-                ? "text-blue-600 dark:text-blue-400"
-                : "text-gray-500 dark:text-gray-400"
-            }`}
-          />
-        )}
-        {isOpen && <span>{item.title}</span>}
-      </button>
-    </li>
-  );
-});
-SidebarMenuSubItem.displayName = "SidebarMenuSubItem";
 
 const Sidebar = memo(({ isOpen, toggleSidebar }) => {
   const pathname = usePathname();
   const router = useRouter();
   const sidebarRef = useRef(null);
   const [expandedItem, setExpandedItem] = useState(null);
-  const [showSignoutConfirmation, setShowSignoutConfirmation] = useState(false);
+  const [userRole, setUserRole] = useState(null);
+  const { handleOpenSignoutConfirmation } = useAuth();
 
-  const { handleLogout, handleOpenSignoutConfirmation } = useAuth();
+  // Get user role from cookie
+  useEffect(() => {
+    const role = getRoleFromCookie();
+    setUserRole(role);
 
-  const handleCancelSignout = () => {
-    setShowSignoutConfirmation(false);
-  };
+    // If role is not available immediately, retry after a short delay
+    if (!role) {
+      const timer = setTimeout(() => {
+        const retryRole = getRoleFromCookie();
+        if (retryRole) {
+          setUserRole(retryRole);
+        }
+      }, 100);
 
-  const handleConfirmSignout = async () => {
-    await handleLogout();
-    setShowSignoutConfirmation(false);
-  };
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Get sidebar sections based on user role
+  const sidebarSections = useMemo(() => {
+    if (!userRole) return [];
+    return getSidebarSectionsByRole(userRole);
+  }, [userRole]);
 
   // Find which menu item should be expanded based on current path
   useEffect(() => {
@@ -285,7 +81,7 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
         }
       }
     }
-  }, [pathname]); // Re-run when pathname changes
+  }, [pathname, sidebarSections]); // Re-run when pathname or sidebarSections changes
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -351,6 +147,18 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
 
   // Render the sidebar sections - memoize to prevent re-renders when only expandedItem changes
   const renderSidebarSections = useMemo(() => {
+    if (!sidebarSections || sidebarSections.length === 0) {
+      return (
+        <div className="px-4 py-8">
+          {isOpen && (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              No menu items available for your role.
+            </p>
+          )}
+        </div>
+      );
+    }
+
     return sidebarSections.map((section, index) => (
       <div key={index} className="space-y-4">
         {isOpen && (
@@ -399,7 +207,13 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
         </SidebarMenu>
       </div>
     ));
-  }, [isOpen, pathname, expandedItem, createMenuItemClickHandler]);
+  }, [
+    isOpen,
+    pathname,
+    expandedItem,
+    createMenuItemClickHandler,
+    sidebarSections,
+  ]);
 
   return (
     <SidebarContext.Provider value={sidebarContextValue}>
@@ -463,8 +277,8 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
 
         {/* Signout Confirmation Popup */}
         <SignOutConfirmation
-          isOpen={showSignoutConfirmation}
-          onCancel={handleCancelSignout}
+          isOpen={false}
+          onCancel={handleOpenSignoutConfirmation}
         />
       </>
     </SidebarContext.Provider>

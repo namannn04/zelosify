@@ -31,7 +31,7 @@ export default function LandingPage() {
         </p>
 
         <Link
-          href={"/user"}
+          href={"/login"}
           className="bg-purple-600 hover:bg-purple-700 text-lg px-6 py-2 rounded-lg font-medium"
         >
           Join Private Beta

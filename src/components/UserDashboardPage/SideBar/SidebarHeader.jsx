@@ -7,7 +7,7 @@ const SidebarHeader = memo(({ isOpen, toggleSidebar }) => (
   <div className="h-16 border-b border-gray-200 dark:border-gray-700 flex gap-7 items-center justify-between px-5">
     {isOpen && (
       <Link
-        href={"/user"}
+        href={"/login"}
         className="text-lg font-bold text-gray-900 dark:text-gray-100 overflow-hidden whitespace-nowrap"
       >
         <img
