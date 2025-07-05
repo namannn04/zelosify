@@ -11,7 +11,6 @@ import FinancePage from "@/pages/UserDashboardPage/Finance/FinancePage";
 import VendorResourcePage from "@/pages/UserDashboardPage/Vendor/VendorResourcePage";
 import DigitalInitiativePage from "@/pages/UserDashboardPage/DigitalInitiative/DigitalInitiativePage";
 import DummyLayout1 from "@/components/UserDashboardPage/Dummy1/DummyLayout1";
-import DummyLayout2 from "@/components/UserDashboardPage/Dummy2/DummyLayout2";
 
 // Dynamically import the ChatPage with SSR disabled
 const ChatPage = dynamic(
@@ -65,8 +64,6 @@ export default function UserSubPage({ params }) {
       return <DigitalInitiativePage />;
     case "dummy-page-1":
       return <DummyLayout1 />;
-    case "dummy-page-2":
-      return <DummyLayout2 />;
 
     // Default case
     default:

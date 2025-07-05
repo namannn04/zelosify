@@ -9,7 +9,6 @@ import {
   Users,
   FileText,
   Scale3DIcon,
-  Mouse,
 } from "lucide-react";
 import { FaDigitalOcean, FaDollarSign } from "react-icons/fa6";
 
@@ -48,7 +47,6 @@ const getOverviewItemsByRole = (role) => {
           href: "/user/dummy-page-1",
           icon: Scale3DIcon,
         },
-        { title: "Dummy Page 2", href: "/user/dummy-page-2", icon: Mouse },
       ];
 
     default:
