@@ -9,6 +9,15 @@ const axiosInstance = axios.create({
 // Add request interceptor for logging
 axiosInstance.interceptors.request.use(
   (config) => {
+    const cookies = document.cookie.split(";");
+    const accessToken = cookies
+      .find((cookie) => cookie.trim().startsWith("access_token="))
+      ?.split("=")[1];
+    
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    
     // console.log(`API Request: ${config.method.toUpperCase()} ${config.url}`);
     return config;
   },

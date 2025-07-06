@@ -46,6 +46,7 @@ const overviewItems = [
       { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
       { title: "Requests", href: "/user/requests", icon: FileSignature },
       { title: "AI Chat", href: "/user/messages", icon: Sparkles },
+      { title: "Utilization", href: "/user/utilization", icon: BarChart3 },
     ],
   },
   { title: "Finance", href: "/user/finance", icon: FaDollarSign },

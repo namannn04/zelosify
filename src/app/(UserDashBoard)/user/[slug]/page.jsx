@@ -5,6 +5,7 @@ import PaymentsPage from "@/pages/UserDashboardPage/Payments/PaymentsPage";
 import RequestPage from "@/pages/UserDashboardPage/Requests/RequestsPage";
 import SupportPage from "@/pages/UserDashboardPage/Support/SupportPage";
 import TrackingPage from "@/pages/UserDashboardPage/Tracking/TrackingPage";
+import UtilizationPage from "@/pages/UserDashboardPage/Utilization/UtilizationPage";
 import { notFound } from "next/navigation";
 import { use } from "react";
 import FinancePage from "@/pages/UserDashboardPage/Finance/FinancePage";
@@ -29,6 +30,7 @@ export default function UserSubPage({ params }) {
       "requests",
       "support",
       "finance",
+      "utilization",
     ].includes(slug)
   ) {
     notFound();
@@ -48,6 +50,8 @@ export default function UserSubPage({ params }) {
       return <SupportPage />;
     case "finance":
       return <FinancePage />;
+    case "utilization":
+      return <UtilizationPage />;
     default:
       return null;
   }
