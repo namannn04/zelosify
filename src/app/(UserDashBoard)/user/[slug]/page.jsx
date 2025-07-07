@@ -7,8 +7,9 @@ import PaymentsPage from "@/pages/UserDashboardPage/Payments/PaymentsPage";
 import RequestPage from "@/pages/UserDashboardPage/Requests/RequestsPage";
 import SupportPage from "@/pages/UserDashboardPage/Support/SupportPage";
 import TrackingPage from "@/pages/UserDashboardPage/Tracking/TrackingPage";
+import UtilizationPage from "@/pages/UserDashboardPage/Utilization/UtilizationPage";
 import FinancePage from "@/pages/UserDashboardPage/Finance/FinancePage";
-import VendorResourcePage from "@/pages/UserDashboardPage/Vendor/VendorResourcePage";
+import VendorResourcePage from "@/pages/UserDashboardPage/Resource/VendorResourcePage";
 import DigitalInitiativePage from "@/pages/UserDashboardPage/DigitalInitiative/DigitalInitiativePage";
 import DummyLayout1 from "@/components/UserDashboardPage/Dummy1/DummyLayout1";
 
@@ -33,9 +34,9 @@ export default function UserSubPage({ params }) {
       "support",
       "finance",
       "resource",
+      "utilization",
       "digital-initiative",
       "dummy-page-1",
-      "dummy-page-2",
     ].includes(slug)
   ) {
     notFound();
@@ -58,6 +59,8 @@ export default function UserSubPage({ params }) {
       return <FinancePage />;
     case "resource":
       return <VendorResourcePage />;
+    case "utilization":
+      return <UtilizationPage />;
 
     // For BUSINESS_STAKEHOLDER role
     case "digital-initiative":

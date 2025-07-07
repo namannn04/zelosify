@@ -1,5 +1,5 @@
 "use client";
-import VendorResourceLayout from "@/components/UserDashboardPage/Vendor/VendorResourceLayout";
+import VendorResourceLayout from "@/components/UserDashboardPage/Resource/VendorResourceLayout";
 
 export default function VendorResourcePage() {
   return (

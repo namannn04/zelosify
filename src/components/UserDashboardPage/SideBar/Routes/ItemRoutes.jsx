@@ -10,7 +10,8 @@ import {
   FileText,
   Scale3DIcon,
 } from "lucide-react";
-import { FaDigitalOcean, FaDollarSign } from "react-icons/fa6";
+import { FaDollarSign } from "react-icons/fa6";
+import { MdDataUsage } from "react-icons/md";
 
 // Role-based menu items
 const getOverviewItemsByRole = (role) => {
@@ -29,6 +30,11 @@ const getOverviewItemsByRole = (role) => {
             { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
             { title: "Requests", href: "/user/requests", icon: FileSignature },
             { title: "AI Chat", href: "/user/messages", icon: Sparkles },
+            {
+              title: "Utilization",
+              href: "/user/utilization",
+              icon: MdDataUsage,
+            },
           ],
         },
         { title: "Resource", href: "/user/resource", icon: BarChart3 },
@@ -40,7 +46,7 @@ const getOverviewItemsByRole = (role) => {
         {
           title: "Digital",
           href: "/user/digital-initiative",
-          icon: FaDigitalOcean,
+          icon: MdDataUsage,
         },
         {
           title: "Dummy Page 1",

@@ -6,6 +6,7 @@ import chatReducer from "@/redux/features/Dashboard/chatSlice";
 import headerMetricsReducer from "@/redux/features/Dashboard/Home/headerMetricsSlice";
 import contractSpendReducer from "@/redux/features/Dashboard/Home/contractSpendSlice";
 import vendorResourceReducer from "@/redux/features/Dashboard/vendorResourceSlice";
+import utilizationReducer from "@/redux/features/Dashboard/utilizationSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     headerMetrics: headerMetricsReducer,
     contractSpend: contractSpendReducer,
     vendorResource: vendorResourceReducer,
+    utilization: utilizationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
