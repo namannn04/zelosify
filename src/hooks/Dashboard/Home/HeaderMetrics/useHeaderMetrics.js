@@ -54,7 +54,7 @@ const useHeaderMetrics = () => {
       {
         icon: "user",
         value: metricsData.totalActiveContracts.toString(),
-        label: "Total Active Contracts",
+        label: "Total Contracts",
         change: { type: "increase", value: "Compared to last quarter" },
       },
       {
