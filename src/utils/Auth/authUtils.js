@@ -4,24 +4,6 @@
  */
 
 /**
- * Check if the user is authenticated by looking for auth tokens in cookies
- * @returns {boolean} True if user has authentication tokens
- */
-export const hasAuthTokens = () => {
-  if (typeof window === "undefined") return false;
-
-  const cookies = document.cookie.split(";");
-  const hasAccessToken = cookies.some((item) =>
-    item.trim().startsWith("access_token=")
-  );
-  const hasRefreshToken = cookies.some((item) =>
-    item.trim().startsWith("refresh_token=")
-  );
-
-  return hasAccessToken || hasRefreshToken;
-};
-
-/**
  * Get user role from cookies
  * @returns {string|null} User role or null if not found
  */

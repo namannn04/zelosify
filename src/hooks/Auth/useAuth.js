@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   checkAuthStatus,
@@ -28,25 +28,40 @@ const useAuth = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Helper function to check if current path is an auth page
+  const isAuthPage = () => {
+    if (!pathname) return false;
+    return !pathname.includes("/user");
+  };
 
   // Check if we need to load user data from localStorage on initial mount
   useEffect(() => {
-    if (!user) {
+    // Skip auth check completely on auth pages
+    if (!user && !isAuthPage()) {
       handleCheckAuthStatus();
     }
-  }, []);
+  }, [pathname]);
 
   /**
    * Dispatches the checkAuthStatus action to verify user authentication status.
    * @param {Object} options - Options for checking auth status
    * @param {boolean} options.suppressErrors - Whether to suppress common errors like "No authentication tokens found"
+   * @param {boolean} options.forceCheck - Force check even on auth pages
    */
   const handleCheckAuthStatus = (options = {}) => {
-    const { suppressErrors = false } = options;
+    const { suppressErrors = false, forceCheck = false } = options;
+
+    // Always pass the current path and auth page status
+    const authOptions = {
+      isAuthPage: isAuthPage() && !forceCheck,
+      pathname,
+    };
 
     // We'll use the unwrap() pattern to handle the errors manually if we want to suppress them
     if (suppressErrors) {
-      dispatch(checkAuthStatus())
+      dispatch(checkAuthStatus(authOptions))
         .unwrap()
         .catch((error) => {
           // Silently handle expected errors
@@ -55,7 +70,11 @@ const useAuth = () => {
             typeof error === "string" &&
             error.includes("No authentication tokens found")
           ) {
-            console.log("User not authenticated yet - expected on login page");
+            if (process.env.NODE_ENV === "development") {
+              console.log(
+                "User not authenticated yet - expected on login page"
+              );
+            }
           } else {
             // For unexpected errors, we still want to see them
             console.error("Auth check error:", error);
@@ -63,7 +82,7 @@ const useAuth = () => {
         });
     } else {
       // Normal behavior - let Redux handle the error state
-      dispatch(checkAuthStatus());
+      dispatch(checkAuthStatus(authOptions));
     }
   };
 

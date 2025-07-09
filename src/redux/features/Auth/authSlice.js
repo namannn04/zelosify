@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/Axios/AxiosInstance";
-import { clearAuthData, hasAuthTokens } from "@/utils/Auth/authUtils";
+import { clearAuthData } from "@/utils/Auth/authUtils";
 
 // Helper functions for localStorage
 const loadUserFromStorage = () => {
@@ -34,34 +34,55 @@ const initialState = {
   showSignoutConfirmation: false,
 };
 
+// Track if an auth check is already in progress to prevent duplicate requests
+let authCheckInProgress = false;
+
 // Async thunk for checking authentication status
 export const checkAuthStatus = createAsyncThunk(
   "auth/checkAuthStatus",
-  async (_, { rejectWithValue }) => {
+  async (options = {}, { rejectWithValue }) => {
+    // Destructure options with defaults
+    const {
+      isAuthPage = false, // true if we're on a login/register page
+      pathname = "", // current route path for more specific checks
+    } = options;
+
     try {
+      // Skip auth check on auth pages completely
+      if (isAuthPage || !pathname.includes("/user")) {
+        return null;
+      }
+
+      // If a check is already in progress, skip this one
+      if (authCheckInProgress) {
+        return null; // Will be ignored in reducer since we handle null case
+      }
+
+      authCheckInProgress = true;
+
       // Try to load from storage first
       const storedUser = loadUserFromStorage();
 
-      // If we have stored user data but no tokens, clear it
-      if (storedUser && !hasAuthTokens()) {
-        saveUserToStorage(null);
-        throw new Error("No authentication tokens found");
+      // If we have user data in localStorage, use it and don't make an API call
+      if (storedUser) {
+        authCheckInProgress = false;
+        return storedUser;
       }
 
-      // If we have tokens, verify with the server
-      if (hasAuthTokens()) {
+      // No user in localStorage, make a single API call to fetch user data
+      try {
         const response = await axiosInstance.get("/auth/user");
         // Save the user data to localStorage
         saveUserToStorage(response.data);
+        authCheckInProgress = false;
         return response.data;
-      } else if (storedUser) {
-        // If we have user data but couldn't verify (e.g., offline), use stored data
-        return storedUser;
-      } else {
-        // No tokens and no stored user
+      } catch (apiError) {
+        // API call failed, we have no user data
+        authCheckInProgress = false;
         throw new Error("No authentication tokens found");
       }
     } catch (error) {
+      authCheckInProgress = false;
       return rejectWithValue(error.message);
     }
   }
@@ -149,7 +170,11 @@ const authSlice = createSlice({
       })
       .addCase(checkAuthStatus.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        // Only update user if we got a non-null payload
+        // (null means we skipped the request because one was already in progress)
+        if (action.payload !== null) {
+          state.user = action.payload;
+        }
       })
       .addCase(checkAuthStatus.rejected, (state, action) => {
         state.loading = false;
