@@ -9,6 +9,12 @@ import { BsMicrosoft } from "react-icons/bs";
 import SocialButton from "@/components/UI/SocialButton";
 import Link from "next/link";
 import axiosInstance from "@/utils/Axios/AxiosInstance";
+import useAuth from "@/hooks/Auth/useAuth";
+import {
+  getUserRole,
+  handleRoleBasedRedirect,
+  hasAuthTokens,
+} from "@/utils/Auth/authUtils";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -17,53 +23,75 @@ export default function LoginPage() {
     totp: "",
   });
   const [error, setError] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [loginStage, setLoginStage] = useState("credentials"); // 'credentials' or 'totp'
   const router = useRouter();
 
+  // Use our custom auth hook instead of direct Redux access
+  const {
+    user,
+    loading: isLoading,
+    error: authError,
+    handleLogin,
+    handleVerifyTOTP,
+    handleCheckAuthStatus,
+  } = useAuth();
+
+  const [showPassword, setShowPassword] = useState(false);
+
   // Check if user already has auth tokens and redirect if needed
   useEffect(() => {
-    // Check cookies directly
-    const cookies = document.cookie.split(";");
-    const hasAccessToken = cookies.some((item) =>
-      item.trim().startsWith("access_token=")
-    );
-    const hasRefreshToken = cookies.some((item) =>
-      item.trim().startsWith("refresh_token=")
-    );
+    // Check for authentication tokens
+    const isAuthenticated = hasAuthTokens();
+    const userRole = getUserRole();
 
-    // Get role from cookie for role-based redirection
-    const roleCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("role=")
-    );
-    const userRole = roleCookie ? roleCookie.split("=")[1].trim() : null;
-
-    console.log("Login page - Auth token check:");
-    console.log("- Access token:", hasAccessToken);
-    console.log("- Refresh token:", hasRefreshToken);
-    console.log("- User role:", userRole);
+    // Only log in development environment
+    if (process.env.NODE_ENV === "development") {
+      console.log("Login page - Auth token check:");
+      console.log("- Is authenticated:", isAuthenticated);
+      console.log("- User role:", userRole);
+    }
 
     // If already authenticated, redirect based on role
-    if (hasAccessToken || hasRefreshToken) {
-      console.log("Already authenticated! Redirecting based on role...");
+    if (isAuthenticated) {
+      if (process.env.NODE_ENV === "development") {
+        console.log("Already authenticated! Redirecting based on role...");
+      }
 
-      // Role-based redirection
-      if (userRole === "VENDOR_MANAGER") {
-        console.log("Redirecting VENDOR_MANAGER to /user");
-        window.location.href = "/user";
-      } else if (userRole === "BUSINESS_STAKEHOLDER") {
-        console.log(
-          "Redirecting BUSINESS_STAKEHOLDER to /user/digital-initiative"
-        );
-        window.location.href = "/user/digital-initiative";
-      } else {
-        // Fallback for unknown roles - let middleware handle it
-        console.log("Unknown role, letting middleware handle redirection");
-        window.location.href = "/login"; // This will trigger middleware redirect
+      // Use the hook method to check auth status
+      // Pass suppressErrors=true since we're on the login page
+      handleCheckAuthStatus({ suppressErrors: true });
+
+      // Handle role-based redirection
+      handleRoleBasedRedirect(userRole);
+    }
+  }, [handleCheckAuthStatus]);
+
+  // Set error from Redux state - but filter out expected "no tokens" errors on login page
+  useEffect(() => {
+    if (authError && !authError.includes("No authentication tokens found")) {
+      if (loginStage === "credentials") {
+        setError({ general: authError });
+      } else if (loginStage === "totp") {
+        setError({ totp: "Invalid 2FA code. Please try again." });
       }
     }
-  }, []);
+  }, [authError, loginStage]);
+
+  // Redirect if user is set after TOTP verification
+  useEffect(() => {
+    if (user && loginStage === "totp") {
+      // Store role in cookie for middleware
+      if (user.role) {
+        document.cookie = `role=${user.role}; path=/; max-age=${
+          60 * 60 * 24 * 7
+        }`; // 7 days
+      }
+
+      // Let middleware handle the role-based redirect
+      console.log("User authenticated, redirecting...");
+      window.location.replace("/login"); // This will trigger middleware redirect
+    }
+  }, [user, loginStage]);
 
   const handleChange = useCallback((e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -73,59 +101,44 @@ export default function LoginPage() {
     async (e) => {
       e.preventDefault();
       setError({});
-      setIsLoading(true);
 
       if (loginStage === "credentials") {
         // Step 1: Verify username/email and password
         try {
           console.log("Verifying credentials for:", formData.usernameOrEmail);
-          const res = await axiosInstance.post("/auth/verify-login", {
+          const resultAction = await handleLogin({
             usernameOrEmail: formData.usernameOrEmail,
             password: formData.password,
           });
 
-          console.log("Verify login response:", res.data);
+          console.log("Verify login response:", resultAction);
           if (
-            res.data.message === "Login verified. Please enter your TOTP code."
+            resultAction.message ===
+            "Login verified. Please enter your TOTP code."
           ) {
             // Move to TOTP verification stage
             setLoginStage("totp");
-          } else if (res.data.message === "Authentication successful") {
+          } else if (resultAction.message === "Authentication successful") {
             // Let middleware handle the role-based redirect
             window.location.replace("/login"); // This will trigger middleware redirect
           }
         } catch (err) {
           console.error("Login verification error:", err);
 
-          if (err.response) {
-            const { status, data } = err.response;
-            console.error(`Login verify status: ${status}, message:`, data);
-
-            if (status === 401) {
-              setError({ password: "Invalid credentials" });
-            } else {
-              setError({
-                general: data?.message || "Login verification failed",
-              });
-            }
-          } else {
-            setError({ general: "Network error. Please try again." });
-          }
-        } finally {
-          setIsLoading(false);
+          // Error handling is now done through the useEffect watching authError
         }
       } else if (loginStage === "totp") {
         // Step 2: Verify TOTP code
         try {
           console.log("Submitting TOTP code:", formData.totp);
-          const res = await axiosInstance.post("/auth/verify-totp", {
+          const resultAction = await handleVerifyTOTP({
             totp: formData.totp,
           });
 
-          console.log("TOTP verification successful:", res.data);
+          console.log("TOTP verification successful:", resultAction);
 
           // Ensure we redirect properly regardless of the exact message
-          if (res.status === 200) {
+          if (resultAction.user) {
             console.log(
               "Authentication successful, letting middleware handle redirect..."
             );
@@ -144,41 +157,26 @@ export default function LoginPage() {
         } catch (err) {
           console.error("TOTP verification error:", err);
 
-          if (err.response) {
-            const { status, data } = err.response;
-            console.error(`TOTP verify status: ${status}, message:`, data);
-
-            if (status === 401 && data?.message === "Invalid TOTP code") {
-              setError({ totp: "Invalid 2FA code. Please try again." });
-            } else if (
-              status === 400 &&
-              data?.message === "Temp token and TOTP are required"
-            ) {
-              setError({ general: "Session expired. Please login again." });
-              setLoginStage("credentials");
-            } else {
-              setError({
-                general:
-                  data?.message ||
-                  "TOTP verification failed. Please try logging in again.",
-              });
-              // If we get here, there might be an issue with the session/cookies
-              setTimeout(() => {
-                setLoginStage("credentials");
-              }, 3000);
-            }
+          // Specific TOTP error handling
+          if (err === "Temp token and TOTP are required") {
+            setError({ general: "Session expired. Please login again." });
+            setLoginStage("credentials");
+          } else if (err === "Invalid TOTP code") {
+            setError({ totp: "Invalid 2FA code. Please try again." });
           } else {
             setError({
               general:
-                "Network error. Please check your connection and try again.",
+                err || "TOTP verification failed. Please try logging in again.",
             });
+            // If we get here, there might be an issue with the session/cookies
+            setTimeout(() => {
+              setLoginStage("credentials");
+            }, 3000);
           }
-        } finally {
-          setIsLoading(false);
         }
       }
     },
-    [formData, loginStage, router]
+    [formData, loginStage, handleLogin, handleVerifyTOTP]
   );
 
   const handleGoogleLogin = useCallback(async () => {
@@ -198,8 +196,11 @@ export default function LoginPage() {
   const handleMicrosoftLogin = useCallback(async () => {
     try {
       const resp = await axiosInstance.get("/auth/microsoft/login");
+
       window.location.href = resp.data.authUrl;
     } catch (err) {
+      console.error(err.message);
+
       setError({ general: "Failed to initiate Microsoft login" });
     }
   }, []);
@@ -227,9 +228,12 @@ export default function LoginPage() {
             height={40}
           />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 text-center">
           Welcome Back
         </h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 text-center">
+          Sign in to continue to your dashboard
+        </p>
       </div>
 
       {error.general && (
@@ -253,6 +257,9 @@ export default function LoginPage() {
                 name="usernameOrEmail"
                 onChange={handleChange}
                 required
+                placeholder="Enter your username or email"
+                aria-label="Username or Email"
+                aria-invalid={error.usernameOrEmail ? "true" : "false"}
                 className={`w-full px-3 py-2 border ${
                   error.usernameOrEmail
                     ? "border-red-500"
@@ -276,6 +283,9 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   onChange={handleChange}
                   required
+                  placeholder="Enter your password"
+                  aria-label="Password"
+                  aria-invalid={error.password ? "true" : "false"}
                   className={`w-full px-3 py-2 border ${
                     error.password
                       ? "border-red-500"
@@ -286,6 +296,8 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  tabIndex="0"
                 >
                   {showPassword ? (
                     <EyeOff className="h-6 w-6 text-gray-700 dark:text-gray-300" />
@@ -308,6 +320,9 @@ export default function LoginPage() {
               name="totp"
               onChange={handleChange}
               required
+              placeholder="Enter your 6-digit code"
+              aria-label="2FA Code"
+              aria-invalid={error.totp ? "true" : "false"}
               className={`w-full px-3 py-2 border ${
                 error.totp
                   ? "border-red-500"
@@ -328,6 +343,13 @@ export default function LoginPage() {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={isLoading}
+          aria-label={
+            isLoading
+              ? "Loading"
+              : loginStage === "credentials"
+              ? "Continue to 2FA"
+              : "Complete sign in"
+          }
           className="w-full bg-black dark:bg-white text-white dark:text-black py-2 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50"
         >
           {isLoading
@@ -342,6 +364,8 @@ export default function LoginPage() {
             type="button"
             onClick={() => setLoginStage("credentials")}
             className="w-full mt-2 text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+            aria-label="Back to login form"
+            tabIndex="0"
           >
             Back to Login
           </button>

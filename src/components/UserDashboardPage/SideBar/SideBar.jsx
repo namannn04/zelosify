@@ -38,7 +38,7 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
   const sidebarRef = useRef(null);
   const [expandedItem, setExpandedItem] = useState(null);
   const [userRole, setUserRole] = useState(null);
-  const { handleOpenSignoutConfirmation } = useAuth();
+  const { handleOpenSignoutConfirmation, showSignoutConfirmation } = useAuth();
 
   // Get user role from cookie
   useEffect(() => {
@@ -277,7 +277,7 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
 
         {/* Signout Confirmation Popup */}
         <SignOutConfirmation
-          isOpen={false}
+          isOpen={showSignoutConfirmation}
           onCancel={handleOpenSignoutConfirmation}
         />
       </>

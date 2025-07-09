@@ -8,7 +8,7 @@ import useAuth from "@/hooks/Auth/useAuth";
 export default function UserDashboardlayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { showSignoutConfirmation } = useAuth();
+  const { showSignoutConfirmation, handleCloseSignoutConfirmation } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -51,7 +51,10 @@ export default function UserDashboardlayout({ children }) {
 
       {/* main content */}
       <div className="flex flex-col min-h-screen bg-background">
-        <SignOutConfirmation isOpen={showSignoutConfirmation} />
+        <SignOutConfirmation
+          isOpen={showSignoutConfirmation}
+          onCancel={handleCloseSignoutConfirmation}
+        />
         <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
         <div className="flex flex-1 overflow-hidden">
           <SideBarLayout
