@@ -65,7 +65,7 @@ const useHeaderMetrics = () => {
       },
       {
         icon: "stack",
-        value: `$${parseInt(
+        value: `$ ${parseInt(
           metricsData.totalContractAmountSpent
         ).toLocaleString()}`,
         label: "Total Contract Amount Spent",

@@ -20,10 +20,10 @@ export default function ImportPopUp({ isOpen, onClose }) {
     businessStakeholder: false,
     admin: false,
   });
+  const [selectAll, setSelectAll] = useState(false);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    // Filter for PDF files only
     const pdfFiles = files.filter(
       (file) =>
         file.type === "application/pdf" && file.size <= 100 * 1024 * 1024
@@ -40,7 +40,6 @@ export default function ImportPopUp({ isOpen, onClose }) {
     e.preventDefault();
 
     const files = Array.from(e.dataTransfer.files);
-    // Filter for PDF files only
     const pdfFiles = files.filter(
       (file) =>
         file.type === "application/pdf" && file.size <= 100 * 1024 * 1024
@@ -54,14 +53,30 @@ export default function ImportPopUp({ isOpen, onClose }) {
   };
 
   const handleRoleChange = (role) => {
-    setVisibleRoles((prev) => ({
-      ...prev,
-      [role]: !prev[role],
-    }));
+    setVisibleRoles((prev) => {
+      const updatedRoles = {
+        ...prev,
+        [role]: !prev[role],
+      };
+
+      const allSelected = Object.values(updatedRoles).every((value) => value);
+      setSelectAll(allSelected);
+
+      return updatedRoles;
+    });
+  };
+
+  const handleSelectAllChange = () => {
+    const newSelectAll = !selectAll;
+    setSelectAll(newSelectAll);
+    setVisibleRoles({
+      vendorManager: newSelectAll,
+      businessStakeholder: newSelectAll,
+      admin: newSelectAll,
+    });
   };
 
   const handleImport = () => {
-    // This will be implemented later with the actual API calls
     console.log("Files to upload:", selectedFiles);
     console.log("Upload name:", uploadName);
     console.log("Visible to roles:", visibleRoles);
@@ -79,7 +94,6 @@ export default function ImportPopUp({ isOpen, onClose }) {
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Upload Area */}
           <div
             className="border-2 border-border border-dashed rounded-lg p-6"
             onDragOver={handleDragOver}
@@ -108,7 +122,6 @@ export default function ImportPopUp({ isOpen, onClose }) {
             </div>
           </div>
 
-          {/* Selected Files */}
           {selectedFiles.length > 0 && (
             <div className="space-y-2">
               <label className="block text-sm font-medium text-secondary">
@@ -134,7 +147,6 @@ export default function ImportPopUp({ isOpen, onClose }) {
             </div>
           )}
 
-          {/* Name Field */}
           <div>
             <label
               htmlFor="uploadName"
@@ -152,12 +164,21 @@ export default function ImportPopUp({ isOpen, onClose }) {
             />
           </div>
 
-          {/* Role Visibility */}
           <div>
             <label className="block text-sm font-medium text-secondary mb-2">
               Assign visibility to roles
             </label>
             <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="selectAll"
+                  checked={selectAll}
+                  onCheckedChange={handleSelectAllChange}
+                />
+                <Label htmlFor="selectAll" className="text-sm cursor-pointer">
+                  All
+                </Label>
+              </div>
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="vendorManager"

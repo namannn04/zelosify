@@ -7,7 +7,7 @@ export default function SupportLayout() {
   const [activeTab, setActiveTab] = useState("contact");
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto py-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
           Support Center
