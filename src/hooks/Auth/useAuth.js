@@ -165,7 +165,16 @@ const useAuth = () => {
    */
   const getUserHandle = () => {
     if (!user) return "";
-    return user.username ? `@${user.username}` : user.email || "";
+    return `@${user.username}`;
+  };
+
+  /**
+   * Get tenantId for the current user
+   * @returns {string} Tenant ID or empty string
+   */
+  const getTenantId = () => {
+    if (!user) return "";
+    return user.tenantId;
   };
 
   /**
@@ -198,6 +207,7 @@ const useAuth = () => {
     handleCloseSignoutConfirmation,
     getDisplayName,
     getUserHandle,
+    getTenantId,
     updateUserData,
     isAuthenticated,
   };

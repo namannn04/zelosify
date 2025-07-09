@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/UI/shadcn/dialog";
 import { Checkbox } from "@/components/UI/shadcn/checkbox";
 import { Label } from "@/components/UI/shadcn/label";
@@ -86,11 +87,14 @@ export default function ImportPopUp({ isOpen, onClose }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent aria-label="Import new contracts" className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
             Import new contracts
           </DialogTitle>
+          <DialogDescription className="text-sm">
+            Supports PDF files only (up to 100MB per file)
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -105,9 +109,6 @@ export default function ImportPopUp({ isOpen, onClose }) {
                 Upload PDF files
               </h3>
               <p className="text-secondary mb-2">or drag and drop them here</p>
-              <p className="text-sm text-secondary">
-                Supports PDF files only (up to 100MB per file)
-              </p>
 
               <label className="mt-4 px-4 py-2 bg-foreground text-background rounded-md cursor-pointer hover:bg-foreground/90 transition-colors">
                 Browse Files
