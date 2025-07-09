@@ -1,241 +1,218 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Upload, Globe, FileText, AtSign } from "lucide-react";
-import Link from "next/link";
+import { Upload, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/UI/shadcn/dialog";
+import { Checkbox } from "@/components/UI/shadcn/checkbox";
+import { Label } from "@/components/UI/shadcn/label";
 
 export default function ImportPopUp({ isOpen, onClose }) {
-  const [step, setStep] = useState(1);
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [uploadName, setUploadName] = useState("");
+  const [visibleRoles, setVisibleRoles] = useState({
+    vendorManager: false,
+    businessStakeholder: false,
+    admin: false,
+  });
 
-  if (!isOpen) return null;
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    // Filter for PDF files only
+    const pdfFiles = files.filter(
+      (file) =>
+        file.type === "application/pdf" && file.size <= 100 * 1024 * 1024
+    );
 
-  const importMethods = [
-    {
-      id: "crawl",
-      icon: <Globe className="w-6 h-6 text-primary" />,
-      title: "Crawl webpages starting from a URL",
-      description: "Crawl and scan up to 1000 webpages from a URL",
-    },
-    {
-      id: "urls",
-      icon: <FileText className="w-6 h-6 text-primary" />,
-      title: "List of specific URLs",
-      description: "Only scan content from certain webpages",
-    },
-    {
-      id: "file",
-      icon: <AtSign className="w-6 h-6 text-primary" />,
-      title: "Import from file",
-      description: "Upload your training data directly from a file",
-    },
-  ];
-
-  const handleNext = () => {
-    if (step === 1 && selectedMethod) {
-      setStep(2);
-    }
+    setSelectedFiles(pdfFiles);
   };
 
-  const handleBack = () => {
-    setStep(1);
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+
+    const files = Array.from(e.dataTransfer.files);
+    // Filter for PDF files only
+    const pdfFiles = files.filter(
+      (file) =>
+        file.type === "application/pdf" && file.size <= 100 * 1024 * 1024
+    );
+
+    setSelectedFiles(pdfFiles);
+  };
+
+  const handleRemoveFile = (index) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRoleChange = (role) => {
+    setVisibleRoles((prev) => ({
+      ...prev,
+      [role]: !prev[role],
+    }));
+  };
+
+  const handleImport = () => {
+    // This will be implemented later with the actual API calls
+    console.log("Files to upload:", selectedFiles);
+    console.log("Upload name:", uploadName);
+    console.log("Visible to roles:", visibleRoles);
+
+    onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
-      />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold">
+            Import new contracts
+          </DialogTitle>
+        </DialogHeader>
 
-      {/* Modal */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
-        <div className="bg-background border border-border rounded-lg shadow-xl">
-          {/* Header */}
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-foreground">
-              Import training data
-            </h2>
+        <div className="space-y-6">
+          {/* Upload Area */}
+          <div
+            className="border-2 border-border border-dashed rounded-lg p-6"
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+          >
+            <div className="flex flex-col items-center text-center">
+              <Upload className="w-8 h-8 text-secondary mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">
+                Upload PDF files
+              </h3>
+              <p className="text-secondary mb-2">or drag and drop them here</p>
+              <p className="text-sm text-secondary">
+                Supports PDF files only (up to 100MB per file)
+              </p>
 
-            {/* Steps */}
-            <div className="mt-4 flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-sm 
-                    ${
-                      step === 1
-                        ? "bg-ring text-white"
-                        : "bg-border text-secondary"
-                    }`}
-                >
-                  1
-                </div>
-                <span className={step === 1 ? "text-ring" : "text-secondary"}>
-                  Select method
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center text-sm 
-                    ${
-                      step === 2
-                        ? "bg-ring text-white"
-                        : "bg-border text-secondary"
-                    }`}
-                >
-                  2
-                </div>
-                <span className={step === 2 ? "text-ring" : "text-secondary"}>
-                  Import data
-                </span>
-              </div>
+              <label className="mt-4 px-4 py-2 bg-foreground text-background rounded-md cursor-pointer hover:bg-foreground/90 transition-colors">
+                Browse Files
+                <input
+                  type="file"
+                  className="hidden"
+                  accept=".pdf,application/pdf"
+                  multiple
+                  onChange={handleFileChange}
+                />
+              </label>
             </div>
           </div>
 
-          <div className="px-6 pb-6">
-            {step === 1 ? (
-              /* Step 1: Select Method */
-              <div className="space-y-4">
-                {importMethods.map((method) => (
+          {/* Selected Files */}
+          {selectedFiles.length > 0 && (
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-secondary">
+                Selected Files ({selectedFiles.length})
+              </label>
+              <div className="max-h-36 overflow-y-auto space-y-2 p-2 border border-border rounded-lg">
+                {selectedFiles.map((file, index) => (
                   <div
-                    key={method.id}
-                    className={`p-4 rounded-lg cursor-pointer border
-                      ${
-                        selectedMethod === method.id
-                          ? "border-ring bg-ring/10"
-                          : "border-border hover:border-secondary"
-                      }`}
-                    onClick={() => setSelectedMethod(method.id)}
+                    key={index}
+                    className="flex items-center justify-between bg-secondary/10 p-2 rounded"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="p-2 rounded-lg bg-border">
-                        {method.icon}
-                      </div>
-                      <div>
-                        <h3
-                          className={`font-medium ${
-                            selectedMethod === method.id
-                              ? "text-ring"
-                              : "text-foreground"
-                          }`}
-                        >
-                          {method.title}
-                        </h3>
-                        <p className="text-secondary text-sm">
-                          {method.description}
-                        </p>
-                      </div>
-                    </div>
+                    <span className="text-sm truncate">{file.name}</span>
+                    <button
+                      onClick={() => handleRemoveFile(index)}
+                      className="text-secondary hover:text-primary"
+                      aria-label={`Remove ${file.name}`}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
                   </div>
                 ))}
-
-                <p className="text-sm text-secondary mt-6">
-                  Want to request more methods to import training data? Let our{" "}
-                  <Link href="/" className="text-ring hover:underline">
-                    Zelosify
-                  </Link>{" "}
-                  team know{" "}
-                  <Link href="/contact" className="text-ring hover:underline">
-                    using our in-app chat!
-                  </Link>
-                </p>
               </div>
-            ) : (
-              /* Step 2: Import Data */
-              <div className="space-y-6">
-                {/* Upload Area */}
-                <div className="border-2 border-border border-dashed rounded-lg p-2">
-                  <div className="flex flex-col items-center text-center">
-                    <Upload className="w-8 h-8 text-secondary mb-4" />
-                    <h3 className="text-lg font-medium text-foreground">
-                      Upload files
-                    </h3>
-                    <p className="text-secondary">or drag and drop them here</p>
-                    <p className="text-sm text-secondary mt-2">
-                      Currently supports PDFs (up to 100 pages), text files
-                      (CSV, JSON, Markdown, etc.), and images
-                    </p>
-                  </div>
-                </div>
+            </div>
+          )}
 
-                {/* Name Input */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-secondary mb-1"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    placeholder="Name your data"
-                    className="w-full bg-background rounded-lg border border-border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
-                  />
-                </div>
-
-                {/* Access Control */}
-                <div>
-                  <label className="block text-sm font-medium text-secondary mb-1">
-                    Who can access this resource's data?
-                  </label>
-                  <button className="w-full flex items-center justify-between rounded-lg border border-border px-3 py-2 text-left">
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-5 h-5 text-secondary" />
-                      <span>Everyone</span>
-                    </div>
-                    <ChevronDown className="w-5 h-5 text-secondary" />
-                  </button>
-                </div>
-
-                {/* Agent Selection */}
-                <div>
-                  <label className="block text-sm font-medium text-secondary mb-1">
-                    Which agents can immediately use this data?
-                  </label>
-                  <button className="w-full flex items-center justify-between rounded-lg border border-border px-3 py-2 text-left text-secondary">
-                    <span>Select agents</span>
-                    <ChevronDown className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-            )}
+          {/* Name Field */}
+          <div>
+            <label
+              htmlFor="uploadName"
+              className="block text-sm font-medium text-secondary mb-1"
+            >
+              Name this contract upload (optional)
+            </label>
+            <input
+              type="text"
+              id="uploadName"
+              value={uploadName}
+              onChange={(e) => setUploadName(e.target.value)}
+              placeholder="e.g., Q2 Vendor Contracts"
+              className="w-full bg-background rounded-lg border border-border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring"
+            />
           </div>
 
-          {/* Footer */}
-          <div className="border-t border-border px-6 py-4 flex justify-between">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-sm text-primary"
-            >
-              Cancel
-            </button>
-            <div className="flex gap-3">
-              {step === 2 && (
-                <button
-                  onClick={handleBack}
-                  className="px-4 py-2 text-sm text-primary"
+          {/* Role Visibility */}
+          <div>
+            <label className="block text-sm font-medium text-secondary mb-2">
+              Assign visibility to roles
+            </label>
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="vendorManager"
+                  checked={visibleRoles.vendorManager}
+                  onCheckedChange={() => handleRoleChange("vendorManager")}
+                />
+                <Label
+                  htmlFor="vendorManager"
+                  className="text-sm cursor-pointer"
                 >
-                  Back
-                </button>
-              )}
-              <button
-                onClick={step === 1 ? handleNext : onClose}
-                disabled={step === 1 && !selectedMethod}
-                className={`px-4 py-2 text-sm rounded-lg
-                  ${
-                    step === 1
-                      ? "bg-foreground text-background disabled:bg-gray-500"
-                      : "bg-foreground text-background"
-                  }`}
-              >
-                {step === 1 ? "Next" : "Import"}
-              </button>
+                  Vendor Manager
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="businessStakeholder"
+                  checked={visibleRoles.businessStakeholder}
+                  onCheckedChange={() =>
+                    handleRoleChange("businessStakeholder")
+                  }
+                />
+                <Label
+                  htmlFor="businessStakeholder"
+                  className="text-sm cursor-pointer"
+                >
+                  Business Stakeholder
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="admin"
+                  checked={visibleRoles.admin}
+                  onCheckedChange={() => handleRoleChange("admin")}
+                />
+                <Label htmlFor="admin" className="text-sm cursor-pointer">
+                  Admin
+                </Label>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+
+        <DialogFooter className="flex justify-between items-center">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-primary">
+            Cancel
+          </button>
+          <button
+            onClick={handleImport}
+            disabled={selectedFiles.length === 0}
+            className="px-4 py-2 text-sm bg-foreground text-background rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed"
+          >
+            Import
+          </button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

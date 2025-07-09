@@ -54,7 +54,7 @@ const Header = memo(({ isSidebarOpen }) => {
     <header
       className={`${
         isSidebarOpen ? "pl-[12rem]" : "pl-[5rem]"
-      } h-16 flex items-center justify-between sticky top-0 z-40 bg-white dark:bg-gray-900 border-b dark:border-gray-700`}
+      } h-16 flex items-center justify-between sticky top-0 z-40 bg-background border-b border-border`}
     >
       <div className="flex items-center justify-end px-6 w-full">
         {/* <div className="flex items-center gap-4 flex-1">

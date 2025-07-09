@@ -229,7 +229,7 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
           ref={sidebarRef}
           className={`${
             isOpen ? "w-[12rem]" : "w-[5rem]"
-          } fixed inset-y-0 left-0 z-40 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-lg flex flex-col h-screen`}
+          } fixed inset-y-0 left-0 z-40 bg-background border-r border-border shadow-lg flex flex-col h-screen`}
         >
           <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
