@@ -41,6 +41,7 @@ export default function ImportPopUp({ isOpen, onClose }) {
     handleUpload,
     resetUploadState,
     error,
+    handleProcessContracts,
   } = useContractUpload();
 
   // Sync Redux error with local error state
@@ -123,7 +124,12 @@ export default function ImportPopUp({ isOpen, onClose }) {
         visibleToRoles,
       });
 
-      if (!result.success) {
+      if (result.success) {
+        // Process contracts after all uploads are complete
+        setTimeout(() => {
+          handleProcessContracts();
+        }, 6000);
+      } else {
         let errorMessage = result.error || "Upload failed with unknown error";
 
         // Add more detailed error info if available

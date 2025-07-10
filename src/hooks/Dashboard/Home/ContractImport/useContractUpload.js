@@ -6,6 +6,7 @@ import {
   updateUploadProgress,
   resetUploads,
   setUploadError,
+  processContracts,
 } from "@/redux/features/Dashboard/Home/contractUploadSlice";
 import { toast } from "sonner";
 import useAuth from "@/hooks/Auth/useAuth";
@@ -17,9 +18,8 @@ import useAuth from "@/hooks/Auth/useAuth";
 const useContractUpload = () => {
   const dispatch = useDispatch();
   const { getTenantId } = useAuth();
-  const { presignedUrls, currentUploads, loading, error } = useSelector(
-    (state) => state.contractUpload
-  );
+  const { presignedUrls, currentUploads, loading, error, isProcessing } =
+    useSelector((state) => state.contractUpload);
   const [uploading, setUploading] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
 
@@ -191,7 +191,9 @@ const useContractUpload = () => {
             (result) => result.status === "rejected" || !result.value?.success
           ).length;
 
-          toast.error(`${failedCount} of ${files.length} uploads failed`);
+          toast.error("Contract Intelligence", {
+            description: `${failedCount} of ${files.length} uploads failed`,
+          });
           return {
             success: false,
             error: "Some uploads failed",
@@ -199,7 +201,9 @@ const useContractUpload = () => {
           };
         }
       } catch (error) {
-        toast.error(`Upload failed: ${error.message || "Unknown error"}`);
+        toast.error("Contract Intelligence", {
+          description: `Upload failed: ${error.message || "Unknown error"}`,
+        });
         return { success: false, error: error.message || "Unknown error" };
       } finally {
         setUploading(false);
@@ -207,6 +211,19 @@ const useContractUpload = () => {
     },
     [dispatch, getTenantId]
   );
+
+  /**
+   * Handles the contract processing
+   */
+  const handleProcessContracts = useCallback(async () => {
+    try {
+      await dispatch(processContracts()).unwrap();
+    } catch (error) {
+      toast.error("Contract processing failed", {
+        description: error,
+      });
+    }
+  }, [dispatch]);
 
   /**
    * Reset upload state
@@ -223,11 +240,13 @@ const useContractUpload = () => {
     currentUploads,
     loading,
     error,
+    isProcessing,
     uploading,
     uploadComplete,
 
     // Methods
     handleUpload,
+    handleProcessContracts,
     resetUploadState,
   };
 };

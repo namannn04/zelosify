@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/Axios/AxiosInstance";
+import { toast } from "sonner";
 
 // Async thunk for generating presigned URLs
 export const generatePresignedUrls = createAsyncThunk(
-  "pdfUpload/generatePresignedUrls",
+  "contractUpload/generatePresignedUrls",
   async (
     { tenantId, filenames, uploadName, visibleToRoles },
     { rejectWithValue }
@@ -41,7 +42,7 @@ export const generatePresignedUrls = createAsyncThunk(
 
 // Async thunk for uploading a single file
 export const uploadPdfFile = createAsyncThunk(
-  "pdfUpload/uploadPdfFile",
+  "contractUpload/uploadPdfFile",
   async ({ tenantId, file, uploadToken, onProgress }, { rejectWithValue }) => {
     try {
       // Create form data for file upload
@@ -98,12 +99,31 @@ export const uploadPdfFile = createAsyncThunk(
   }
 );
 
+// Async thunk for processing contracts
+export const processContracts = createAsyncThunk(
+  "contractUpload/processContracts",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("/pdf/process");
+      return response.data;
+    } catch (error) {
+      console.error("Error processing contracts:", error);
+      return rejectWithValue(
+        error.response?.data?.message ||
+          error.message ||
+          "Network error occurred"
+      );
+    }
+  }
+);
+
 const initialState = {
   presignedUrls: [],
   uploads: {},
   loading: false,
   error: null,
   currentUploads: {},
+  isProcessing: false,
 };
 
 const contractUploadSlice = createSlice({
@@ -122,6 +142,7 @@ const contractUploadSlice = createSlice({
       state.currentUploads = {};
       state.error = null;
       state.loading = false;
+      state.isProcessing = false;
     },
     setUploadError: (state, action) => {
       const { filename, error } = action.payload;
@@ -181,6 +202,24 @@ const contractUploadSlice = createSlice({
             action.payload?.message || action.error?.message || "Upload failed",
           details: action.payload || action.error,
         };
+      })
+      // Handle processContracts
+      .addCase(processContracts.pending, (state) => {
+        toast.info("Contract Intelligence", {
+          description: `Contract processing has started. We'll notify you when it's complete.`,
+        });
+
+        state.isProcessing = true;
+      })
+      .addCase(processContracts.fulfilled, (state) => {
+        toast.success("Contract Intelligence", {
+          description: `Contract processing completed successfully.`,
+        });
+
+        state.isProcessing = false;
+      })
+      .addCase(processContracts.rejected, (state) => {
+        state.isProcessing = false;
       });
   },
 });
