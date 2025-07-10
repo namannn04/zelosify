@@ -1,4 +1,4 @@
-const EmptyState = ({ message = 'No data available', illustration }) => {
+const EmptyState = ({ message = "No data available", illustration }) => {
   return (
     <div className="flex flex-col items-center justify-center py-20 text-gray-500 space-y-4">
       {illustration && (

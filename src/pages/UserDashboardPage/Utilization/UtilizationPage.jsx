@@ -1,5 +1,11 @@
 "use client";
-import UtilizationLayout from "@/components/UserDashboardPage/Utilization/UtilizationLayout";
+
+import dynamic from "next/dynamic";
+
+const UtilizationLayout = dynamic(
+  () => import("@/components/UserDashboardPage/Utilization/UtilizationLayout"),
+  { ssr: false }
+);
 
 export default function UtilizationPage() {
   return (
@@ -7,11 +13,4 @@ export default function UtilizationPage() {
       <UtilizationLayout />
     </div>
   );
-}
-
-// Force server-side rendering to prevent static generation issues with Redux
-export async function getServerSideProps() {
-  return {
-    props: {},
-  };
 }

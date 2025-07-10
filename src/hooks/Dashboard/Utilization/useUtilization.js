@@ -1,5 +1,5 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useCallback, useRef } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+import { useCallback, useRef } from "react";
 import {
   fetchUtilizationData,
   fetchFilterOptions,
@@ -11,7 +11,7 @@ import {
   selectUtilizationFilters,
   selectUtilizationFilterOptions,
   setUtilizationFilters,
-} from '../../../redux/features/Dashboard/utilizationSlice';
+} from "@/redux/features/Dashboard/utilizationSlice";
 
 /**
  * custom hook for managing utilization state and operations
@@ -35,7 +35,7 @@ const useUtilization = () => {
         await dispatch(fetchUtilizationData(params)).unwrap();
         hasFetchedRef.current = true;
       } catch (err) {
-        console.error('Failed to fetch utilization data:', err);
+        console.error("Failed to fetch utilization data:", err);
       }
     },
     [dispatch]
@@ -50,15 +50,18 @@ const useUtilization = () => {
     hasFetchedRef.current = false;
   }, [dispatch]);
 
-  const handleSetFilters = useCallback((newFilters) => {
-    dispatch(setUtilizationFilters(newFilters));
-  }, [dispatch]);
+  const handleSetFilters = useCallback(
+    (newFilters) => {
+      dispatch(setUtilizationFilters(newFilters));
+    },
+    [dispatch]
+  );
 
   const handleFetchFilterOptions = useCallback(async () => {
     try {
       await dispatch(fetchFilterOptions()).unwrap();
     } catch (err) {
-      console.error('Failed to fetch filter options:', err);
+      console.error("Failed to fetch filter options:", err);
     }
   }, [dispatch]);
 
