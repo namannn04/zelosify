@@ -180,7 +180,11 @@ const useContractUpload = () => {
         setUploadComplete(true);
 
         if (allSucceeded) {
-          toast.success(`Successfully uploaded ${files.length} files`);
+          toast.success("Contract Intelligence", {
+            description: `Successfully uploaded ${files.length} ${
+              files.length > 1 ? "files" : "file"
+            }`,
+          });
           return { success: true };
         } else {
           const failedCount = results.filter(

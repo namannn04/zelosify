@@ -214,7 +214,7 @@ export default function ImportPopUp({ isOpen, onClose }) {
               <Button
                 variant="link"
                 onClick={resetUploadState}
-                className="text-sm"
+                className="text-sm cancel-red"
               >
                 Cancel Upload
               </Button>
@@ -225,7 +225,10 @@ export default function ImportPopUp({ isOpen, onClose }) {
         {uploading && (
           <div className="space-y-3 mt-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Uploading files...</span>
+              <span className="text-sm flex items-center gap-2">
+                <p className="text-sm">Uploading files... please wait</p>
+                <Loader2 className="h-4 w-4 animate-spin" />
+              </span>
               <span className="text-xs text-muted-foreground">
                 {Math.min(
                   Object.values(currentUploads).filter(

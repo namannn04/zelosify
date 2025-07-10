@@ -9,28 +9,14 @@ export const generatePresignedUrls = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      console.log("Requesting presigned URLs for files:", filenames);
-
       const response = await axiosInstance.post(`/pdf/${tenantId}/presign`, {
         filenames,
         uploadName,
         visibleToRoles,
       });
 
-      // Log the complete structure of the response for debugging
-      console.log("Presigned URL response structure:", {
-        status: response.status,
-        fullData: response.data,
-        unwrappedData: response.data.data,
-        uploads: response.data.data?.uploads,
-      });
-
       // Confirm what we're returning to the state
       const result = response.data.data;
-      console.log(
-        "Returning presign data with upload tokens for:",
-        result.uploads.map((u) => u.filename)
-      );
 
       return result;
     } catch (error) {
@@ -62,22 +48,6 @@ export const uploadPdfFile = createAsyncThunk(
       const formData = new FormData();
       formData.append("file", file);
       formData.append("uploadToken", uploadToken);
-
-      console.log(
-        `Uploading file ${file.name} with token: ${uploadToken.substring(
-          0,
-          20
-        )}...`
-      );
-
-      // Log request details for debugging
-      console.log(`Upload request details:
-        - URL: /pdf/${tenantId}/upload
-        - File name: ${file.name}
-        - File size: ${file.size} bytes
-        - File type: ${file.type}
-        - Token length: ${uploadToken.length}
-      `);
 
       // Use axios to upload with progress tracking
       const response = await axiosInstance.post(

@@ -187,6 +187,9 @@ html {
   .flex-center {
     @apply flex justify-center items-center;
   }
+  .cancel-red {
+    @apply text-red-600 dark:text-red-400;
+  }
 }
 
 /* Animation delays for typing indicator */

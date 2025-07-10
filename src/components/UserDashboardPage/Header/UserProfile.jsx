@@ -96,7 +96,7 @@ const UserProfile = memo(
             {/* Logout */}
             <button
               onClick={handleOpenSignoutConfirmation}
-              className="flex w-full items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="flex w-full items-center px-4 py-2 text-sm cancel-red hover:bg-gray-100 dark:hover:bg-gray-800"
               role="menuitem"
               tabIndex="0"
               aria-label="Sign out"
