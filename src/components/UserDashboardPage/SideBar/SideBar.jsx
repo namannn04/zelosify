@@ -265,7 +265,7 @@ const Sidebar = memo(({ isOpen, toggleSidebar }) => {
             </button>
             <button
               onClick={handleOpenSignoutConfirmation}
-              className={`rounded-md flex gap-2 items-center w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
+              className={`rounded-md flex gap-2 items-center w-full px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition ${
                 isOpen ? "justify-start" : "justify-center"
               }`}
             >

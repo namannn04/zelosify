@@ -7,6 +7,7 @@ import headerMetricsReducer from "@/redux/features/Dashboard/Home/headerMetricsS
 import contractSpendReducer from "@/redux/features/Dashboard/Home/contractSpendSlice";
 import vendorResourceReducer from "@/redux/features/Dashboard/vendorResourceSlice";
 import utilizationReducer from "@/redux/features/Dashboard/utilizationSlice";
+import contractUploadReducer from "@/redux/features/Dashboard/Home/contractUploadSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     contractSpend: contractSpendReducer,
     vendorResource: vendorResourceReducer,
     utilization: utilizationReducer,
+    contractUpload: contractUploadReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
