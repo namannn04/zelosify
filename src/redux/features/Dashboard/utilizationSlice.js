@@ -12,7 +12,7 @@ export const fetchUtilizationData = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.get('/vendor/utilization', { params });
-      return response.data;
+      return response.data.data ? response.data : { data: response.data };
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || error.message || 'Failed to fetch utilization data'
@@ -22,22 +22,21 @@ export const fetchUtilizationData = createAsyncThunk(
 );
 
 /**
- * Async thunk to fetch filter options (vendors, contracts)
+ * Async thunk to fetch filter options (vendors, contracts, statuses)
+ * Uses single endpoint with getFilters=true parameter
  */
 export const fetchFilterOptions = createAsyncThunk(
   'utilization/fetchFilterOptions',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get('/vendor/utilization/filters');
-      return response.data;
+      const response = await axiosInstance.get('/vendor/utilization', { 
+        params: { getFilters: true } 
+      });
+      return response.data.data || response.data;
     } catch (error) {
-      // Fallback: Return default filter options if API doesn't exist
-      console.warn('Filter options API not available, using defaults');
-      return {
-        vendors: ['Zelosify', 'TechStack', 'ByteWorks'],
-        contracts: ['L1 Support', 'L2 Infra', 'Field Ops'],
-        statuses: ['PENDING', 'APPROVED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']
-      };
+      return rejectWithValue(
+        error.response?.data?.message || error.message || 'Failed to fetch filter options'
+      );
     }
   }
 );
@@ -89,10 +88,11 @@ const utilizationSlice = createSlice({
       })
       .addCase(fetchFilterOptions.fulfilled, (state, action) => {
         state.filterOptions = {
-          ...state.filterOptions,
-          ...action.payload,
+          vendors: action.payload.vendors || [],
+          contracts: action.payload.contracts || [],
+          statuses: action.payload.statuses || ['PENDING', 'APPROVED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'],
         };
-      });
+      })
   },
 });
 
