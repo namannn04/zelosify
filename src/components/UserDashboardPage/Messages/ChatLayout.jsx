@@ -10,11 +10,13 @@ export default function ChatLayout() {
     handleCreateNewChat,
     isLoading,
     isSendingMessage,
+    isDeletingConversation,
     handleSendMessage,
     messages,
     conversations,
     activeConversationId,
     handleSwitchConversation,
+    handleDeleteConversation,
   } = useChat();
 
   // Initialize new chat on component mount
@@ -29,6 +31,9 @@ export default function ChatLayout() {
         <ChatHeader
           isLoading={isLoading}
           handleCreateNewChat={handleCreateNewChat}
+          activeConversationId={activeConversationId}
+          handleDeleteConversation={handleDeleteConversation}
+          isDeletingConversation={isDeletingConversation}
         />
 
         {/* Chat Area */}

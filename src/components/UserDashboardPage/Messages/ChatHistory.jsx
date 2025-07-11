@@ -50,9 +50,12 @@ const ChatHistory = memo(
 
     const handleConversationSelect = useCallback(
       (conversationId) => {
-        onSelectConversation?.(conversationId);
+        // Only trigger selection if it's not the currently active conversation
+        if (conversationId !== activeConversationId) {
+          onSelectConversation?.(conversationId);
+        }
       },
-      [onSelectConversation]
+      [onSelectConversation, activeConversationId]
     );
 
     const renderConversationItem = useCallback(
@@ -71,7 +74,7 @@ const ChatHistory = memo(
             ${
               isActive
                 ? "bg-blue-50 border-l-2 border-blue-500 text-blue-900 dark:bg-blue-900/20 dark:text-blue-100"
-                : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
             }`}
           >
             <MessageSquare

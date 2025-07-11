@@ -140,6 +140,27 @@ export const fetchConversationMessages = createAsyncThunk(
   }
 );
 
+// Async thunk to delete a conversation
+export const deleteConversation = createAsyncThunk(
+  "chat/deleteConversation",
+  async (conversationId, { rejectWithValue, dispatch }) => {
+    try {
+      await axiosInstance.delete(`/chat/${conversationId}`);
+
+      // Refetch conversations to update the list
+      dispatch(fetchConversations());
+
+      return { conversationId };
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to delete conversation.";
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
 export const updateConversationId = createAction(
   "chat/updateConversationId",
   ({ oldConversationId, newConversationId, title }) => ({
@@ -162,6 +183,7 @@ const chatSlice = createSlice({
     messages: [],
     isLoading: false,
     isSendingMessage: false, // Separate loading state for sending messages
+    isDeletingConversation: false, // Loading state for deleting conversations
     error: null,
     hasFetchedConversations: false,
   },
@@ -300,6 +322,29 @@ const chatSlice = createSlice({
         state.activeConversationId = action.payload;
         // Messages will be loaded separately via fetchConversationMessages
         state.messages = [];
+      })
+      .addCase(deleteConversation.pending, (state) => {
+        state.isDeletingConversation = true;
+        state.error = null;
+      })
+      .addCase(deleteConversation.fulfilled, (state, action) => {
+        state.isDeletingConversation = false;
+        const { conversationId } = action.payload;
+
+        // Remove conversation from the list
+        state.conversations = state.conversations.filter(
+          (conv) => conv.conversationId !== conversationId
+        );
+
+        // If deleted conversation was active, reset to new chat
+        if (state.activeConversationId === conversationId) {
+          state.activeConversationId = "newChat";
+          state.messages = [];
+        }
+      })
+      .addCase(deleteConversation.rejected, (state, action) => {
+        state.isDeletingConversation = false;
+        state.error = action.payload;
       });
   },
 });

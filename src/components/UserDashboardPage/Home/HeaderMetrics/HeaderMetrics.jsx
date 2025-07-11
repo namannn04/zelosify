@@ -97,7 +97,7 @@ export default function HeaderMetrics() {
               className="bg-background p-2 rounded-lg border border-border"
             >
               <div className="flex items-center justify-between mb-4">
-                <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800">
                   {getIcon(metric.icon)}
                 </div>
               </div>
