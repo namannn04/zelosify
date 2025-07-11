@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Check } from "lucide-react";
+import { Loader2, Check, FileText } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -162,10 +162,11 @@ export default function ImportPopUp({ isOpen, onClose }) {
 
   return (
     <Dialog open={isOpen} onOpenChange={!uploading && onClose}>
-      <DialogContent aria-label="Import new contracts" className="max-w-2xl">
+      <DialogContent aria-label="Import new contracts" className="max-w-xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">
-            Import new contracts
+          <DialogTitle className="flex items-center text-xl font-bold">
+            <FileText className="w-6 h-6 mr-2" />
+            Import New Contracts
           </DialogTitle>
           <DialogDescription className="text-sm">
             Supports PDF files only (up to 100MB per file)
@@ -217,13 +218,12 @@ export default function ImportPopUp({ isOpen, onClose }) {
                   </span>
                 </div>
               </div>
-              <Button
-                variant="link"
+              <button
                 onClick={resetUploadState}
-                className="text-sm cancel-red"
+                className="text-sm cancel-red hover:underline"
               >
-                Cancel Upload
-              </Button>
+                Cancel
+              </button>
             </div>
           </div>
         )}
@@ -254,7 +254,7 @@ export default function ImportPopUp({ isOpen, onClose }) {
                     {currentUploads[file.name] ? (
                       <span className="text-xs ml-2">
                         {currentUploads[file.name].status === "failed" ? (
-                          <span className="text-destructive">Failed</span>
+                          <span className="cancel-red">Failed</span>
                         ) : (
                           <span>{currentUploads[file.name].progress}%</span>
                         )}

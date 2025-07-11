@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/UI/shadcn/checkbox";
 import { Input } from "@/components/UI/shadcn/input";
 import { Label } from "@/components/UI/shadcn/label";
 import { Upload, X } from "lucide-react";
-import React from "react";
+import React, { useState, useCallback } from "react";
 
 export default function UploadComponent({
   uploading,
@@ -16,6 +16,8 @@ export default function UploadComponent({
   setVisibleRoles,
   setSelectAll,
 }) {
+  const [dragActive, setDragActive] = useState(false);
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const pdfFiles = files.filter(
@@ -26,21 +28,39 @@ export default function UploadComponent({
     setSelectedFiles(pdfFiles);
   };
 
-  const handleDragOver = (e) => {
+  /**
+   * Handles drag events with visual feedback
+   */
+  const handleDrag = useCallback((e) => {
     e.preventDefault();
-  };
+    e.stopPropagation();
 
-  const handleDrop = (e) => {
-    e.preventDefault();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  }, []);
 
-    const files = Array.from(e.dataTransfer.files);
-    const pdfFiles = files.filter(
-      (file) =>
-        file.type === "application/pdf" && file.size <= 100 * 1024 * 1024
-    );
+  /**
+   * Handles drop event
+   */
+  const handleDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
 
-    setSelectedFiles(pdfFiles);
-  };
+      const files = Array.from(e.dataTransfer.files);
+      const pdfFiles = files.filter(
+        (file) =>
+          file.type === "application/pdf" && file.size <= 100 * 1024 * 1024
+      );
+
+      setSelectedFiles(pdfFiles);
+    },
+    [setSelectedFiles]
+  );
 
   const handleRemoveFile = (index) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
@@ -73,28 +93,54 @@ export default function UploadComponent({
   return (
     <div className="space-y-6">
       <div
-        className="border-2 border-border border-dashed rounded-lg p-6"
-        onDragOver={handleDragOver}
+        className={`border-dashed border-2 ${
+          dragActive
+            ? "border-primary bg-primary/5"
+            : "border-gray-300 dark:border-gray-600"
+        } rounded-md p-6 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 ${
+          uploading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        onDragEnter={handleDrag}
+        onDragOver={handleDrag}
+        onDragLeave={handleDrag}
         onDrop={handleDrop}
+        onClick={() =>
+          !uploading && document.getElementById("pdf-file-upload").click()
+        }
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if ((e.key === "Enter" || e.key === " ") && !uploading) {
+            e.preventDefault();
+            document.getElementById("pdf-file-upload").click();
+          }
+        }}
+        aria-label="Drag and drop PDF files here or click to upload"
       >
         <div className="flex flex-col items-center text-center">
-          <Upload className="w-8 h-8 text-secondary mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">
-            Upload PDF files
-          </h3>
-          <p className="text-secondary mb-2">or drag and drop them here</p>
+          <Upload
+            className={`w-10 h-10 mx-auto mb-2 ${
+              dragActive ? "text-primary" : "text-gray-400"
+            } transition-colors`}
+          />
 
-          <label className="mt-4 px-4 py-2 bg-foreground text-background rounded-md cursor-pointer hover:bg-foreground/90 transition-colors">
-            Browse Files
-            <input
-              type="file"
-              className="hidden"
-              accept=".pdf,application/pdf"
-              multiple
-              onChange={handleFileChange}
-              disabled={uploading}
-            />
-          </label>
+          <div className="text-gray-600 dark:text-gray-300">
+            <p className="font-medium">
+              {dragActive ? "Drop files here" : "Drag and drop PDF files here"}
+            </p>
+            <p className="text-sm text-gray-500">or click to browse</p>
+          </div>
+
+          {/* Hidden file input for click functionality */}
+          <input
+            id="pdf-file-upload"
+            type="file"
+            multiple
+            className="hidden"
+            accept=".pdf,application/pdf"
+            onChange={handleFileChange}
+            disabled={uploading}
+          />
         </div>
       </div>
 
@@ -141,9 +187,9 @@ export default function UploadComponent({
           id="upload-name"
           value={uploadName}
           onChange={(e) => setUploadName(e.target.value)}
-          placeholder="Q2 Vendor Contracts"
+          placeholder="Eg. Q2 Vendor Contracts"
           disabled={uploading}
-          className="w-full"
+          className="w-full placeholder:text-secondary/70"
         />
       </div>
 

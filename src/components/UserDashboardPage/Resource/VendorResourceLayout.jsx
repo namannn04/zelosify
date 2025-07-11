@@ -150,7 +150,7 @@ export default function VendorResourceLayout() {
    * Table column configuration
    */
   const tableColumns = [
-    { key: "id", label: "ID" },
+    // { key: "id", label: "ID" },
     { key: "requestType", label: "Request Type" },
     { key: "role", label: "Role" },
     { key: "experience", label: "Experience" },

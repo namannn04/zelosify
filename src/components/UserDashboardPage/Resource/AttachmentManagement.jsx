@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/UI/shadcn/dialog";
@@ -13,7 +14,10 @@ import {
   FileText,
   Loader2,
   CheckCircle2,
+  X,
 } from "lucide-react";
+import { Button } from "@/components/UI/shadcn/button";
+import { formatAttachmentName } from "@/utils/Common/formatAttachment";
 
 export default function AttachmentManagement({
   isDialogOpen,
@@ -25,6 +29,7 @@ export default function AttachmentManagement({
 }) {
   const [uploadProgress, setUploadProgress] = useState({});
   const [dragActive, setDragActive] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   // Find the selected request and its attachments
   const selectedRequest = requests?.find(
@@ -69,11 +74,11 @@ export default function AttachmentManagement({
   }, []);
 
   /**
-   * Handles file upload process
-   * @param {FileList|File[]} files - Files to upload
+   * Handles file selection from input or drag-drop
+   * @param {FileList|File[]} files - Files to select
    */
-  const handleUploadFiles = useCallback(
-    async (files) => {
+  const handleFileSelection = useCallback(
+    (files) => {
       if (!files || files.length === 0) return;
 
       const fileArray = Array.from(files);
@@ -86,48 +91,58 @@ export default function AttachmentManagement({
         });
       }
 
-      setUploadProgress({});
-
-      try {
-        // Simulate progress tracking since actual upload is handled by Redux
-        validFiles.forEach((file, index) => {
-          const progressInterval = setInterval(() => {
-            setUploadProgress((prev) => {
-              const currentProgress = prev[file.name] || 0;
-              const newProgress = Math.min(currentProgress + 10, 90);
-
-              if (newProgress >= 90) {
-                clearInterval(progressInterval);
-              }
-
-              return { ...prev, [file.name]: newProgress };
-            });
-          }, 4000);
-        });
-
-        // Call the parent handler which uses Redux
-        await handleManageAttachments(selectedRequestId, validFiles);
-
-        // Complete progress
-        setUploadProgress((_) => {
-          const completed = {};
-          validFiles.forEach((file) => {
-            completed[file.name] = 100;
-          });
-          return completed;
-        });
-
-        // Clear progress after showing completion
-        setTimeout(() => {
-          setUploadProgress({});
-        }, 4000);
-      } catch (error) {
-        console.error("Upload error:", error);
-        setUploadProgress({});
-      }
+      setSelectedFiles(validFiles);
     },
-    [selectedRequestId, handleManageAttachments, validateFile]
+    [validateFile]
   );
+
+  /**
+   * Handles file upload process on submit
+   */
+  const handleSubmitUpload = useCallback(async () => {
+    if (selectedFiles.length === 0) return;
+
+    setUploadProgress({});
+
+    try {
+      // Simulate progress tracking since actual upload is handled by Redux
+      selectedFiles.forEach((file, index) => {
+        const progressInterval = setInterval(() => {
+          setUploadProgress((prev) => {
+            const currentProgress = prev[file.name] || 0;
+            const newProgress = Math.min(currentProgress + 10, 90);
+
+            if (newProgress >= 90) {
+              clearInterval(progressInterval);
+            }
+
+            return { ...prev, [file.name]: newProgress };
+          });
+        }, 4000);
+      });
+
+      // Call the parent handler which uses Redux
+      await handleManageAttachments(selectedRequestId, selectedFiles);
+
+      // Complete progress
+      setUploadProgress((_) => {
+        const completed = {};
+        selectedFiles.forEach((file) => {
+          completed[file.name] = 100;
+        });
+        return completed;
+      });
+
+      // Clear progress and selected files after showing completion
+      setTimeout(() => {
+        setUploadProgress({});
+        setSelectedFiles([]);
+      }, 4000);
+    } catch (error) {
+      console.error("Upload error:", error);
+      setUploadProgress({});
+    }
+  }, [selectedFiles, selectedRequestId, handleManageAttachments]);
 
   /**
    * Handles drag events
@@ -153,110 +168,122 @@ export default function AttachmentManagement({
       setDragActive(false);
 
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        handleUploadFiles(e.dataTransfer.files);
+        handleFileSelection(e.dataTransfer.files);
       }
     },
-    [handleUploadFiles]
+    [handleFileSelection]
   );
 
   /**
-   * Formats filename from S3 key
+   * Handles file input change
    */
-  const formatAttachmentName = useCallback((attachmentKey) => {
-    if (typeof attachmentKey === "object" && attachmentKey?.key) {
-      attachmentKey = attachmentKey.key;
-    }
+  const handleFileChange = useCallback(
+    (e) => {
+      handleFileSelection(e.target.files);
+    },
+    [handleFileSelection]
+  );
 
-    if (typeof attachmentKey !== "string") {
-      console.error("Invalid attachmentKey: Expected a string", attachmentKey);
-      return "Unknown Attachment";
-    }
-
-    try {
-      return attachmentKey.split("/").pop() || attachmentKey;
-    } catch (error) {
-      console.error("Error formatting attachmentKey", { attachmentKey, error });
-      return "Unknown Attachment";
-    }
+  /**
+   * Removes a selected file
+   */
+  const handleRemoveFile = useCallback((index) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
-      <DialogContent className="backdrop-blur-md max-w-md">
+      <DialogContent className="backdrop-blur-md max-w-xl">
         <DialogHeader>
-          <DialogTitle className="flex items-center">
-            <Paperclip className="w-5 h-5 mr-2" />
+          <DialogTitle className="flex items-center text-xl font-bold">
+            <Paperclip className="w-6 h-6 mr-2" />
             Manage Attachments for Request #{selectedRequestId}
           </DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription className="text-xs">
+            Supports: PDF, DOC, DOCX, PPT, PPTX, TXT, images (max 10MB each)
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* File Drop Zone */}
-          <div
-            className={`border-dashed border-2 ${
-              dragActive
-                ? "border-primary bg-primary/5"
-                : "border-gray-300 dark:border-gray-600"
-            } rounded-md p-6 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 ${
-              isUploading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-            onDragEnter={handleDrag}
-            onDragOver={handleDrag}
-            onDragLeave={handleDrag}
-            onDrop={handleDrop}
-            onClick={() =>
-              !isUploading && document.getElementById("file-upload").click()
-            }
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if ((e.key === "Enter" || e.key === " ") && !isUploading) {
-                e.preventDefault();
-                document.getElementById("file-upload").click();
-              }
-            }}
-            aria-label="Drag and drop files here or click to upload"
-          >
-            <Upload
-              className={`w-10 h-10 mx-auto mb-2 ${
-                dragActive ? "text-primary" : "text-gray-400"
-              } transition-colors`}
-            />
-            <div className="text-gray-600 dark:text-gray-300">
-              <p className="font-medium">
-                {dragActive ? "Drop files here" : "Drag and drop files here"}
-              </p>
-              <p className="text-sm text-gray-500">or click to browse</p>
-            </div>
-          </div>
+          {/* File Drop Zone - Hidden during upload */}
+          {!isUploading && (
+            <div
+              className={`border-dashed border-2 ${
+                dragActive
+                  ? "border-primary bg-primary/5"
+                  : "border-gray-300 dark:border-gray-600"
+              } rounded-md p-6 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200`}
+              onDragEnter={handleDrag}
+              onDragOver={handleDrag}
+              onDragLeave={handleDrag}
+              onDrop={handleDrop}
+              onClick={() => document.getElementById("file-upload").click()}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  document.getElementById("file-upload").click();
+                }
+              }}
+              aria-label="Drag and drop files here or click to upload"
+            >
+              <Upload
+                className={`w-10 h-10 mx-auto mb-2 ${
+                  dragActive ? "text-primary" : "text-gray-400"
+                } transition-colors`}
+              />
+              <div className="text-gray-600 dark:text-gray-300">
+                <p className="font-medium">
+                  {dragActive ? "Drop files here" : "Drag and drop files here"}
+                </p>
+                <p className="text-sm text-gray-500">or click to browse</p>
+              </div>
 
-          {/* File Input */}
-          <div>
-            <label
-              htmlFor="file-upload"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-            >
-              Select Files
-            </label>
-            <input
-              id="file-upload"
-              type="file"
-              multiple
-              className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-primary file:text-background hover:cursor-pointer hover:file:bg-primary/80 dark:file:bg-primary/80 dark:hover:file:bg-primary/60"
-              onChange={(e) => handleUploadFiles(e.target.files)}
-              disabled={isUploading}
-              aria-describedby="file-upload-help"
-              accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif"
-            />
-            <p
-              id="file-upload-help"
-              className="mt-1 text-xs text-gray-500 dark:text-gray-400"
-            >
-              Supported formats: PDF, DOC, DOCX, PPT, PPTX, TXT, images (max
-              10MB each)
-            </p>
-          </div>
+              {/* Hidden file input for click functionality */}
+              <input
+                id="file-upload"
+                type="file"
+                multiple
+                className="hidden"
+                onChange={handleFileChange}
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif"
+              />
+            </div>
+          )}
+
+          {/* Selected Files Display - Hidden during upload */}
+          {!isUploading && selectedFiles.length > 0 && (
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Selected Files ({selectedFiles.length})
+              </label>
+              <div className="max-h-36 overflow-y-auto space-y-2 p-2 border border-gray-200 dark:border-gray-700 rounded-lg">
+                {selectedFiles.map((file, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded"
+                  >
+                    <div className="flex items-center space-x-2 truncate">
+                      <span className="text-sm truncate">{file.name}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFile(index)}
+                      className="text-gray-400 hover:text-red-500 focus:outline-none"
+                      aria-label={`Remove ${file.name}`}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Upload Progress */}
           {Object.keys(uploadProgress).length > 0 && (
@@ -331,12 +358,20 @@ export default function AttachmentManagement({
           </div>
 
           {/* Dialog Actions */}
-          <div className="flex justify-end pt-4">
+
+          <DialogFooter>
             <button
               onClick={handleCloseDialog}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-background bg-foreground rounded-md hover:bg-foreground/80 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm text-primary disabled:opacity-50 disabled:cursor-not-allowed"
               type="button"
               disabled={isUploading}
+            >
+              Cancel
+            </button>
+            <Button
+              type="button"
+              onClick={handleSubmitUpload}
+              disabled={isUploading || selectedFiles.length === 0}
             >
               {isUploading ? (
                 <>
@@ -344,10 +379,10 @@ export default function AttachmentManagement({
                   Uploading...
                 </>
               ) : (
-                "Close"
+                "Submit"
               )}
-            </button>
-          </div>
+            </Button>
+          </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>
