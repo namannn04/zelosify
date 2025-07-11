@@ -13,6 +13,7 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import useHeaderMetrics from "@/hooks/Dashboard/Home/HeaderMetrics/useHeaderMetrics";
 import CardSkeleton from "@/components/UI/loaders/CardSkeleton";
+import { Button } from "@/components/UI/shadcn/button";
 
 // Map icons to their respective components
 const iconMapping = {
@@ -62,13 +63,10 @@ export default function HeaderMetrics() {
         <h2 className="text-2xl font-bold text-foreground">
           Contracts Intelligence
         </h2>
-        <button
-          onClick={() => setIsImportOpen(true)}
-          className="flex items-center px-4 py-2 text-sm font-medium text-background bg-foreground rounded-md transition"
-        >
-          <Upload className="w-4 h-4 mr-2" />
+        <Button onClick={() => setIsImportOpen(true)}>
+          <Upload className="w-4 h-4" />
           Import
-        </button>
+        </Button>
       </div>
 
       {/* Import Popup */}
