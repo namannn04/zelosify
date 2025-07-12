@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useUtilization from "@/hooks/Dashboard/Utilization/useUtilization";
 import UtilizationFilters from "./UtilizationFilters";
 import UtilizationTable from "./UtilizationTable";
@@ -48,6 +48,8 @@ const UtilizationLayout = () => {
     handleFetchFilterOptions,
   } = useUtilization();
 
+  const initializationRef = useRef(false);
+
   const handleFilterChange = (newFilters) => {
     const cleanFilters = Object.fromEntries(
       Object.entries(newFilters).filter(
@@ -60,8 +62,20 @@ const UtilizationLayout = () => {
   };
 
   useEffect(() => {
-    handleFetchFilterOptions();
-    handleFetchUtilizationData({ forceRefresh: true });
+    if (initializationRef.current) return;
+    
+    initializationRef.current = true;
+
+    const initializeData = async () => {
+      try {
+        await handleFetchFilterOptions();
+        await handleFetchUtilizationData({ forceRefresh: true });
+      } catch (error) {
+        console.error("Failed to initialize utilization data:", error);
+      }
+    };
+    
+    initializeData();
   }, []);
 
   useEffect(() => {

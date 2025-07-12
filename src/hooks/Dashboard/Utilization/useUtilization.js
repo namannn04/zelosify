@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import {
   fetchUtilizationData,
   fetchFilterOptions,
@@ -21,6 +21,7 @@ import {
 const useUtilization = () => {
   const dispatch = useDispatch();
   const hasFetchedRef = useRef(false);
+  const hasFetchedFiltersRef = useRef(false);
 
   const data = useSelector(selectUtilizationData);
   const isLoading = useSelector(selectUtilizationLoading);
@@ -30,12 +31,17 @@ const useUtilization = () => {
 
   const handleFetchUtilizationData = useCallback(
     async (params = {}) => {
-      if (hasFetchedRef.current && !params.forceRefresh) return;
+      if (hasFetchedRef.current && !params.forceRefresh) {
+        return;
+      }
+      
       try {
-        await dispatch(fetchUtilizationData(params)).unwrap();
+        const result = await dispatch(fetchUtilizationData(params)).unwrap();
         hasFetchedRef.current = true;
+        return result;
       } catch (err) {
         console.error("Failed to fetch utilization data:", err);
+        throw err;
       }
     },
     [dispatch]
@@ -48,6 +54,7 @@ const useUtilization = () => {
   const handleResetUtilization = useCallback(() => {
     dispatch(resetUtilization());
     hasFetchedRef.current = false;
+    hasFetchedFiltersRef.current = false;
   }, [dispatch]);
 
   const handleSetFilters = useCallback(
@@ -58,12 +65,26 @@ const useUtilization = () => {
   );
 
   const handleFetchFilterOptions = useCallback(async () => {
+    if (hasFetchedFiltersRef.current) {
+      return;
+    }
+    
     try {
-      await dispatch(fetchFilterOptions()).unwrap();
+      const result = await dispatch(fetchFilterOptions()).unwrap();
+      hasFetchedFiltersRef.current = true;
+      return result;
     } catch (err) {
       console.error("Failed to fetch filter options:", err);
+      throw err;
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    return () => {
+      hasFetchedRef.current = false;
+      hasFetchedFiltersRef.current = false;
+    };
+  }, []);
 
   return {
     data,
