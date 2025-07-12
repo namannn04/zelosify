@@ -1,4 +1,4 @@
-import { formatDate } from "../../../utils/Dashboard/Utilization/formdata";
+import { formatDate } from "@/utils/Common/date";
 
 const UtilizationTable = ({ data }) => {
   return (

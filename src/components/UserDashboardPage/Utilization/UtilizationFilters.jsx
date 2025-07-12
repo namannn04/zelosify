@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/UI/shadcn/button";
 import { useState } from "react";
 
 const UtilizationFilters = ({ onFilterChange, filterOptions = {} }) => {
@@ -96,18 +97,12 @@ const UtilizationFilters = ({ onFilterChange, filterOptions = {} }) => {
 
       {/* Filter Actions */}
       <div className="flex gap-3">
-        <button
-          onClick={applyFilters}
-          className="bg-primary text-white dark:bg-white dark:text-black px-6 py-2 rounded-lg hover:bg-primary/90 dark:hover:bg-gray-100 transition-colors font-medium"
-        >
+        <Button size="sm" onClick={applyFilters}>
           Apply Filters
-        </button>
-        <button
-          onClick={resetFilters}
-          className="bg-secondary text-white dark:bg-gray-100 dark:text-black px-4 py-2 rounded-lg hover:bg-secondary/80 dark:hover:bg-gray-200 transition-colors"
-        >
+        </Button>
+        <Button size="sm" onClick={resetFilters}>
           Reset
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -15,13 +15,10 @@ const ActiveFilters = ({ filters, onClear }) => {
     .map(([key, value]) => (
       <span
         key={key}
-        className="bg-[#252837] text-gray-300 text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-gray-600"
+        className="bg-[#252837] text-white text-sm px-3 py-1 rounded-full flex items-center gap-2 border border-gray-600"
       >
         {key}: {value}
-        <button
-          onClick={() => onClear(key)}
-          className="text-gray-400 hover:text-white"
-        >
+        <button onClick={() => onClear(key)} className="text-white">
           ×
         </button>
       </span>
@@ -29,7 +26,7 @@ const ActiveFilters = ({ filters, onClear }) => {
 
   return pills.length > 0 ? (
     <div className="mb-4">
-      <div className="text-sm text-gray-400 mb-2">Active Filters:</div>
+      <div className="text-sm text-primary mb-2">Active Filters:</div>
       <div className="flex flex-wrap gap-2">{pills}</div>
     </div>
   ) : null;
@@ -63,7 +60,7 @@ const UtilizationLayout = () => {
 
   useEffect(() => {
     if (initializationRef.current) return;
-    
+
     initializationRef.current = true;
 
     const initializeData = async () => {
@@ -74,7 +71,7 @@ const UtilizationLayout = () => {
         console.error("Failed to initialize utilization data:", error);
       }
     };
-    
+
     initializeData();
   }, []);
 
