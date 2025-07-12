@@ -29,6 +29,7 @@ const getOverviewItemsByRole = (role) => {
             { title: "Payments", href: "/user/payments", icon: CreditCard },
             { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
             { title: "Requests", href: "/user/requests", icon: FileSignature },
+            { title: "Openings", href: "/user/vendor-openings", icon: Users },
             { title: "AI Chat", href: "/user/messages", icon: Sparkles },
             {
               title: "Utilization",
