@@ -116,7 +116,7 @@ const FilterControls = memo(
         </SelectTrigger>
         <SelectContent className="rounded-xl bg-background text-foreground">
           <SelectItem value="All Industries" className="rounded-lg">
-            All Industries
+            All Verticles
           </SelectItem>
           {industries &&
             industries.map((industry) => (
