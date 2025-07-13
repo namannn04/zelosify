@@ -62,10 +62,8 @@ export function middleware(request) {
     if (userRole === "VENDOR_MANAGER") {
       console.log(`Redirecting VENDOR_MANAGER to /user`);
       return NextResponse.redirect(new URL("/user", request.url));
-    } else if (userRole === "BUSINESS_STAKEHOLDER") {
-      console.log(
-        `Redirecting BUSINESS_STAKEHOLDER to /user/digital-initiative`
-      );
+    } else if (userRole === "BUSINESS_USER") {
+      console.log(`Redirecting BUSINESS_USER to /user/digital-initiative`);
       return NextResponse.redirect(
         new URL("/user/digital-initiative", request.url)
       );

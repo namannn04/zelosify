@@ -27,7 +27,7 @@ export const getRoleRedirectPath = (role) => {
   switch (role) {
     case "VENDOR_MANAGER":
       return "/user";
-    case "BUSINESS_STAKEHOLDER":
+    case "BUSINESS_USER":
       return "/user/digital-initiative";
     default:
       return "/login"; // Let middleware handle it

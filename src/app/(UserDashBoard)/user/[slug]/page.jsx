@@ -62,7 +62,7 @@ export default function UserSubPage({ params }) {
     case "utilization":
       return <UtilizationPage />;
 
-    // For BUSINESS_STAKEHOLDER role
+    // For BUSINESS_USER role
     case "digital-initiative":
       return <DigitalInitiativePage />;
     case "dummy-page-1":

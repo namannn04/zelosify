@@ -26,7 +26,6 @@ const getOverviewItemsByRole = (role) => {
           hasSubmenu: true,
           submenu: [
             { title: "Contracts", href: "/user", icon: FileText },
-            { title: "Payments", href: "/user/payments", icon: CreditCard },
             { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
             { title: "Requests", href: "/user/requests", icon: FileSignature },
             { title: "AI Chat", href: "/user/messages", icon: Sparkles },
@@ -40,8 +39,8 @@ const getOverviewItemsByRole = (role) => {
         { title: "Resource", href: "/user/resource", icon: BarChart3 },
       ];
 
-    // For BUSINESS_STAKEHOLDER role
-    case "BUSINESS_STAKEHOLDER":
+    // For BUSINESS_USER role
+    case "BUSINESS_USER":
       return [
         {
           title: "Digital",
@@ -54,6 +53,10 @@ const getOverviewItemsByRole = (role) => {
           icon: Scale3DIcon,
         },
       ];
+
+    // For IT_VENDOR
+    case "IT_VENDOR":
+      return [{ title: "Payments", href: "/user/payments", icon: CreditCard }];
 
     default:
       return [];

@@ -23,7 +23,7 @@ export default function ImportPopUp({ isOpen, onClose }) {
   const [uploadName, setUploadName] = useState("");
   const [visibleRoles, setVisibleRoles] = useState({
     vendorManager: false,
-    businessStakeholder: false,
+    businessUser: false,
     admin: false,
   });
   const [selectAll, setSelectAll] = useState(false);
@@ -65,7 +65,7 @@ export default function ImportPopUp({ isOpen, onClose }) {
       setUploadName("");
       setVisibleRoles({
         vendorManager: false,
-        businessStakeholder: false,
+        businessUser: false,
         admin: false,
       });
       setSelectAll(false);
@@ -113,8 +113,7 @@ export default function ImportPopUp({ isOpen, onClose }) {
     // Convert visibleRoles object to array of role strings
     const visibleToRoles = [];
     if (visibleRoles.vendorManager) visibleToRoles.push("VENDOR_MANAGER");
-    if (visibleRoles.businessStakeholder)
-      visibleToRoles.push("BUSINESS_STAKEHOLDER");
+    if (visibleRoles.businessUser) visibleToRoles.push("BUSINESS_USER");
     if (visibleRoles.admin) visibleToRoles.push("ADMIN");
 
     try {
@@ -206,8 +205,8 @@ export default function ImportPopUp({ isOpen, onClose }) {
                         switch (key) {
                           case "vendorManager":
                             return "Vendor Manager";
-                          case "businessStakeholder":
-                            return "Business Stakeholder";
+                          case "businessUser":
+                            return "Business User";
                           case "admin":
                             return "Admin";
                           default:
