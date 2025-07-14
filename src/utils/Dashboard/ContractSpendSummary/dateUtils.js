@@ -34,9 +34,15 @@ export const formatDateToYYYYMM = (dateString) => {
  */
 export const formatDateForApi = (date) => {
   if (!date) return null;
-  return date instanceof Date
-    ? date.toISOString().split("T")[0]
-    : new Date(date).toISOString().split("T")[0];
+
+  const d = date instanceof Date ? date : new Date(date);
+
+  // Use local date components to avoid timezone issues
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 };
 
 /**
@@ -94,41 +100,101 @@ export const generateMonthsForYear = (year) => {
 };
 
 /**
+ * UNIFIED DATE RANGE CALCULATION
+ *
+ * This function ensures consistent date calculations across:
+ * 1. API parameters (YYYY-MM-DD format)
+ * 2. Frontend filtering (YYYY-MM format)
+ *
+ * Examples for July 14, 2025:
+ * - thisMonth: 2025-07-01 to 2025-07-14
+ * - last3Months: 2025-04-14 to 2025-07-14
+ * - thisYear: 2025-01-01 to 2025-07-14
+ * - last2Years: 2023-07-14 to 2025-07-14
+ */
+
+/**
+ * Calculate unified date range for both API and frontend filtering
+ * @param {string} selectedTimeRange - Time range selection
+ * @param {Date} fromDate - Custom from date (for custom range)
+ * @param {Date} toDate - Custom to date (for custom range)
+ * @returns {object} Object with startDate, endDate, and startDateFormatted, endDateFormatted
+ */
+export const calculateUnifiedDateRange = (
+  selectedTimeRange,
+  fromDate = null,
+  toDate = null
+) => {
+  const now = new Date();
+  let startDate, endDate;
+
+  if (selectedTimeRange === "custom" && fromDate && toDate) {
+    startDate = new Date(fromDate);
+    endDate = new Date(toDate);
+  } else {
+    endDate = new Date(now);
+
+    switch (selectedTimeRange) {
+      case "thisMonth":
+        // Current month only - start from 1st of current month
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        // Reset time to start of day to avoid timezone issues
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case "last3Months":
+        // Last 3 months from current date (exact date 3 months ago)
+        startDate = new Date(now);
+        startDate.setMonth(startDate.getMonth() - 3);
+        break;
+      case "thisYear":
+        // Current year only - start from January 1st
+        startDate = new Date(now.getFullYear(), 0, 1);
+        // Reset time to start of day to avoid timezone issues
+        startDate.setHours(0, 0, 0, 0);
+        break;
+      case "last2Years":
+        // Last 2 years from current date (exact date 2 years ago)
+        startDate = new Date(now);
+        startDate.setFullYear(startDate.getFullYear() - 2);
+        break;
+      default:
+        // Default to last 3 months
+        startDate = new Date(now);
+        startDate.setMonth(startDate.getMonth() - 3);
+        break;
+    }
+  }
+
+  return {
+    startDate,
+    endDate,
+    startDateFormatted: formatDateForApi(startDate), // For API (YYYY-MM-DD)
+    endDateFormatted: formatDateForApi(endDate), // For API (YYYY-MM-DD)
+    startDateYYYYMM: formatDateToYYYYMM(startDate.toISOString()), // For frontend filtering (YYYY-MM)
+    endDateYYYYMM: formatDateToYYYYMM(endDate.toISOString()), // For frontend filtering (YYYY-MM)
+  };
+};
+
+/**
  * Calculate date range parameters based on selected time range
- * @param {string} selectedTimeRange - Time range selection ('30d', '60d', '90d', 'custom')
+ * @param {string} selectedTimeRange - Time range selection ('thisMonth', 'last3Months', 'thisYear', 'last2Years', 'custom')
  * @param {Date} fromDate - Custom from date (for custom range)
  * @param {Date} toDate - Custom to date (for custom range)
  * @returns {object} Object with startDate and endDate
  */
-export const calculateDateRangeParams = (selectedTimeRange, fromDate = null, toDate = null) => {
-  if (selectedTimeRange === "custom" && fromDate && toDate) {
-    return {
-      startDate: formatDateForApi(fromDate),
-      endDate: formatDateForApi(toDate),
-    };
-  }
-
-  const now = new Date();
-  let startDate;
-
-  switch (selectedTimeRange) {
-    case "30d":
-      startDate = new Date(now);
-      startDate.setDate(startDate.getDate() - 30);
-      break;
-    case "60d":
-      startDate = new Date(now);
-      startDate.setDate(startDate.getDate() - 60);
-      break;
-    case "90d":
-    default:
-      startDate = new Date(now);
-      startDate.setDate(startDate.getDate() - 90);
-      break;
-  }
+export const calculateDateRangeParams = (
+  selectedTimeRange,
+  fromDate = null,
+  toDate = null
+) => {
+  const dateRange = calculateUnifiedDateRange(
+    selectedTimeRange,
+    fromDate,
+    toDate
+  );
 
   return {
-    startDate: formatDateForApi(startDate),
-    endDate: formatDateForApi(now),
+    startDate: dateRange.startDateFormatted,
+    endDate: dateRange.endDateFormatted,
   };
 };
