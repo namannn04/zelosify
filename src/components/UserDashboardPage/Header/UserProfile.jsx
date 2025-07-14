@@ -8,7 +8,7 @@ const UserProfile = memo(
   ({ toggleNotifications, isProfileOpen, toggleProfile, profileRef }) => {
     const router = useRouter();
     const {
-      // user,
+      user,
       handleOpenSignoutConfirmation,
       getDisplayName,
       getUserHandle,
@@ -51,16 +51,16 @@ const UserProfile = memo(
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {userHandle}
               </p>
-              {/* {user?.role && (
+              {user?.role && (
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  {user.role.replace(/_/g, " ")}
+                  Role = {user.role.replace(/_/g, " ")}
                 </p>
               )}
               {user?.department && (
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {user.department}
+                  Dept = {user.department}
                 </p>
-              )} */}
+              )}
             </div>
             <div className="border-t border-gray-100 dark:border-gray-800"></div>
 

@@ -23,7 +23,7 @@
   --secondary-foreground: 222.2 47.4% 11.2%;
   --muted: 210 40% 96.1%;
   --muted-foreground: #1f2937; /* slate-800 */
-  --accent: 210 40% 96.1%;
+  --accent: #f3f4f6; /* gray-100 */
   --accent-foreground: 222.2 47.4% 11.2%;
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: #dc2626;
@@ -71,7 +71,7 @@
   --secondary-foreground: 210 40% 98%;
   --muted: 217.2 32.6% 17.5%;
   --muted-foreground: #cbd5e1; /* slate-300 */
-  --accent: 217.2 32.6% 17.5%;
+  --accent: #1f2937; /* gray-800 */
   --accent-foreground: 210 40% 98%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: #f87171;
