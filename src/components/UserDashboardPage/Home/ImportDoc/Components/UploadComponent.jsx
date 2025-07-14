@@ -85,7 +85,7 @@ export default function UploadComponent({
     setSelectAll(newSelectAll);
     setVisibleRoles({
       vendorManager: newSelectAll,
-      businessStakeholder: newSelectAll,
+      businessUser: newSelectAll,
       admin: newSelectAll,
     });
   };
