@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
-import LandingNavbar from "@/components/LandingPage/LandingNavbar";
-import FooterSection from "@/components/LandingPage/footer/FooterSection";
+import LandingNavbar from "@/components/LandingPage2/navbar/LandingNavbar";
+import FooterSection from "@/components/LandingPage2/footer/FooterSection";
 // import {
 //   Sparkles,
 //   MapPin,
@@ -13,9 +14,12 @@ import FooterSection from "@/components/LandingPage/footer/FooterSection";
 //   Twitter,
 //   Linkedin,
 // } from "lucide-react";
-import ContactForm from "@/components/LandingPage/contact/ContactForm";
+import ContactForm from "@/components/LandingPage2/contact/ContactForm";
 
 export default function ContactPage() {
+  const pathname = usePathname();
+  const isDemoRoute = pathname === '/demo';
+  
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -47,92 +51,68 @@ export default function ContactPage() {
         <LandingNavbar />
       </div>
 
-      <div className="min-h-screen bg-[#0F0720] pt-24 px-4 relative overflow-hidden">
-        {/* Animated background */}
-        <div className="absolute inset-0 overflow-hidden">
+      <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-20 px-4 relative overflow-hidden min-h-screen pt-24">
+        {/* Background Elements */}
+        <div className="absolute inset-0">
           <div className="absolute w-full h-full">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute rounded-full mix-blend-screen animate-float"
-                style={{
-                  width: `${Math.random() * 10 + 5}rem`,
-                  height: `${Math.random() * 10 + 5}rem`,
-                  top: `${Math.random() * 100}%`,
-                  left: `${Math.random() * 100}%`,
-                  background: `radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, rgba(0, 0, 0, 0) 70%)`,
-                  animationDelay: `${Math.random() * 5}s`,
-                  animationDuration: `${Math.random() * 10 + 10}s`,
-                }}
-              />
-            ))}
+            {[...Array(20)].map((_, i) => {
+              // Use deterministic values based on index for SSR consistency
+              const width = (((i * 17 + 23) % 50) + 50) / 10; // Range: 5-10rem
+              const height = (((i * 13 + 37) % 50) + 50) / 10; // Range: 5-10rem
+              const top = (i * 19 + 31) % 100; // Range: 0-100%
+              const left = (i * 23 + 41) % 100; // Range: 0-100%
+              const delay = (i * 7) % 50 / 10; // Range: 0-5s
+              const duration = (i * 11) % 100 / 10 + 10; // Range: 10-20s
+              
+              return (
+                <div
+                  key={i}
+                  className="absolute w-32 h-32 bg-blue-200/20 rounded-full blur-xl"
+                  style={{
+                    width: `${width}rem`,
+                    height: `${height}rem`,
+                    top: `${top}%`,
+                    left: `${left}%`,
+                    animationDelay: `${delay}s`,
+                    animationDuration: `${duration}s`,
+                  }}
+                />
+              )
+            })}
           </div>
+          <div className="absolute top-20 left-20 w-32 h-32 bg-blue-200/20 rounded-full blur-xl"></div>
+          <div className="absolute bottom-20 right-20 w-48 h-48 bg-purple-200/20 rounded-full blur-xl"></div>
         </div>
 
-        <div className="max-w-3xl mx-auto relative">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
-                Contact Us
+        <div className="max-w-4xl mx-auto relative z-10">
+          {/* Enhanced Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center bg-blue-100 text-blue-700 px-6 py-3 rounded-full text-sm font-semibold mb-6">
+              <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 animate-pulse"></span>
+              {isDemoRoute ? "Get Started Today" : "Contact Us"}
+            </div>
+            
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 text-foreground">
+              {isDemoRoute ? "Schedule Your " : "Get in Touch - "}
+              <span className="font-extrabold bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600 bg-clip-text text-transparent"
+                    style={{ 
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                      fontSize: 'inherit',
+                      lineHeight: 'inherit'
+                    }}>
+                {isDemoRoute ? "Demo" : "Contact Us"}
               </span>
             </h2>
-
-            <p className="text-purple-200/80 max-w-2xl mx-auto text-lg mb-12">
-              Have questions about our AI Tool? We're here to help. Reach out to
-              us and we'll get back to you as soon as possible.
+            
+            <p className="text-muted-foreground max-w-3xl mx-auto text-xl md:text-2xl leading-relaxed font-medium">
+              Maximize Contract Value - Discover How Zelosify Can Transform Your Business
             </p>
           </div>
 
-          {/* Form Card */}
+          {/* Form */}
           <ContactForm />
-
-          {/* Contact Information */}
-          {/* <div className="space-y-8 md:pl-8">
-                            <div className="bg-[#1A1033] backdrop-blur-sm rounded-3xl p-8 space-y-8">
-                                <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
-
-                                <div className="space-y-6">
-                                    <div className="flex items-start space-x-4">
-                                        <MapPin className="w-6 h-6 text-purple-400 mt-1" />
-                                        <span className="text-purple-200">123 AI Street, Tech City, TC 12345</span>
-                                    </div>
-
-                                    <div className="flex items-start space-x-4">
-                                        <Mail className="w-6 h-6 text-purple-400 mt-1" />
-                                        <span className="text-purple-200">contact@aitool.com</span>
-                                    </div>
-
-                                    <div className="flex items-start space-x-4">
-                                        <Phone className="w-6 h-6 text-purple-400 mt-1" />
-                                        <span className="text-purple-200">+1 (555) 123-4567</span>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-xl font-bold text-white mb-4">Follow Us</h4>
-                                    <div className="flex space-x-4">
-                                        <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors duration-300">
-                                            <Facebook className="w-6 h-6" />
-                                        </a>
-                                        <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors duration-300">
-                                            <Twitter className="w-6 h-6" />
-                                        </a>
-                                        <a href="#" className="text-purple-400 hover:text-purple-300 transition-colors duration-300">
-                                            <Linkedin className="w-6 h-6" />
-                                        </a>
-                                    </div>
-                                </div>
-                            </div> */}
-
-          {/* <div className="relative h-[300px] rounded-3xl overflow-hidden">
-                                <Image
-                                    src="/placeholder.svg"
-                                    alt="Contact illustration"
-                                    fill
-                                    className="object-cover"
-                                />
-                            </div> */}
         </div>
       </div>
 
