@@ -193,7 +193,7 @@ const useAuth = () => {
    */
   const getTenantId = () => {
     if (!user) return "";
-    return user.tenantId;
+    return user.tenant.tenantId;
   };
 
   /**

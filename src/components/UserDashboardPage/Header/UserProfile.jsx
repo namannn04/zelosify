@@ -53,12 +53,17 @@ const UserProfile = memo(
               </p>
               {user?.role && (
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  Role = {user.role.replace(/_/g, " ")}
+                  Role : {user.role.replace(/_/g, " ")}
                 </p>
               )}
               {user?.department && (
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Dept = {user.department}
+                  Dept : {user.department}
+                </p>
+              )}
+              {user?.department && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Tenant : {user.tenant.companyName}
                 </p>
               )}
             </div>
