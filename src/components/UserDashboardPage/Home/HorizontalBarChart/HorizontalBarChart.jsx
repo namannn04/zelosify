@@ -151,7 +151,7 @@ export default function HorizantalBarChartComponent() {
             </div>
             <div className="rounded-lg border border-border bg-muted/20 p-4">
               <div className="text-sm text-muted-foreground">
-                Avg Budget Utilization
+                Average Budget Utilization
               </div>
               <div className="mt-1 flex items-center">
                 <TrendingUp className="mr-1 h-4 w-4 text-primary" />
