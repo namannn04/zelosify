@@ -14,7 +14,7 @@ const useVendorOpenings = () => {
     try {
       const response = await axiosInstance.get(`/vendor/openings?page=${page}`);
       const data = response.data;
-      setOpenings(data.openings || data);
+      setOpenings(Array.isArray(data.openings) ? data.openings : []);
       setPagination(data.pagination || null);
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Failed to fetch openings');

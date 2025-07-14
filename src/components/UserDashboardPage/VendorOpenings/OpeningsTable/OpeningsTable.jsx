@@ -140,11 +140,13 @@ export default function OpeningsTable({
       </div>
 
       {/* Pagination */}
-      {pagination && (
+      {pagination && pagination.totalPages > 1 && (
         <div className="flex justify-center">
           <Pagination
             currentPage={pagination.currentPage}
             totalPages={pagination.totalPages}
+            totalItems={pagination.totalItems}
+            itemsPerPage={pagination.itemsPerPage}
             onPageChange={onPageChange}
           />
         </div>
