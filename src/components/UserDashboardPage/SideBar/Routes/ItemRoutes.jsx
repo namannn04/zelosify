@@ -28,6 +28,7 @@ const getOverviewItemsByRole = (role) => {
             { title: "Contracts", href: "/user", icon: FileText },
             { title: "Tracking", href: "/user/tracking", icon: FaDollarSign },
             { title: "Requests", href: "/user/requests", icon: FileSignature },
+            { title: "Openings", href: "/user/vendor-openings", icon: Users },
             { title: "AI Chat", href: "/user/messages", icon: Sparkles },
             {
               title: "Utilization",
