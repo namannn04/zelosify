@@ -10,6 +10,7 @@ export {
   getNextMonth,
   generateMonthsForYear,
   calculateDateRangeParams,
+  calculateUnifiedDateRange,
 } from "./dateUtils";
 
 // Chart utilities

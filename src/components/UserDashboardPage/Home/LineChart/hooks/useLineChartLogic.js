@@ -3,7 +3,6 @@ import useContractSpend from "@/hooks/Dashboard/Home/ContractSpend/useContractSp
 
 const useLineChartLogic = () => {
   const [selectedVendor, setSelectedVendor] = useState("All Vendors");
-  const [selectedTimeRange, setSelectedTimeRange] = useState("90d");
   const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
   const [topVendorsCount, setTopVendorsCount] = useState("5");
   const [fromDate, setFromDate] = useState(null);
@@ -23,6 +22,8 @@ const useLineChartLogic = () => {
     vendorColors,
     setTopVendors,
     setCustomDateRange,
+    setSelectedTimeRange: setReduxSelectedTimeRange,
+    selectedTimeRange, // Get from Redux instead of local state
   } = useContractSpend();
 
   // Update localStorage when selectedVendor changes
@@ -56,8 +57,9 @@ const useLineChartLogic = () => {
   // Handle time range change
   const handleTimeRangeChange = useCallback(
     (value) => {
-      setSelectedTimeRange(value);
       if (value !== "custom") {
+        // For non-custom ranges, immediately update Redux and trigger API call
+        setReduxSelectedTimeRange(value);
         setFromDate(null);
         setToDate(null);
         setTempFromDate(null);
@@ -66,27 +68,57 @@ const useLineChartLogic = () => {
           setCustomDateRange({ fromDate: null, toDate: null });
         }
       } else {
+        // For custom range, update Redux to show calendar but don't trigger API call yet
+        setReduxSelectedTimeRange(value);
         setTempFromDate(fromDate);
         setTempToDate(toDate);
-        setCalendarOpen(true);
+        // Use a small delay to ensure the select dropdown closes before opening calendar
+        setTimeout(() => {
+          setCalendarOpen(true);
+        }, 100);
+        // Don't update custom date range yet - wait for Apply button
       }
     },
-    [setCustomDateRange, fromDate, toDate]
+    [setCustomDateRange, fromDate, toDate, setReduxSelectedTimeRange]
   );
 
   // Handle apply date range
   const handleApplyDateRange = useCallback(() => {
-    setFromDate(tempFromDate);
-    setToDate(tempToDate);
-    setCalendarOpen(false);
-    setSelectedTimeRange("custom");
-    if (typeof setCustomDateRange === "function") {
-      setCustomDateRange({
-        fromDate: tempFromDate,
-        toDate: tempToDate,
-      });
+    if (tempFromDate && tempToDate) {
+      setFromDate(tempFromDate);
+      setToDate(tempToDate);
+      setCalendarOpen(false);
+
+      // Now set custom date range to trigger API call
+      if (typeof setCustomDateRange === "function") {
+        setCustomDateRange({
+          fromDate: tempFromDate,
+          toDate: tempToDate,
+        });
+      }
+      // selectedTimeRange is already "custom" from when the dropdown was selected
     }
   }, [tempFromDate, tempToDate, setCustomDateRange]);
+
+  // Handle calendar close without applying (cancel)
+  const handleCalendarClose = useCallback(() => {
+    setCalendarOpen(false);
+    setTempFromDate(fromDate);
+    setTempToDate(toDate);
+    // Reset to previous time range if custom was selected but not applied
+    if (selectedTimeRange === "custom" && (!fromDate || !toDate)) {
+      // If custom was selected but no dates were applied, reset to default
+      setReduxSelectedTimeRange("thisMonth");
+    }
+  }, [fromDate, toDate, selectedTimeRange, setReduxSelectedTimeRange]);
+
+  // Handle cancel button click (only close calendar, keep custom selected)
+  const handleCalendarCancel = useCallback(() => {
+    setCalendarOpen(false);
+    setTempFromDate(fromDate);
+    setTempToDate(toDate);
+    // Don't reset the time range - keep "custom" selected
+  }, [fromDate, toDate]);
 
   // Update the context whenever the time range changes
   useEffect(() => {
@@ -141,8 +173,8 @@ const useLineChartLogic = () => {
     // State
     selectedVendor,
     setSelectedVendor,
-    selectedTimeRange,
-    setSelectedTimeRange,
+    selectedTimeRange, // From Redux
+    setSelectedTimeRange: setReduxSelectedTimeRange, // Redux setter
     selectedIndustry,
     setSelectedIndustry,
     topVendorsCount,
@@ -169,6 +201,8 @@ const useLineChartLogic = () => {
     // Event handlers
     handleTempDateSelect,
     handleCalendarOpen,
+    handleCalendarClose,
+    handleCalendarCancel,
     handleTimeRangeChange,
     handleApplyDateRange,
   };

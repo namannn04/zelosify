@@ -23,7 +23,7 @@ export const fetchContractSpendData = createAsyncThunk(
   "contractSpend/fetchContractSpendData",
   async (params, { rejectWithValue }) => {
     try {
-      // Default to 90 days if no specific range is set
+      // Default to This Month if no specific range is set
       const defaultParams = {
         topVendors: params.topVendors,
       };
@@ -91,13 +91,13 @@ const initialState = {
   isLoading: true,
   error: null,
 
-  // Filter settings
+  // Default Filter settings
   topVendors: "5",
   customDateRange: {
     fromDate: null,
     toDate: null,
   },
-  selectedTimeRange: "90d",
+  selectedTimeRange: "thisMonth",
 };
 
 /**

@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/Axios/AxiosInstance";
 import { toast } from "sonner";
+import { fetchContractSpendData } from "./contractSpendSlice";
+import { fetchHeaderMetrics } from "./headerMetricsSlice";
 
 // Async thunk for generating presigned URLs
 export const generatePresignedUrls = createAsyncThunk(
@@ -102,9 +104,27 @@ export const uploadPdfFile = createAsyncThunk(
 // Async thunk for processing contracts
 export const processContracts = createAsyncThunk(
   "contractUpload/processContracts",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, dispatch, getState }) => {
     try {
       const response = await axiosInstance.post("/pdf/process");
+
+      // After successful processing, refetch header metrics and contract spend data
+      const state = getState();
+
+      // Dispatch header metrics refetch
+      dispatch(fetchHeaderMetrics());
+
+      // Get current contract spend parameters for refetch
+      const contractSpendState = state.contractSpend;
+      const refetchParams = {
+        topVendors: contractSpendState.topVendors,
+        selectedTimeRange: contractSpendState.selectedTimeRange,
+        customDateRange: contractSpendState.customDateRange,
+      };
+
+      // Dispatch contract spend data refetch with current parameters
+      dispatch(fetchContractSpendData(refetchParams));
+
       return response.data;
     } catch (error) {
       console.error("Error processing contracts:", error);

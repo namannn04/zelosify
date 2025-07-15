@@ -51,6 +51,8 @@ export default function LineChartComponent() {
     // Event handlers
     handleTempDateSelect,
     handleCalendarOpen,
+    handleCalendarClose,
+    handleCalendarCancel,
     handleTimeRangeChange,
     handleApplyDateRange,
   } = useLineChartLogic();
@@ -77,8 +79,10 @@ export default function LineChartComponent() {
               calendarOpen={calendarOpen}
               setCalendarOpen={setCalendarOpen}
               handleCalendarOpen={handleCalendarOpen}
-              fromDate={tempFromDate}
-              toDate={tempToDate}
+              handleCalendarClose={handleCalendarClose}
+              handleCalendarCancel={handleCalendarCancel}
+              tempFromDate={tempFromDate}
+              tempToDate={tempToDate}
               handleDateSelect={handleTempDateSelect}
               selectedIndustry={selectedIndustry}
               setSelectedIndustry={setSelectedIndustry}

@@ -25,9 +25,21 @@ export const extractRoleFromToken = (token) => {
     return null;
   }
 
-  // Get the first business role (VENDOR_MANAGER, BUSINESS_STAKEHOLDER, etc.)
-  const businessRoles = decoded.realm_access.roles.filter(
-    (role) => role === "VENDOR_MANAGER" || role === "BUSINESS_STAKEHOLDER"
+  // Define business roles in an array for easy extensibility
+  const businessRolesList = [
+    "ADMIN",
+    "VENDOR_MANAGER",
+    "BUSINESS_USER",
+    "HIRING_MANAGER",
+    "FINANCE_MANAGER",
+    "RESOURCE_MANAGER",
+    "IT_VENDOR",
+    "PROCUREMENT_MANAGER",
+  ];
+
+  // Filter roles based on the defined list
+  const businessRoles = decoded.realm_access.roles.filter((role) =>
+    businessRolesList.includes(role)
   );
 
   return businessRoles.length > 0 ? businessRoles[0] : null;

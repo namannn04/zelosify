@@ -85,7 +85,7 @@ export default function UploadComponent({
     setSelectAll(newSelectAll);
     setVisibleRoles({
       vendorManager: newSelectAll,
-      businessStakeholder: newSelectAll,
+      businessUser: newSelectAll,
       admin: newSelectAll,
     });
   };
@@ -226,13 +226,13 @@ export default function UploadComponent({
 
             <div className="flex items-center space-x-2">
               <Checkbox
-                id="role-business-stakeholder"
-                checked={visibleRoles.businessStakeholder}
-                onCheckedChange={() => handleRoleChange("businessStakeholder")}
+                id="role-business-user"
+                checked={visibleRoles.businessUser}
+                onCheckedChange={() => handleRoleChange("businessUser")}
                 disabled={uploading}
               />
-              <Label htmlFor="role-business-stakeholder" className="text-sm">
-                Business Stakeholder
+              <Label htmlFor="role-business-user" className="text-sm">
+                Business User
               </Label>
             </div>
 

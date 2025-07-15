@@ -13,12 +13,26 @@ const CustomDatePicker = memo(
     calendarOpen,
     setCalendarOpen,
     handleCalendarOpen,
-    fromDate,
-    toDate,
+    tempFromDate,
+    tempToDate,
     handleDateSelect,
     onApply,
+    onCalendarClose,
+    onCalendarCancel,
   }) => (
-    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+    <Popover
+      open={calendarOpen}
+      onOpenChange={(open) => {
+        if (!open) {
+          // Calendar is being closed
+          if (onCalendarClose) {
+            onCalendarClose();
+          } else {
+            setCalendarOpen(false);
+          }
+        }
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -28,7 +42,7 @@ const CustomDatePicker = memo(
           <CalendarDaysIcon className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-4 bg-background border border-border shadow-md rounded-lg">
+      <PopoverContent className="w-60 p-4 bg-background border border-border shadow-md rounded-lg">
         <div className="space-y-3">
           <h3 className="text-sm font-medium text-foreground">
             Select Date Range
@@ -45,7 +59,7 @@ const CustomDatePicker = memo(
                 id="from-date"
                 type="date"
                 className="p-2 text-sm rounded-md border border-input bg-transparent"
-                value={fromDate ? format(fromDate, "yyyy-MM-dd") : ""}
+                value={tempFromDate ? format(tempFromDate, "yyyy-MM-dd") : ""}
                 onChange={(e) => {
                   if (e.target.value) {
                     handleDateSelect(new Date(e.target.value), "from");
@@ -64,22 +78,35 @@ const CustomDatePicker = memo(
                 id="to-date"
                 type="date"
                 className="p-2 text-sm rounded-md border border-input bg-transparent"
-                value={toDate ? format(toDate, "yyyy-MM-dd") : ""}
+                value={tempToDate ? format(tempToDate, "yyyy-MM-dd") : ""}
                 onChange={(e) => {
                   if (e.target.value) {
                     handleDateSelect(new Date(e.target.value), "to");
                   }
                 }}
-                min={fromDate ? format(fromDate, "yyyy-MM-dd") : ""}
+                min={tempFromDate ? format(tempFromDate, "yyyy-MM-dd") : ""}
               />
             </div>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
             <Button
-              className="disabled:hover:cursor-not-allowed rounded-lg text-xs text-background bg-foreground"
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                if (onCalendarCancel) {
+                  onCalendarCancel();
+                } else {
+                  setCalendarOpen(false);
+                }
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="rounded-lg text-xs"
               size="sm"
               onClick={onApply}
-              disabled={!fromDate || !toDate}
+              disabled={!tempFromDate || !tempToDate}
             >
               Apply
             </Button>

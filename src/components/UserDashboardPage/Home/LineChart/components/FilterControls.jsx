@@ -19,8 +19,10 @@ const FilterControls = memo(
     calendarOpen,
     setCalendarOpen,
     handleCalendarOpen,
-    fromDate,
-    toDate,
+    handleCalendarClose,
+    handleCalendarCancel,
+    tempFromDate,
+    tempToDate,
     handleDateSelect,
     selectedIndustry,
     setSelectedIndustry,
@@ -77,17 +79,20 @@ const FilterControls = memo(
           className="w-[160px] rounded-lg"
           aria-label="Select time range"
         >
-          <SelectValue placeholder="Last 90 Days" />
+          <SelectValue placeholder="This Month" />
         </SelectTrigger>
         <SelectContent className="rounded-xl bg-background text-foreground">
-          <SelectItem value="90d" className="rounded-lg">
-            Last 90 Days
+          <SelectItem value="thisMonth" className="rounded-lg">
+            This Month
           </SelectItem>
-          <SelectItem value="60d" className="rounded-lg">
-            Last 60 Days
+          <SelectItem value="last3Months" className="rounded-lg">
+            Last 3 Months
           </SelectItem>
-          <SelectItem value="30d" className="rounded-lg">
-            Last 30 Days
+          <SelectItem value="thisYear" className="rounded-lg">
+            This Year
+          </SelectItem>
+          <SelectItem value="last2Years" className="rounded-lg">
+            Last 2 Years
           </SelectItem>
           <SelectItem value="custom" className="rounded-lg">
             Custom Range
@@ -100,8 +105,10 @@ const FilterControls = memo(
           calendarOpen={calendarOpen}
           setCalendarOpen={setCalendarOpen}
           handleCalendarOpen={handleCalendarOpen}
-          fromDate={fromDate}
-          toDate={toDate}
+          onCalendarClose={handleCalendarClose}
+          onCalendarCancel={handleCalendarCancel}
+          tempFromDate={tempFromDate}
+          tempToDate={tempToDate}
           handleDateSelect={handleDateSelect}
           onApply={onApply}
         />
@@ -116,7 +123,7 @@ const FilterControls = memo(
         </SelectTrigger>
         <SelectContent className="rounded-xl bg-background text-foreground">
           <SelectItem value="All Industries" className="rounded-lg">
-            All Industries
+            All Verticles
           </SelectItem>
           {industries &&
             industries.map((industry) => (

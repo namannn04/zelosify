@@ -2,6 +2,8 @@
  * Filtering utilities for Contract Spend Summary
  */
 
+import { calculateUnifiedDateRange } from "./dateUtils";
+
 /**
  * Filter chart data based on various criteria
  * @param {object[]} chartData - Original chart data
@@ -30,51 +32,23 @@ export const getFilteredData = (
 
   let data = [...chartData]; // Copy original data
 
-  // Chart data is already filtered to only include months up to next month after latest
-  // Now apply additional time range filtering based on user selection
+  // Apply time range filtering using unified date calculation
   if (selectedTimeRange && selectedTimeRange !== "all") {
-    const now = new Date();
-    let cutoffDate;
+    try {
+      const dateRange = calculateUnifiedDateRange(
+        selectedTimeRange,
+        fromDate,
+        toDate
+      );
+      const startDateYYYYMM = dateRange.startDateYYYYMM;
+      const endDateYYYYMM = dateRange.endDateYYYYMM;
 
-    if (selectedTimeRange === "custom" && fromDate && toDate) {
-      // Use custom date range if provided
-      try {
-        const fromDateStr = fromDate.toISOString().substring(0, 7); // YYYY-MM
-        const toDateStr = toDate.toISOString().substring(0, 7); // YYYY-MM
-
-        // Filter the data based on date range
-        data = data.filter((item) => {
-          return item.date >= fromDateStr && item.date <= toDateStr;
-        });
-      } catch (error) {
-        console.error("Error filtering by custom date range:", error);
-      }
-    } else {
-      // Use predefined time ranges
-      try {
-        switch (selectedTimeRange) {
-          case "30d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 30));
-            break;
-          case "60d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 60));
-            break;
-          case "90d":
-            cutoffDate = new Date(now.setDate(now.getDate() - 90));
-            break;
-          default:
-            cutoffDate = new Date(now.setDate(now.getDate() - 90));
-            break;
-        }
-
-        // Convert cutoff date to string format for comparison (YYYY-MM)
-        const cutoffDateStr = cutoffDate.toISOString().substring(0, 7);
-
-        // Filter the data based on the date
-        data = data.filter((item) => item.date >= cutoffDateStr);
-      } catch (error) {
-        console.error("Error filtering by predefined date range:", error);
-      }
+      // Filter the data based on date range
+      data = data.filter((item) => {
+        return item.date >= startDateYYYYMM && item.date <= endDateYYYYMM;
+      });
+    } catch (error) {
+      console.error("Error filtering by date range:", error);
     }
   }
 

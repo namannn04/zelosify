@@ -197,6 +197,14 @@ const useContractSpend = () => {
   // Effect to fetch data when dependencies change
   useEffect(() => {
     if (pathname === "/user") {
+      // Don't fetch if custom range is selected but no dates are set
+      if (
+        selectedTimeRange === "custom" &&
+        (!customDateRange.fromDate || !customDateRange.toDate)
+      ) {
+        return;
+      }
+
       // Create a unique key based on current parameters
       const currentKey = `${topVendors}-${selectedTimeRange}-${customDateRange.fromDate}-${customDateRange.toDate}`;
 
