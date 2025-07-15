@@ -1,10 +1,18 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Upload, User, Calendar, MapPin, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  Upload,
+  User,
+  Calendar,
+  MapPin,
+  FileText,
+} from "lucide-react";
 import useVendorOpenings from "@/hooks/Dashboard/Vendor/useVendorOpenings";
 import CircleLoader from "@/components/UI/loaders/CircleLoader";
 import { formatDate } from "@/utils/Common/date";
+import { Button } from "@/components/UI/shadcn/button";
 
 export default function OpeningDetails() {
   const params = useParams();
@@ -120,8 +128,12 @@ export default function OpeningDetails() {
                   <div className="flex items-center gap-3">
                     <MapPin className="h-5 w-5 text-gray-400" />
                     <div>
-                      <p className="text-sm font-medium text-gray-500">Location</p>
-                      <p className="text-gray-900 dark:text-white">{opening.location}</p>
+                      <p className="text-sm font-medium text-gray-500">
+                        Location
+                      </p>
+                      <p className="text-gray-900 dark:text-white">
+                        {opening.location}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -129,8 +141,12 @@ export default function OpeningDetails() {
                   <div className="flex items-center gap-3">
                     <Calendar className="h-5 w-5 text-gray-400" />
                     <div>
-                      <p className="text-sm font-medium text-gray-500">Contract Type</p>
-                      <p className="text-gray-900 dark:text-white">{opening.contractType}</p>
+                      <p className="text-sm font-medium text-gray-500">
+                        Contract Type
+                      </p>
+                      <p className="text-gray-900 dark:text-white">
+                        {opening.contractType}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -168,13 +184,13 @@ export default function OpeningDetails() {
             {opening.status === "OPEN" && (
               <div className="bg-white dark:bg-gray-800 rounded-lg border border-border p-6">
                 <h2 className="text-xl font-semibold mb-4">Actions</h2>
-                <button
+                <Button
                   onClick={handleUploadProfiles}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                  // className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
                 >
                   <Upload className="h-5 w-5" />
                   Upload Candidate Profiles
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -182,4 +198,4 @@ export default function OpeningDetails() {
       </div>
     </div>
   );
-} 
+}
