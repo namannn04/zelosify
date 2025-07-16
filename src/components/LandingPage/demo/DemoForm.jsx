@@ -1,13 +1,13 @@
 import React from "react"
 import { useEffect, useState } from "react"
 
-const ContactForm = () => {
+const DemoForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     companyEmail: "",
     phone: "",
     companyName: "",
-    primaryLocation: "",
+    bringsYou: "",
     heardAbout: "",
   })
 
@@ -45,7 +45,7 @@ const ContactForm = () => {
     if (!formData.phone.trim()) newErrors.phone = "Phone Number is required."
     else if (!phoneRegex.test(formData.phone)) newErrors.phone = "Phone Number must be 10 digits."
     if (!formData.companyName.trim()) newErrors.companyName = "Company Name is required."
-    if (!formData.primaryLocation.trim()) newErrors.primaryLocation = "Primary Location is required."
+    if (!formData.bringsYou.trim()) newErrors.bringsYou = "What brings you to Zelosify is required."
     if (!formData.heardAbout.trim()) newErrors.heardAbout = "Please select how you heard about us."
 
     setErrors(newErrors)
@@ -148,19 +148,19 @@ const ContactForm = () => {
         <div className="relative group">
           <input
             type="text"
-            name="primaryLocation"
-            value={formData.primaryLocation}
+            name="bringsYou"
+            value={formData.bringsYou}
             onChange={handleInputChange}
             className="peer w-full px-4 py-4 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-            placeholder="Primary Location*"
+            placeholder="What brings you to Zelosify*"
           />
           <label
-            htmlFor="primaryLocation"
+            htmlFor="bringsYou"
             className="absolute left-4 -top-6 text-sm text-gray-600 transition-all duration-300 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-4 peer-focus:-top-6 peer-focus:text-sm peer-focus:text-blue-600"
           >
-            Primary Location*
+            What brings you to Zelosify*
           </label>
-          {errors.primaryLocation && <p className="text-red-500 text-sm mt-1">{errors.primaryLocation}</p>}
+          {errors.bringsYou && <p className="text-red-500 text-sm mt-1">{errors.bringsYou}</p>}
         </div>
 
         <div className="relative group">
@@ -195,4 +195,4 @@ const ContactForm = () => {
   )
 }
 
-export default ContactForm
+export default DemoForm

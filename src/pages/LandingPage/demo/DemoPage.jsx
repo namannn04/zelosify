@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 
-import LandingNavbar from "@/components/LandingPage2/navbar/LandingNavbar";
-import FooterSection from "@/components/LandingPage2/footer/FooterSection";
+import LandingNavbar from "@/components/LandingPage/navbar/LandingNavbar";
+import FooterSection from "@/components/LandingPage/footer/FooterSection";
 // import {
 //   Sparkles,
 //   MapPin,
@@ -14,11 +13,9 @@ import FooterSection from "@/components/LandingPage2/footer/FooterSection";
 //   Twitter,
 //   Linkedin,
 // } from "lucide-react";
-import ContactForm from "@/components/LandingPage2/contact/ContactForm";
+import DemoForm from "@/components/LandingPage/demo/DemoForm";
 
-export default function ContactPage() {
-  const pathname = usePathname();
-  const isDemoRoute = pathname === '/demo';
+export default function DemoPage() {
   
   const [formData, setFormData] = useState({
     firstName: "",
@@ -86,33 +83,23 @@ export default function ContactPage() {
 
         <div className="max-w-4xl mx-auto relative z-10">
           {/* Enhanced Header */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center bg-blue-100 text-blue-700 px-6 py-3 rounded-full text-sm font-semibold mb-6">
-              <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 animate-pulse"></span>
-              {isDemoRoute ? "Get Started Today" : "Contact Us"}
-            </div>
-            
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 text-foreground">
-              {isDemoRoute ? "Schedule Your " : "Get in Touch - "}
-              <span className="font-extrabold bg-gradient-to-r from-blue-500 via-purple-500 to-blue-600 bg-clip-text text-transparent"
+          <div className="text-center mb-16">            
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 text-black">
+              Schedule Your{" "}
+              <span className="font-extrabold text-black"
                     style={{ 
                       WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
                       fontSize: 'inherit',
                       lineHeight: 'inherit'
                     }}>
-                {isDemoRoute ? "Demo" : "Contact Us"}
+                Demo
               </span>
             </h2>
-            
-            <p className="text-muted-foreground max-w-3xl mx-auto text-xl md:text-2xl leading-relaxed font-medium">
-              Maximize Contract Value - Discover How Zelosify Can Transform Your Business
-            </p>
           </div>
 
           {/* Form */}
-          <ContactForm />
+          <DemoForm />
         </div>
       </div>
 

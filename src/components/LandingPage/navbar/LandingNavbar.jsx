@@ -37,38 +37,35 @@ export default function LandingNavbar() {
           >
             <div className="max-w-7xl mx-auto px-6 py-4">
               <div className="flex items-center justify-between">
-                {/* Logo */}
-                <Link href="/" className="flex items-center">
-                  <img 
-                    src="/assets/logos/zelosify_Dark.png" 
-                    alt="Zelosify" 
-                    className="h-8 w-auto"
-                  />
-                </Link>
-
-                {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center space-x-8">
-                  <button
-                    onClick={() => handleScrollToSection("features")}
-                    className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
-                  >
-                    Features
-                  </button>
-                  <button
-                    onClick={() => handleScrollToSection("demo")}
-                    className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
-                  >
-                    Demo
-                  </button>
-                  <Link
-                    href="/contact"
-                    className="text-gray-700 hover:text-blue-600 transition-colors font-medium"
-                  >
-                    Contact
+                {/* Left: Logo and NAV options */}
+                <div className="flex items-center gap-12">
+                  {/* Logo */}
+                  <Link href="/" className="flex items-center">
+                    <img 
+                      src="/assets/logos/zelosify_Dark.png" 
+                      alt="Zelosify" 
+                      className="h-10 w-auto"
+                    />
                   </Link>
+
+                  {/* Desktop Navigation */}
+                  <div className="hidden md:flex items-center space-x-8">
+                    <button
+                      onClick={() => handleScrollToSection("features")}
+                      className="text-gray-700 hover:text-blue-600 transition-colors font-medium text-xl"
+                    >
+                      Features
+                    </button>
+                    <button
+                      onClick={() => handleScrollToSection("faq")}
+                      className="text-gray-700 hover:text-blue-600 transition-colors font-medium text-xl"
+                    >
+                      FAQ
+                    </button>
+                  </div>
                 </div>
 
-                {/* Mobile Menu */}
+                {/* Right: Sign in button and mobile menu */}
                 <div className="flex items-center gap-4">
                   {/* Mobile Menu Button */}
                   <button
@@ -79,17 +76,17 @@ export default function LandingNavbar() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                   </button>
-                </div>
 
-                {/* CTA Button */}
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
-                  <Link
-                    href="/login"
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
-                  >
-                    Sign in
-                  </Link>
-                </motion.div>
+                  {/* CTA Button */}
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="hidden md:block">
+                    <Link
+                      href="/login"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 text-white text-lg px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    >
+                      Sign in
+                    </Link>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </motion.nav>
@@ -126,17 +123,11 @@ export default function LandingNavbar() {
                     Features
                   </button>
                   <button
-                    onClick={() => handleScrollToSection("demo")}
+                    onClick={() => handleScrollToSection("faq")}
                     className="text-gray-700 hover:text-blue-600 transition-colors font-medium text-md"
                   >
-                    Demo
+                    FAQ
                   </button>
-                  <Link
-                    href="/contact"
-                    className="text-gray-700 hover:text-blue-600 transition-colors font-medium text-md"
-                  >
-                    Contact
-                  </Link>
                 </div>
 
                 {/* Mobile Menu */}

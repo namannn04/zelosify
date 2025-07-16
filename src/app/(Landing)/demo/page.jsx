@@ -1,5 +1,5 @@
-import ContactPage from "@/pages/LandingPage/contact/ContactPage";
+import DemoPage from "@/pages/LandingPage/demo/DemoPage";
 
-export default function DemoPage() {
-  return <ContactPage />;
+export default function page() {
+  return <DemoPage />;
 }

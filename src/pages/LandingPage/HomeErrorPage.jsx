@@ -1,6 +1,6 @@
 "use client";
 
-import LandingNavbar from "@/components/LandingPage/LandingNavbar";
+import LandingNavbar from "@/components/LandingPage/navbar/LandingNavbar";
 import FooterSection from "@/components/LandingPage/footer/FooterSection";
 import { useRouter } from "next/navigation";
 

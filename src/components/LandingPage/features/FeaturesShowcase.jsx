@@ -192,30 +192,6 @@ export default function FeaturesShowcase() {
             </motion.div>
           ))}
         </div>
-
-        {/* Bottom Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-white/30 shadow-lg max-w-4xl mx-auto">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Ready to experience the future of vendor management?
-            </h3>
-            <p className="text-lg text-gray-600 mb-6">
-              Join over 10,000 businesses already using Zelosify to maximize their contract value
-            </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Join Private Beta
-            </motion.button>
-          </div>
-        </motion.div>
       </div>
     </section>
   )

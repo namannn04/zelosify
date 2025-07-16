@@ -1,4 +1,4 @@
-import LandingNavbar from "@/components/LandingPage/LandingNavbar";
+import LandingNavbar from "@/components/LandingPage/navbar/LandingNavbar";
 import FooterSection from "@/components/LandingPage/footer/FooterSection";
 import PrivacyPolicy from "@/components/LandingPage/footer/PrivacySection";
 

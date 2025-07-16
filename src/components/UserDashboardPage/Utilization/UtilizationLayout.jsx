@@ -154,14 +154,24 @@ const UtilizationLayout = () => {
 
       {filteredRows.length > 0 ? (
         <>
-          <UtilizationTable data={filteredRows} />
-          <Pagination
-            currentPage={filters.page}
-            totalPages={Math.ceil(filteredRows.length / filters.pageSize)}
-            totalItems={filteredRows.length}
-            itemsPerPage={filters.pageSize}
-            onPageChange={(page) => handleSetFilters({ page })}
-          />
+          {(() => {
+            const startIdx = ((filters.page || 1) - 1) * (filters.pageSize || 10);
+            const endIdx = startIdx + (filters.pageSize || 10);
+            const pageRows = filteredRows.slice(startIdx, endIdx);
+
+            return (
+              <>
+                <UtilizationTable data={pageRows} />
+                <Pagination
+                  currentPage={filters.page}
+                  totalPages={Math.ceil(filteredRows.length / (filters.pageSize || 10))}
+                  totalItems={filteredRows.length}
+                  itemsPerPage={filters.pageSize || 10}
+                  onPageChange={(page) => handleSetFilters({ page })}
+                />
+              </>
+            );
+          })()}
         </>
       ) : (
         <EmptyState message="No utilization data found for the selected filters." />

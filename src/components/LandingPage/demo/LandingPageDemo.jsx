@@ -5,7 +5,7 @@ import { useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { Play, Pause, RotateCcw, Maximize2 } from "lucide-react"
 
-export default function InteractiveDemo() {
+export default function LandingPageDemo() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
   const [isPlaying, setIsPlaying] = useState(false)
@@ -26,11 +26,6 @@ export default function InteractiveDemo() {
       title: "Smart Insights",
       description: "Get actionable recommendations and automated alerts for better decisions",
       highlight: "insights-dashboard",
-    },
-    {
-      title: "Track Performance",
-      description: "Monitor vendor performance and contract value in real-time",
-      highlight: "performance-metrics",
     },
   ]
 
@@ -80,10 +75,6 @@ export default function InteractiveDemo() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center bg-indigo-100 text-indigo-700 px-6 py-3 rounded-full text-sm font-semibold mb-6">
-            <Play className="w-4 h-4 mr-2" />
-            Interactive Demo
-          </div>
 
           <h2 className="text-5xl md:text-6xl font-bold mb-6">
             <span className="text-gray-900">See Zelosify in</span>
@@ -114,28 +105,6 @@ export default function InteractiveDemo() {
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/50">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-2xl font-bold text-gray-900">Demo Controls</h3>
-                <div className="flex space-x-2">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={handlePlayPause}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
-                      isPlaying
-                        ? "bg-red-500 hover:bg-red-600 text-white"
-                        : "bg-green-500 hover:bg-green-600 text-white"
-                    }`}
-                  >
-                    {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setCurrentStep(0)}
-                    className="w-12 h-12 bg-gray-500 hover:bg-gray-600 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300"
-                  >
-                    <RotateCcw className="w-5 h-5" />
-                  </motion.button>
-                </div>
               </div>
 
               {/* Step Indicators */}
@@ -172,28 +141,6 @@ export default function InteractiveDemo() {
                 ))}
               </div>
             </div>
-
-            {/* Current Step Details */}
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-3xl p-8 text-white shadow-xl"
-            >
-              <h4 className="text-2xl font-bold mb-4">{demoSteps[currentStep].title}</h4>
-              <p className="text-indigo-100 text-lg leading-relaxed">{demoSteps[currentStep].description}</p>
-
-              {/* Progress Bar */}
-              <div className="mt-6 bg-white/20 rounded-full h-2">
-                <motion.div
-                  className="bg-white rounded-full h-2"
-                  initial={{ width: "0%" }}
-                  animate={{ width: `${((currentStep + 1) / demoSteps.length) * 100}%` }}
-                  transition={{ duration: 0.5 }}
-                ></motion.div>
-              </div>
-            </motion.div>
           </motion.div>
 
           {/* Demo Screen */}
@@ -249,49 +196,9 @@ export default function InteractiveDemo() {
                   ></motion.div>
                 </motion.div>
               </div>
-
-              {/* Floating Metrics */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                className="absolute -top-4 -right-4 bg-white rounded-2xl p-4 shadow-xl border border-gray-200 hidden lg:block"
-              >
-                <div className="text-2xl font-bold text-green-600">+40%</div>
-                <div className="text-sm text-gray-600">Efficiency</div>
-              </motion.div>
-
-              <motion.div
-                animate={{ y: [0, 15, 0] }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-                className="absolute -bottom-4 -left-4 bg-white rounded-2xl p-4 shadow-xl border border-gray-200 hidden lg:block"
-              >
-                <div className="text-2xl font-bold text-blue-600">99.9%</div>
-                <div className="text-sm text-gray-600">Accuracy</div>
-              </motion.div>
             </div>
           </motion.div>
         </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="text-center mt-16"
-        >
-          <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-white/30 shadow-lg max-w-4xl mx-auto">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">Ready to see it in your environment?</h3>
-            <p className="text-lg text-gray-600 mb-6">Schedule a personalized demo with your actual contract data</p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-indigo-600 to-cyan-600 text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-              onClick={() => window.location.href = '/demo'}
-            >
-              Book Personal Demo
-            </motion.button>
-          </div>
-        </motion.div>
       </div>
     </section>
   )

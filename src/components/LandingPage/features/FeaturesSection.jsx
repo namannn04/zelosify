@@ -1,7 +1,8 @@
-"use client";
+"use client"
 
-import { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import Image from "next/image"
 
 const features = [
   {
@@ -28,55 +29,52 @@ const features = [
     imageHeight: 450,
     imageWidth: 800,
   },
-];
+]
 
 export default function FeaturesSection() {
-  const containerRef = useRef(null);
-  const [activeFeature, setActiveFeature] = useState(0);
-
-  const featureRefs = useRef([]);
+  const containerRef = useRef(null)
+  const [activeFeature, setActiveFeature] = useState(0)
+  const featureRefs = useRef([])
 
   useEffect(() => {
     const observerOptions = {
       root: null,
       rootMargin: "0px",
       threshold: 0.5,
-    };
+    }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const index = featureRefs.current.findIndex(
-            (ref) => ref === entry.target
-          );
-          setActiveFeature(index);
+          const index = featureRefs.current.findIndex((ref) => ref === entry.target)
+          if (index !== -1) {
+            setActiveFeature(index)
+          }
         }
-      });
-    }, observerOptions);
+      })
+    }, observerOptions)
 
     featureRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
+      if (ref) observer.observe(ref)
+    })
 
-    return () => observer.disconnect();
-  }, []);
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <section id="features" className="bg-[#0F0725] relative overflow-x-hidden">
-      <div className="bg-[#0F0725] pt-16">
-        <div className="max-w-7xl mx-auto px-2 sm:px-2 md:px-4">
+    <section id="features" className="bg-gray-50 relative overflow-hidden">
+      <div className="bg-gray-50 pt-20 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             className="text-center"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-white via-purple-200 to-purple-400 bg-clip-text text-transparent">
-                Your New Vendor Management Workspace
-              </span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900">
+              Your New Vendor Management <span className="text-blue-600">Workspace</span>
             </h2>
-            <p className="text-purple-200/80 max-w-3xl mx-auto text-lg sm:text-2xl">
+            <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl leading-relaxed">
               Discover how our platform can transform your workflow
             </p>
           </motion.div>
@@ -88,39 +86,37 @@ export default function FeaturesSection() {
           <div
             key={index}
             ref={(el) => (featureRefs.current[index] = el)}
-            className="min-h-[75vh] flex items-center justify-center py-8 md:py-16"
+            className="min-h-[75vh] flex items-center justify-center py-12 md:py-20"
           >
-            <div className="max-w-7xl mx-auto px-4 sm:px-2 md:px-4 w-full">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center md:flex-row-reverse">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="relative order-2 md:order-none"
+                  className={`relative ${index % 2 === 1 ? "lg:order-2" : ""}`}
                 >
-                  <div className="relative rounded-lg overflow-hidden">
-                    <img
-                      src={feature.image}
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                    <Image
+                      src={feature.image || "/placeholder.svg"}
                       alt={feature.title}
                       height={feature.imageHeight}
                       width={feature.imageWidth}
-                      className="rounded-lg object-cover"
+                      className="rounded-2xl object-cover"
                     />
-                    <div className="absolute inset-0 bg-purple-600/10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-600/10 to-transparent"></div>
                   </div>
                 </motion.div>
                 <motion.div
-                  className="space-y-6 order-1 md:order-none"
+                  className={`space-y-6 ${index % 2 === 1 ? "lg:order-1" : ""}`}
                   initial={{ opacity: 0, x: 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <h3 className="text-3xl md:text-4xl font-bold text-white">
+                  <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                     {feature.title}
                   </h3>
-                  <p className="text-purple-200/80 text-lg">
-                    {feature.description}
-                  </p>
+                  <p className="text-gray-600 text-lg md:text-xl leading-relaxed">{feature.description}</p>
                 </motion.div>
               </div>
             </div>
@@ -128,5 +124,5 @@ export default function FeaturesSection() {
         ))}
       </div>
     </section>
-  );
+  )
 }
