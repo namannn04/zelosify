@@ -25,8 +25,7 @@ export default function WorkflowSection() {
                 We integrate directly into your existing workflow.
               </h1>
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-                Seamlessly connect with the tools you already use and love. Our platform works with your favorite
-                applications to streamline your workflow.
+                Get up and running in days not months with plug-and-play connectors for SAP, Oracle & beyond.
               </p>
             </div>
 
